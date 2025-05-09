@@ -1,3 +1,11 @@
+export 'package:agentic/chat/agent/agent.dart';
+export 'package:agentic/chat/connector/connector.dart';
+export 'package:agentic/chat/connector/connector_anthropic.dart';
+export 'package:agentic/chat/connector/connector_gemini.dart';
+export 'package:agentic/chat/connector/connector_ollama.dart';
+export 'package:agentic/chat/connector/connector_openai.dart';
+export 'package:agentic/chat/connector/connector_xai.dart';
+export 'package:agentic/chat/connector/model.dart';
 export 'package:agentic/chat/content/content.dart';
 export 'package:agentic/chat/content/content_audio.dart';
 export 'package:agentic/chat/content/content_group.dart';
@@ -7,7 +15,8 @@ export 'package:agentic/chat/message/message_agent.dart';
 export 'package:agentic/chat/message/message_system.dart';
 export 'package:agentic/chat/message/message_tool.dart';
 export 'package:agentic/chat/message/message_user.dart';
+export 'package:agentic/chat/tool/tool.dart';
 export 'package:agentic/chat/tool/tool_call.dart';
+export 'package:agentic/chat/tool/tool_schema.dart';
 export 'package:agentic/gen/artifacts.gen.dart';
-
-void main() async {}
+export 'package:agentic/util/chat_models.dart';

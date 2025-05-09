@@ -1,12 +1,13 @@
 import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/connector/model.dart';
 import 'package:agentic/chat/tool/tool.dart';
+import 'package:agentic/util/chat_models.dart';
 import 'package:artifact/artifact.dart';
 
 @artifact
 class ChatRequest {
   final List<Message> messages;
-  final List<ToolSchema> tools;
+  final List<Tool> tools;
   final ChatModel model;
   final String? user;
   final String? systemPrompt;
@@ -14,7 +15,7 @@ class ChatRequest {
 
   const ChatRequest({
     required this.messages,
-    required this.tools,
+    this.tools = const [],
     required this.model,
     this.systemPrompt,
     this.user,

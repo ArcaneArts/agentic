@@ -1,6 +1,7 @@
 import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/connector/chat_request.dart';
 import 'package:agentic/chat/connector/connector.dart';
+import 'package:agentic/chat/connector/model.dart';
 import 'package:agentic/chat/connector/result.dart';
 import 'package:agentic/util/codec.dart';
 import 'package:langchain/langchain.dart' as lc;
@@ -11,6 +12,21 @@ class OpenAIConnector extends ChatConnector {
     required super.apiKey,
     super.baseUrl = "https://api.openai.com/v1",
   });
+
+  @override
+  List<ChatModel> get supportedModels => const [
+    ChatModel.openaiO4Mini,
+    ChatModel.openaiO3,
+    ChatModel.openaiO3Mini,
+    ChatModel.openaiO1Pro,
+    ChatModel.openaiO1,
+    ChatModel.openaiO1Mini,
+    ChatModel.openai4_1,
+    ChatModel.openai4_1Mini,
+    ChatModel.openai4_1Nano,
+    ChatModel.openai4o,
+    ChatModel.openai4oMini,
+  ];
 
   @override
   Future<ChatResult> call(ChatRequest request) async {
@@ -36,7 +52,7 @@ class OpenAIConnector extends ChatConnector {
         tools:
             request.tools.isEmpty
                 ? null
-                : request.tools.map((i) => i.toLangChain).toList(),
+                : request.tools.map((i) => i.toolSchema.toLangChain).toList(),
       ),
     ).invoke(
       lc.PromptValue.chat([for (Message i in request.messages) i.toLangChain]),

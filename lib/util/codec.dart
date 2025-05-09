@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/connector/result.dart';
-import 'package:agentic/chat/tool/tool.dart';
 import 'package:langchain/langchain.dart';
 
 import '../chat/content/text_content.dart';

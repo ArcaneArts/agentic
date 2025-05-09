@@ -1,16 +1,25 @@
 import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/connector/chat_request.dart';
 import 'package:agentic/chat/connector/connector.dart';
+import 'package:agentic/chat/connector/model.dart';
 import 'package:agentic/chat/connector/result.dart';
 import 'package:agentic/util/codec.dart';
 import 'package:langchain/langchain.dart' as lc;
 import 'package:langchain_google/langchain_google.dart' as lc;
 
-class AnthropicConnector extends ChatConnector {
-  AnthropicConnector({
+class GoogleConnector extends ChatConnector {
+  GoogleConnector({
     required super.apiKey,
     super.baseUrl = "https://generativelanguage.googleapis.com/v1beta",
   });
+
+  @override
+  List<ChatModel> get supportedModels => const [
+    ChatModel.googleGemini2_5Pro,
+    ChatModel.googleGemini2_5Flash,
+    ChatModel.googleGemini2Flash,
+    ChatModel.googleGemini2FlashLite,
+  ];
 
   @override
   Future<ChatResult> call(ChatRequest request) async {
@@ -28,7 +37,7 @@ class AnthropicConnector extends ChatConnector {
         tools:
             request.tools.isEmpty
                 ? null
-                : request.tools.map((i) => i.toLangChain).toList(),
+                : request.tools.map((i) => i.toolSchema.toLangChain).toList(),
       ),
     ).invoke(
       lc.PromptValue.chat([for (Message i in request.messages) i.toLangChain]),

@@ -25,6 +25,11 @@ class ChatUsage {
   final int outputTokens;
 
   const ChatUsage({this.inputTokens = 0, this.outputTokens = 0});
+
+  operator +(ChatUsage other) => ChatUsage(
+    inputTokens: inputTokens + other.inputTokens,
+    outputTokens: outputTokens + other.outputTokens,
+  );
 }
 
 enum ChatFinishReason {

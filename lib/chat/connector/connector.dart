@@ -1,4 +1,5 @@
 import 'package:agentic/chat/connector/chat_request.dart';
+import 'package:agentic/chat/connector/model.dart';
 import 'package:agentic/chat/connector/result.dart';
 
 abstract class ChatConnector {
@@ -8,4 +9,6 @@ abstract class ChatConnector {
   const ChatConnector({required this.apiKey, required this.baseUrl});
 
   Future<ChatResult> call(ChatRequest request);
+
+  List<ChatModel> get supportedModels;
 }

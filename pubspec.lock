@@ -45,18 +45,18 @@ packages:
     dependency: "direct main"
     description:
       name: artifact
-      sha256: "4ddd5da295d6fb751a21fe68b3414a6fef5c342bcd3342161198029168b5de3c"
+      sha256: "54287337dfc90ed65e7589f00ecaadf03ddf73b5f4b4eb44711e41b80c535481"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.12"
+    version: "1.0.14"
   artifact_gen:
     dependency: "direct dev"
     description:
       name: artifact_gen
-      sha256: ec74e34c128b77004625e4c8e64e42025c352cc438d91856089534d5d28624f7
+      sha256: d27cf4c8077c7b62f6afa2de6f44171a89bd722d11bc43f71afbf33565f3d6bd
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.8"
+    version: "1.0.10"
   async:
     dependency: transitive
     description:
@@ -450,7 +450,7 @@ packages:
     source: hosted
     version: "0.7.3"
   langchain_tiktoken:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: langchain_tiktoken
       sha256: c1804f4b3e56574ca67e562305d9f11e3eabe3c8aa87fea8635992f7efc66674
@@ -809,5 +809,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.3"
+  yaml_edit:
+    dependency: "direct main"
+    description:
+      name: yaml_edit
+      sha256: fb38626579fb345ad00e674e2af3a5c9b0cc4b9bfb8fd7f7ff322c7c9e62aef5
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.2"
 sdks:
   dart: ">=3.7.0 <4.0.0"

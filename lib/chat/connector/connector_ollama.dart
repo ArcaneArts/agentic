@@ -1,3 +1,5 @@
+import 'package:agentic/chat/connector/model.dart';
+
 import 'connector_openai.dart';
 
 class OLlamaConnector extends OpenAIConnector {
@@ -5,4 +7,7 @@ class OLlamaConnector extends OpenAIConnector {
     super.apiKey = "",
     super.baseUrl = "http://localhost:11434/v1",
   });
+
+  @override
+  List<ChatModel> get supportedModels => const [];
 }

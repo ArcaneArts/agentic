@@ -1,6 +1,5 @@
-import 'package:agentic/util/cost.dart';
+import 'package:agentic/util/chat_models.dart';
 import 'package:artifact/artifact.dart';
-import 'package:rational/rational.dart';
 
 @artifact
 class ChatModel {
@@ -15,95 +14,442 @@ class ChatModel {
     required this.cost,
     required this.capabilities,
   });
-}
 
-@artifact
-class ChatModelCapabilities {
-  /// First all tool response messages are converted to system response messages prefixed with (tool <tool_id> called): <tool_response>
-  /// Then, all system messages are replaced into user messages prefixed with (system): <system_message>
-  final bool ultraCompatibleMode;
+  static const ChatModel mercuryCoderSmall = ChatModel(
+    id: "mercury-coder-small",
+    displayName: "Mercury Coder Small",
+    cost: ChatModelCost(input: 0.25, output: 1),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 131072,
+      maxTokenOutput: 16385,
+      inputModalities: [Modality.text],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: false,
+      streaming: false,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// Does this model support tool calling?
-  final bool tools;
+  static const ChatModel xaiGrok3 = ChatModel(
+    id: "grok-3",
+    displayName: "Grok 3",
+    cost: ChatModelCost(input: 3, output: 15),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 131072,
+      maxTokenOutput: 16385,
+      inputModalities: [Modality.text],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// Can this model see tool response messages? If not they will be replaced with system messages
-  final bool seesToolMessages;
+  static const ChatModel xaiGrok3Fast = ChatModel(
+    id: "grok-3-fast",
+    displayName: "Grok 3 Fast",
+    cost: ChatModelCost(input: 5, output: 25),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 131072,
+      maxTokenOutput: 16385,
+      inputModalities: [Modality.text],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// Does this model support reasoning?
-  final bool reasoning;
+  static const ChatModel xaiGrok3Mini = ChatModel(
+    id: "grok-3-mini",
+    displayName: "Grok 3 Mini",
+    cost: ChatModelCost(input: 0.30, output: 0.50),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 131072,
+      maxTokenOutput: 16385,
+      inputModalities: [Modality.text],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// Does this model support structured output? via JSON or other formats
-  final bool structuredOutput;
+  static const ChatModel xaiGrok3MiniFast = ChatModel(
+    id: "grok-3-mini-fast",
+    displayName: "Grok 3 Mini Fast",
+    cost: ChatModelCost(input: 0.60, output: 4),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 131072,
+      maxTokenOutput: 16385,
+      inputModalities: [Modality.text],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// Does this model support streaming?
-  final bool streaming;
+  static const ChatModel googleGemini2_5Pro = ChatModel(
+    id: "gemini-2.5-pro-preview-05-06",
+    displayName: "Gemini 2.5 Pro",
+    cost: ChatModelCost(input: 2.50, output: 15),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 1048576,
+      maxTokenOutput: 65536,
+      inputModalities: [
+        Modality.text,
+        Modality.image,
+        Modality.audio,
+        Modality.video,
+      ],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// The system mode of the model, see [ChatModelSystemMode]
-  final ChatModelSystemMode systemMode;
+  static const ChatModel googleGemini2_5Flash = ChatModel(
+    id: "gemini-2.5-flash-preview-04-17",
+    displayName: "Gemini 2.5 Flash",
+    cost: ChatModelCost(input: 0.15, output: 0.60),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 1048576,
+      maxTokenOutput: 65536,
+      inputModalities: [
+        Modality.text,
+        Modality.image,
+        Modality.audio,
+        Modality.video,
+      ],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// The maximum number of tokens the model can process in a single call
-  final int contextWindow;
+  static const ChatModel googleGemini2Flash = ChatModel(
+    id: "gemini-2.0-flash",
+    displayName: "Gemini 2.0 Flash",
+    cost: ChatModelCost(input: 0.1, output: 0.40),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 1048576,
+      maxTokenOutput: 8192,
+      inputModalities: [
+        Modality.text,
+        Modality.image,
+        Modality.audio,
+        Modality.video,
+      ],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// The maximum number of tokens the model can output in a single call
-  final int maxTokenOutput;
+  static const ChatModel googleGemini2FlashLite = ChatModel(
+    id: "gemini-2.0-flash",
+    displayName: "Gemini 2.0 Flash",
+    cost: ChatModelCost(input: 0.075, output: 0.30),
+    capabilities: ChatModelCapabilities(
+      tools: false,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 1048576,
+      maxTokenOutput: 8192,
+      inputModalities: [
+        Modality.text,
+        Modality.image,
+        Modality.audio,
+        Modality.video,
+      ],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// The input modalities supported by the model
-  final List<Modality> inputModalities;
+  static const ChatModel anthropicClaude3_7Sonnet = ChatModel(
+    id: "claude-3-7-sonnet-latest",
+    displayName: "Claude 3.7 Sonnet",
+    cost: ChatModelCost(input: 3, output: 15),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 200000,
+      maxTokenOutput: 64000,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: true,
+      structuredOutput: false,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// The output modalities supported by the model
-  final List<Modality> outputModalities;
+  static const ChatModel anthropicClaude3_5Haiku = ChatModel(
+    id: "claude-3-5-haiku-latest",
+    displayName: "Claude 3.5 Haiku",
+    cost: ChatModelCost(input: 0.8, output: 4),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 200000,
+      maxTokenOutput: 8192,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: false,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  const ChatModelCapabilities({
-    required this.tools,
-    required this.ultraCompatibleMode,
-    required this.systemMode,
-    required this.contextWindow,
-    required this.maxTokenOutput,
-    required this.inputModalities,
-    required this.outputModalities,
-    required this.reasoning,
-    required this.structuredOutput,
-    required this.streaming,
-    required this.seesToolMessages,
-  });
-}
+  static const ChatModel openaiO4Mini = ChatModel(
+    id: "o4-mini",
+    displayName: "o4 Mini",
+    cost: ChatModelCost(input: 1.10, output: 4.40),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 200000,
+      maxTokenOutput: 100000,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: true,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-enum Modality { text, image, audio, video }
+  static const ChatModel openaiO3 = ChatModel(
+    id: "o3",
+    displayName: "o3",
+    cost: ChatModelCost(input: 10, output: 40),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 200000,
+      maxTokenOutput: 100000,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: true,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-enum ChatModelSystemMode {
-  /// System messages are supported as messages
-  supported,
+  static const ChatModel openaiO3Mini = ChatModel(
+    id: "o3-mini",
+    displayName: "o3 Mini",
+    cost: ChatModelCost(input: 1.10, output: 4.40),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 200000,
+      maxTokenOutput: 100000,
+      inputModalities: [Modality.text],
+      outputModalities: [Modality.text],
+      reasoning: true,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// System messages are not supported as messages
-  /// They are supported as a separate field in the call
-  /// So we need to merge the messages into the system prompt field
-  merged,
+  static const ChatModel openaiO1Pro = ChatModel(
+    id: "o1-pro",
+    displayName: "o1 Pro",
+    cost: ChatModelCost(input: 150, output: 600),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 200000,
+      maxTokenOutput: 100000,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: true,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  /// There is no system message support
-  /// Nor is there a system prompt field in the call
-  /// We need to use user messages prefixed with (system):
-  unsupported,
-}
+  static const ChatModel openaiO1 = ChatModel(
+    id: "o1",
+    displayName: "o1",
+    cost: ChatModelCost(input: 15, output: 60),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 200000,
+      maxTokenOutput: 100000,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: true,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-@artifact
-class ChatModelCost {
-  // USD per 1m input tokens
-  final double input;
+  static const ChatModel openaiO1Mini = ChatModel(
+    id: "o1-mini",
+    displayName: "o1 Mini",
+    cost: ChatModelCost(input: 1.10, output: 4.40),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 128000,
+      maxTokenOutput: 65536,
+      inputModalities: [Modality.text],
+      outputModalities: [Modality.text],
+      reasoning: true,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  // USD per 1m input tokens
-  final double output;
+  static const ChatModel openai4_1 = ChatModel(
+    id: "gpt-4.1",
+    displayName: "4.1",
+    cost: ChatModelCost(input: 2, output: 8),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 1047576,
+      maxTokenOutput: 32768,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  const ChatModelCost({required this.input, required this.output});
+  static const ChatModel openai4_1Mini = ChatModel(
+    id: "gpt-4.1-mini",
+    displayName: "4.1 Mini",
+    cost: ChatModelCost(input: 0.40, output: 1.60),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 1047576,
+      maxTokenOutput: 32768,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  factory ChatModelCost.free() => const ChatModelCost(input: 0, output: 0);
+  static const ChatModel openai4_1Nano = ChatModel(
+    id: "gpt-4.1-nano",
+    displayName: "4.1 Nano",
+    cost: ChatModelCost(input: 0.10, output: 0.40),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 1047576,
+      maxTokenOutput: 32768,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  factory ChatModelCost.io(double input, double output) =>
-      ChatModelCost(input: input, output: output);
+  static const ChatModel openai4o = ChatModel(
+    id: "gpt-4o",
+    displayName: "4o",
+    cost: ChatModelCost(input: 2.50, output: 10),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 128000,
+      maxTokenOutput: 16384,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 
-  Rational getRealCost(int inputTokens, int outputTokens) =>
-      (TokenCost.rational(inputTokens, input) +
-          TokenCost.rational(outputTokens, output));
-
-  double getEstimatedCost(int inputTokens, int outputTokens) =>
-      getRealCost(inputTokens, outputTokens).toDouble();
+  static const ChatModel openai4oMini = ChatModel(
+    id: "gpt-4o-mini",
+    displayName: "4o Mini",
+    cost: ChatModelCost(input: 0.15, output: 0.60),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 128000,
+      maxTokenOutput: 16384,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
 }

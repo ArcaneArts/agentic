@@ -3,7 +3,7 @@ import 'package:agentic/chat/connector/model.dart';
 import 'connector_openai.dart';
 
 class InceptionLabsConnector extends OpenAIConnector {
-  InceptionLabsConnector({
+  const InceptionLabsConnector({
     required super.apiKey,
     super.baseUrl = "https://api.inceptionlabs.ai/v1",
   });

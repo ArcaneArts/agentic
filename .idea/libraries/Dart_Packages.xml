@@ -47,7 +47,7 @@
         <entry key="artifact_gen">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/artifact_gen-1.0.10/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/artifact_gen-1.0.12/lib" />
             </list>
           </value>
         </entry>
@@ -725,7 +725,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/anthropic_sdk_dart-0.2.0+1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/args-2.7.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/artifact-1.0.14/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/artifact_gen-1.0.10/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/artifact_gen-1.0.12/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/async-2.13.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/boolean_selector-2.1.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/build-2.4.2/lib" />

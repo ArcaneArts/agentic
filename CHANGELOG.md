@@ -1,3 +1,6 @@
+# 1.0.2
+* Const connections & Inception
+
 # 1.0.1
 * More
 

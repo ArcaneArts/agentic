@@ -1,14 +1,12 @@
 import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/connector/chat_request.dart';
-import 'package:agentic/chat/connector/connector.dart';
-import 'package:agentic/chat/connector/model.dart';
 import 'package:agentic/chat/connector/result.dart';
 import 'package:agentic/util/codec.dart';
 import 'package:langchain/langchain.dart' as lc;
 import 'package:langchain_openai/langchain_openai.dart' as lc;
 
 class OpenAIConnector extends ChatConnector {
-  OpenAIConnector({
+  const OpenAIConnector({
     required super.apiKey,
     super.baseUrl = "https://api.openai.com/v1",
   });

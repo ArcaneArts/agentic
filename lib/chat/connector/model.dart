@@ -1,4 +1,5 @@
-import 'package:agentic/util/chat_models.dart';
+import 'package:agentic/agentic.dart';
+import 'package:agentic/chat/connector/connected_model.dart';
 import 'package:artifact/artifact.dart';
 
 @artifact
@@ -14,6 +15,9 @@ class ChatModel {
     required this.cost,
     required this.capabilities,
   });
+
+  ConnectedChatModel connect(ChatConnector connector) =>
+      ConnectedChatModel(model: this, connector: connector);
 
   static const ChatModel mercuryCoderSmall = ChatModel(
     id: "mercury-coder-small",

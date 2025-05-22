@@ -13,6 +13,8 @@ class AnthropicConnector extends ChatConnector {
 
   @override
   List<ChatModel> get supportedModels => const [
+    ChatModel.anthropicClaude4Opus,
+    ChatModel.anthropicClaude4Sonnet,
     ChatModel.anthropicClaude3_7Sonnet,
     ChatModel.anthropicClaude3_5Haiku,
   ];

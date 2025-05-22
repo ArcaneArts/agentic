@@ -1,6 +1,7 @@
 import 'package:agentic/agentic.dart';
 import 'package:yaml_edit/yaml_edit.dart';
 
+@pragma('vm:entry-point')
 abstract class Tool {
   final String name;
   final String description;
@@ -18,6 +19,7 @@ abstract class Tool {
   });
 }
 
+@pragma('vm:entry-point')
 abstract class TransformerTool<I, O> extends Tool {
   TransformerTool({required super.name, required super.description});
 

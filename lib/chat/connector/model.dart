@@ -8,12 +8,14 @@ class ChatModel {
   final String? displayName;
   final ChatModelCost cost;
   final ChatModelCapabilities capabilities;
+  final bool deprecated;
 
   const ChatModel({
     required this.id,
     this.displayName,
     required this.cost,
     required this.capabilities,
+    this.deprecated = false,
   });
 
   ConnectedChatModel connect(ChatConnector connector) =>
@@ -139,7 +141,7 @@ class ChatModel {
   );
 
   static const ChatModel googleGemini2_5Flash = ChatModel(
-    id: "gemini-2.5-flash-preview-04-17",
+    id: "gemini-2.5-flash-preview-05-20",
     displayName: "Gemini 2.5 Flash",
     cost: ChatModelCost(input: 0.15, output: 0.60),
     capabilities: ChatModelCapabilities(
@@ -164,6 +166,7 @@ class ChatModel {
 
   static const ChatModel googleGemini2Flash = ChatModel(
     id: "gemini-2.0-flash",
+    deprecated: true,
     displayName: "Gemini 2.0 Flash",
     cost: ChatModelCost(input: 0.1, output: 0.40),
     capabilities: ChatModelCapabilities(
@@ -188,6 +191,7 @@ class ChatModel {
 
   static const ChatModel googleGemini2FlashLite = ChatModel(
     id: "gemini-2.0-flash",
+    deprecated: true,
     displayName: "Gemini 2.0 Flash",
     cost: ChatModelCost(input: 0.075, output: 0.30),
     capabilities: ChatModelCapabilities(
@@ -210,10 +214,49 @@ class ChatModel {
     ),
   );
 
+  static const ChatModel anthropicClaude4Opus = ChatModel(
+    id: "claude-opus-4-20250514",
+    displayName: "Claude 4 Opus",
+    cost: ChatModelCost(input: 15, output: 75),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 200000,
+      maxTokenOutput: 32000,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: true,
+      structuredOutput: false,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
+
+  static const ChatModel anthropicClaude4Sonnet = ChatModel(
+    id: "claude-sonnet-4-20250514",
+    displayName: "Claude 4 Sonnet",
+    cost: ChatModelCost(input: 3, output: 15),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 200000,
+      maxTokenOutput: 64000,
+      inputModalities: [Modality.text, Modality.image],
+      outputModalities: [Modality.text],
+      reasoning: true,
+      structuredOutput: false,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
+
   static const ChatModel anthropicClaude3_7Sonnet = ChatModel(
     id: "claude-3-7-sonnet-latest",
     displayName: "Claude 3.7 Sonnet",
     cost: ChatModelCost(input: 3, output: 15),
+    deprecated: true,
     capabilities: ChatModelCapabilities(
       tools: true,
       ultraCompatibleMode: false,
@@ -288,6 +331,7 @@ class ChatModel {
 
   static const ChatModel openaiO3Mini = ChatModel(
     id: "o3-mini",
+    deprecated: true,
     displayName: "o3 Mini",
     cost: ChatModelCost(input: 1.10, output: 4.40),
     capabilities: ChatModelCapabilities(
@@ -307,6 +351,7 @@ class ChatModel {
 
   static const ChatModel openaiO1Pro = ChatModel(
     id: "o1-pro",
+    deprecated: true,
     displayName: "o1 Pro",
     cost: ChatModelCost(input: 150, output: 600),
     capabilities: ChatModelCapabilities(
@@ -326,6 +371,7 @@ class ChatModel {
 
   static const ChatModel openaiO1 = ChatModel(
     id: "o1",
+    deprecated: true,
     displayName: "o1",
     cost: ChatModelCost(input: 15, output: 60),
     capabilities: ChatModelCapabilities(
@@ -345,6 +391,7 @@ class ChatModel {
 
   static const ChatModel openaiO1Mini = ChatModel(
     id: "o1-mini",
+    deprecated: true,
     displayName: "o1 Mini",
     cost: ChatModelCost(input: 1.10, output: 4.40),
     capabilities: ChatModelCapabilities(
@@ -421,6 +468,7 @@ class ChatModel {
 
   static const ChatModel openai4o = ChatModel(
     id: "gpt-4o",
+    deprecated: true,
     displayName: "4o",
     cost: ChatModelCost(input: 2.50, output: 10),
     capabilities: ChatModelCapabilities(
@@ -440,6 +488,7 @@ class ChatModel {
 
   static const ChatModel openai4oMini = ChatModel(
     id: "gpt-4o-mini",
+    deprecated: true,
     displayName: "4o Mini",
     cost: ChatModelCost(input: 0.15, output: 0.60),
     capabilities: ChatModelCapabilities(

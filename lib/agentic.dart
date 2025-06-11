@@ -20,4 +20,5 @@ export 'package:agentic/chat/tool/tool.dart';
 export 'package:agentic/chat/tool/tool_call.dart';
 export 'package:agentic/chat/tool/tool_schema.dart';
 export 'package:agentic/gen/artifacts.gen.dart';
+export 'package:agentic/ingest/chunker.dart';
 export 'package:agentic/util/chat_models.dart';

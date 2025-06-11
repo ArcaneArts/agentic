@@ -1,3 +1,9 @@
+# 1.0.6
+* Chunkers
+
+# 1.0.5
+* gemini-2.0-flash-lite
+
 # 1.0.4
 * Add Claude 4 Sonnet
 * Add Claude 4 Opus

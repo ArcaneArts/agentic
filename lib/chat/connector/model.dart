@@ -190,9 +190,9 @@ class ChatModel {
   );
 
   static const ChatModel googleGemini2FlashLite = ChatModel(
-    id: "gemini-2.0-flash",
+    id: "gemini-2.0-flash-lite",
     deprecated: true,
-    displayName: "Gemini 2.0 Flash",
+    displayName: "Gemini 2.0 Flash Lite",
     cost: ChatModelCost(input: 0.075, output: 0.30),
     capabilities: ChatModelCapabilities(
       tools: false,

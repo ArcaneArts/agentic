@@ -53,10 +53,10 @@ packages:
     dependency: "direct dev"
     description:
       name: artifact_gen
-      sha256: "3bf681ea6bbb295e99a0c08f8c213ef08f05b044e5277b066f44279c0da029fa"
+      sha256: "9afb56962b0e97b58b4386926519e9574273f8dac8774ba19d136db9ac7a03fe"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.12"
+    version: "1.0.13"
   async:
     dependency: transitive
     description:

@@ -1,3 +1,13 @@
+# 1.0.9
+* O3 Pricing Changes 
+* Gemini 2.5 Pro Model Update 6-05
+
+# 1.0.8
+* Fixes
+
+# 1.0.7
+* Post overlap count in chunker
+
 # 1.0.6
 * Chunkers
 

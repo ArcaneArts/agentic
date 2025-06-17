@@ -29,8 +29,8 @@ class ChatModel {
       tools: true,
       ultraCompatibleMode: false,
       systemMode: ChatModelSystemMode.supported,
-      contextWindow: 131072,
-      maxTokenOutput: 16385,
+      contextWindow: 64000,
+      maxTokenOutput: 8192,
       inputModalities: [Modality.text],
       outputModalities: [Modality.text],
       reasoning: false,
@@ -117,7 +117,7 @@ class ChatModel {
   );
 
   static const ChatModel googleGemini2_5Pro = ChatModel(
-    id: "gemini-2.5-pro-preview-05-06",
+    id: "gemini-2.5-pro-preview-06-05",
     displayName: "Gemini 2.5 Pro",
     cost: ChatModelCost(input: 2.50, output: 15),
     capabilities: ChatModelCapabilities(
@@ -313,7 +313,7 @@ class ChatModel {
   static const ChatModel openaiO3 = ChatModel(
     id: "o3",
     displayName: "o3",
-    cost: ChatModelCost(input: 10, output: 40),
+    cost: ChatModelCost(input: 2, output: 8),
     capabilities: ChatModelCapabilities(
       tools: true,
       ultraCompatibleMode: false,

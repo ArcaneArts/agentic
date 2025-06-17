@@ -13,10 +13,19 @@ import 'package:fast_log/fast_log.dart';
 class IChunk {
   final int index;
   final String content;
+  final String postContent;
   final int charStart;
   final int charEnd;
 
-  IChunk(this.index, this.content, this.charStart, this.charEnd);
+  IChunk(
+    this.index,
+    this.content,
+    this.postContent,
+    this.charStart,
+    this.charEnd,
+  );
+
+  String get fullContent => "$content$postContent";
 }
 
 class IChunker {
@@ -72,7 +81,8 @@ class TXChunkMerger extends StreamTransformerBase<String, IChunk> {
 
           yield IChunk(
             index++,
-            "$content$post",
+            content,
+            post,
             startCursor,
             buffer.startCursor + post.length,
           );
@@ -82,7 +92,7 @@ class TXChunkMerger extends StreamTransformerBase<String, IChunk> {
       if (buffer.isNotEmpty) {
         int startCursor = buffer.startCursor;
         String content = buffer.takeAll();
-        yield IChunk(index++, content, startCursor, buffer.startCursor);
+        yield IChunk(index++, content, "", startCursor, buffer.startCursor);
       }
     } catch (e, es) {
       error(e);

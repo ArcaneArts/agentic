@@ -9,5 +9,8 @@ class InceptionLabsConnector extends OpenAIConnector {
   });
 
   @override
-  List<ChatModel> get supportedModels => const [ChatModel.mercuryCoderSmall];
+  List<ChatModel> get supportedModels => const [
+    ChatModel.mercury,
+    ChatModel.mercuryCoder,
+  ];
 }

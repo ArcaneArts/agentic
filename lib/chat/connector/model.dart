@@ -21,21 +21,59 @@ class ChatModel {
   ConnectedChatModel connect(ChatConnector connector) =>
       ConnectedChatModel(model: this, connector: connector);
 
-  static const ChatModel mercuryCoderSmall = ChatModel(
-    id: "mercury-coder-small",
-    displayName: "Mercury Coder Small",
+  static const ChatModel mercuryCoder = ChatModel(
+    id: "mercury-coder",
+    displayName: "Mercury Coder",
     cost: ChatModelCost(input: 0.25, output: 1),
     capabilities: ChatModelCapabilities(
       tools: true,
       ultraCompatibleMode: false,
       systemMode: ChatModelSystemMode.supported,
-      contextWindow: 64000,
+      contextWindow: 32000,
       maxTokenOutput: 8192,
       inputModalities: [Modality.text],
       outputModalities: [Modality.text],
       reasoning: false,
       structuredOutput: false,
-      streaming: false,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
+
+  static const ChatModel mercury = ChatModel(
+    id: "mercury",
+    displayName: "Mercury",
+    cost: ChatModelCost(input: 0.25, output: 1),
+    capabilities: ChatModelCapabilities(
+      tools: false,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 32000,
+      maxTokenOutput: 8192,
+      inputModalities: [Modality.text],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: false,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
+
+  static const ChatModel xaiGrok4 = ChatModel(
+    id: "grok-4",
+    displayName: "Grok 4",
+    cost: ChatModelCost(input: 6, output: 30),
+    capabilities: ChatModelCapabilities(
+      tools: true,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 256000,
+      maxTokenOutput: 16385,
+      inputModalities: [Modality.text],
+      outputModalities: [Modality.text],
+      reasoning: true,
+      structuredOutput: true,
+      streaming: true,
       seesToolMessages: true,
     ),
   );
@@ -117,7 +155,7 @@ class ChatModel {
   );
 
   static const ChatModel googleGemini2_5Pro = ChatModel(
-    id: "gemini-2.5-pro-preview-06-05",
+    id: "gemini-2.5-pro",
     displayName: "Gemini 2.5 Pro",
     cost: ChatModelCost(input: 2.50, output: 15),
     capabilities: ChatModelCapabilities(
@@ -141,7 +179,7 @@ class ChatModel {
   );
 
   static const ChatModel googleGemini2_5Flash = ChatModel(
-    id: "gemini-2.5-flash-preview-05-20",
+    id: "gemini-2.5-flash",
     displayName: "Gemini 2.5 Flash",
     cost: ChatModelCost(input: 0.15, output: 0.60),
     capabilities: ChatModelCapabilities(
@@ -189,6 +227,31 @@ class ChatModel {
     ),
   );
 
+  static const ChatModel googleGemini2_5FlashLite = ChatModel(
+    id: "gemini-2.5-flash-lite-preview-06-17",
+    deprecated: true,
+    displayName: "Gemini 2.5 Flash Lite",
+    cost: ChatModelCost(input: 0.10, output: 0.40),
+    capabilities: ChatModelCapabilities(
+      tools: false,
+      ultraCompatibleMode: false,
+      systemMode: ChatModelSystemMode.supported,
+      contextWindow: 1000000,
+      maxTokenOutput: 64000,
+      inputModalities: [
+        Modality.text,
+        Modality.image,
+        Modality.audio,
+        Modality.video,
+      ],
+      outputModalities: [Modality.text],
+      reasoning: false,
+      structuredOutput: true,
+      streaming: true,
+      seesToolMessages: true,
+    ),
+  );
+
   static const ChatModel googleGemini2FlashLite = ChatModel(
     id: "gemini-2.0-flash-lite",
     deprecated: true,
@@ -215,7 +278,7 @@ class ChatModel {
   );
 
   static const ChatModel anthropicClaude4Opus = ChatModel(
-    id: "claude-opus-4-20250514",
+    id: "claude-opus-4-0",
     displayName: "Claude 4 Opus",
     cost: ChatModelCost(input: 15, output: 75),
     capabilities: ChatModelCapabilities(
@@ -234,7 +297,7 @@ class ChatModel {
   );
 
   static const ChatModel anthropicClaude4Sonnet = ChatModel(
-    id: "claude-sonnet-4-20250514",
+    id: "	claude-sonnet-4-0",
     displayName: "Claude 4 Sonnet",
     cost: ChatModelCost(input: 3, output: 15),
     capabilities: ChatModelCapabilities(

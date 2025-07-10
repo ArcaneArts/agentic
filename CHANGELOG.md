@@ -1,3 +1,14 @@
+# 1.1.0
+* + Grok 4
+* + Gemini 2.5 Flash Lite
+* + Mercury (Generalized Diffusion Model from InceptionLabs)
+* BREAKING mercury-coder-small is now just mercury-coder (changed field from mercuryCoderSmall to mercuryCoder)
+* Mercury Coder context window reduced from 64k to 32k again (they did it not me)
+* gemini-2.5-pro is now off preview model name
+* gemini-2.5-flash is now off preview model name
+* claude-opus-4-0 is now an alias for Claude 4
+* claude-sonnet-4-0 is now an alias for Claude 4 Sonnet
+
 # 1.0.9
 * O3 Pricing Changes 
 * Gemini 2.5 Pro Model Update 6-05

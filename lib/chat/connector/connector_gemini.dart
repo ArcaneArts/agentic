@@ -15,6 +15,7 @@ class GoogleConnector extends ChatConnector {
   List<ChatModel> get supportedModels => const [
     ChatModel.googleGemini2_5Pro,
     ChatModel.googleGemini2_5Flash,
+    ChatModel.googleGemini2_5FlashLite,
     ChatModel.googleGemini2Flash,
     ChatModel.googleGemini2FlashLite,
   ];

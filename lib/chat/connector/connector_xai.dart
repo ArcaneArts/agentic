@@ -10,6 +10,7 @@ class XaiConnector extends OpenAIConnector {
 
   @override
   List<ChatModel> get supportedModels => const [
+    ChatModel.xaiGrok4,
     ChatModel.xaiGrok3,
     ChatModel.xaiGrok3Fast,
     ChatModel.xaiGrok3Mini,

@@ -12,8 +12,14 @@ class Agent {
   final ConnectedChatModel llm;
   final String? user;
   final ChatProvider chatProvider;
+  final Map<String, dynamic> customData;
 
-  Agent({this.user, required this.llm, required this.chatProvider});
+  Agent({
+    this.user,
+    required this.llm,
+    required this.chatProvider,
+    this.customData = const {},
+  });
 
   Future<List<Message>> readMessages() => chatProvider.readMessages();
 

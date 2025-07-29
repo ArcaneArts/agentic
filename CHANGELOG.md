@@ -1,3 +1,6 @@
+# 1.1.2
+* Support open router models
+
 # 1.1.0
 * + Grok 4
 * + Gemini 2.5 Flash Lite

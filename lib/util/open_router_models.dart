@@ -1,6 +1,7 @@
 import 'package:agentic/agentic.dart';
 import 'package:artifact/artifact.dart';
 import 'package:decimal/decimal.dart';
+import 'package:fast_log/fast_log.dart';
 import 'package:http/http.dart' as http;
 import 'package:threshold/threshold.dart';
 import 'package:toxic/extensions/iterable.dart';
@@ -118,20 +119,19 @@ class OpenRouterPricing {
 
 //////////////////////////////////////////////////////////////////////
 
-void main() async {
-  //print(await _getCompressedData());
-}
-
-Future<String> _getCompressedData() =>
-    http.get(Uri.parse("https://openrouter.ai/api/v1/models")).then((v) {
-      int l = v.body.length;
-      String o = compress(
+Future<String> getLiveOpenRouterData() => http
+    .get(Uri.parse("https://openrouter.ai/api/v1/models"))
+    .then(
+      (v) => compress(
         $OpenRouterModelsListResponse.fromJson(v.body).toJson(pretty: false),
         allowBZip2: false,
         allowZLib: false,
-      );
-      print("$l -> ${o.length}");
-      return o;
+      ),
+    )
+    .catchError((e, es) {
+      warn("Failed to get live OpenRouter data. Using internal fallback.");
+      warn("$e, $es");
+      return _openRouterData;
     });
 
 const String _openRouterData =

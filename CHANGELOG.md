@@ -1,3 +1,9 @@
+# 1.1.4
+* Update to support gpt oss models
+
+# 1.1.3
+* Update pricing to reflect openrouter charges ~5% more than cost.
+
 # 1.1.2
 * Support open router models
 

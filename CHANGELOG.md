@@ -1,3 +1,10 @@
+# 1.1.6
+* Update open router models to support new models
+
+# 1.1.5
+* Support live opem router model pulling `Future<List<ChatModel>> getLiveOpenRouterModels()`
+* Updated to support gpt-5 models
+
 # 1.1.4
 * Update to support gpt oss models
 

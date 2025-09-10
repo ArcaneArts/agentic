@@ -13,11 +13,13 @@ class Agent {
   final String? user;
   final ChatProvider chatProvider;
   final Map<String, dynamic> customData;
+  final String? initialSystemMessage;
 
   Agent({
     this.user,
     required this.llm,
     required this.chatProvider,
+    this.initialSystemMessage,
     this.customData = const {},
   });
 
@@ -34,7 +36,11 @@ class Agent {
     ToolSchema? schema = tools.isNotEmpty ? null : responseFormat;
     ChatResult result = await llm.connector(
       ChatRequest(
-        messages: [...messages],
+        messages: [
+          if (initialSystemMessage != null)
+            Message.system(initialSystemMessage!),
+          ...messages,
+        ],
         model: llm.model,
         responseFormat: schema,
         tools: tools,

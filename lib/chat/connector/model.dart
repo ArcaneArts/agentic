@@ -18,6 +18,42 @@ class ChatModel {
     this.deprecated = false,
   });
 
+  const ChatModel.safe(this.id)
+    : displayName = null,
+      cost = const ChatModelCost(input: 0, output: 0),
+      capabilities = const ChatModelCapabilities(
+        tools: false,
+        contextWindow: 128000,
+        inputModalities: [Modality.text],
+        outputModalities: [Modality.text],
+        maxTokenOutput: 32000,
+        reasoning: false,
+        seesToolMessages: false,
+        streaming: false,
+        structuredOutput: false,
+        ultraCompatibleMode: true,
+        systemMode: ChatModelSystemMode.unsupported,
+      ),
+      deprecated = false;
+
+  const ChatModel.basic(this.id)
+    : displayName = null,
+      cost = const ChatModelCost(input: 0, output: 0),
+      capabilities = const ChatModelCapabilities(
+        tools: true,
+        contextWindow: 128000,
+        inputModalities: [Modality.text],
+        outputModalities: [Modality.text],
+        maxTokenOutput: 32000,
+        reasoning: true,
+        seesToolMessages: true,
+        streaming: false,
+        structuredOutput: true,
+        ultraCompatibleMode: false,
+        systemMode: ChatModelSystemMode.supported,
+      ),
+      deprecated = false;
+
   ConnectedChatModel connect(ChatConnector connector) =>
       ConnectedChatModel(model: this, connector: connector);
 

@@ -11,4 +11,24 @@ class OpenRouterConnector extends OpenAIConnector {
 
   @override
   List<ChatModel> get supportedModels => openRouterChatModels;
+
+  @override
+  Future<List<double>> embed({
+    required String model,
+    required String text,
+    int? dimensions,
+  }) =>
+      throw UnimplementedError(
+        "openrouter doesnt support this directly, use openai or ollama or naga providers",
+      );
+
+  @override
+  Future<List<List<double>>> embedMultiple({
+    required String model,
+    required List<String> texts,
+    int? dimensions,
+  }) =>
+      throw UnimplementedError(
+        "openrouter doesnt support this directly, use openai or ollama naga providers",
+      );
 }

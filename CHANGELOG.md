@@ -1,3 +1,7 @@
+# 1.1.7
+* Support Naga models https://naga.ac/platform/models 
+* Support openai + ollama + naga embedding models
+
 # 1.1.6
 * Update open router models to support new models
 

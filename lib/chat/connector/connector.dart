@@ -16,3 +16,17 @@ abstract class ChatConnector {
   ConnectedChatModel connect(ChatModel model) =>
       ConnectedChatModel(connector: this, model: model);
 }
+
+mixin EmbedProvider {
+  Future<List<double>> embed({
+    required String model,
+    required String text,
+    int? dimensions,
+  });
+
+  Future<List<List<double>>> embedMultiple({
+    required String model,
+    required List<String> texts,
+    int? dimensions,
+  });
+}

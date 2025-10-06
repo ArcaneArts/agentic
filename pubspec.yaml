@@ -1,6 +1,6 @@
 name: agentic
 description: Ai Wrapper
-version: 1.1.6
+version: 1.1.7
 repository: https://github.com/ArcaneArts/agentic
 environment:
   sdk: ^3.7.0
@@ -18,7 +18,7 @@ dependencies:
   fast_log: ">=1.0.7 <2.0.0"
   http: ">=1.4.0 <2.0.0"
   threshold: ">=1.0.4 <2.0.0"
-  expressions: ^0.2.5+2
+  expressions: ">=0.2.5 <1.0.0"
 dev_dependencies:
   artifact_gen: ^1.0.13
   build_runner: ^2.5.4

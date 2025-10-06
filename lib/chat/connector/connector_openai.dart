@@ -5,7 +5,7 @@ import 'package:agentic/util/codec.dart';
 import 'package:langchain/langchain.dart' as lc;
 import 'package:langchain_openai/langchain_openai.dart' as lc;
 
-class OpenAIConnector extends ChatConnector {
+class OpenAIConnector extends ChatConnector with EmbedProvider {
   const OpenAIConnector({
     required super.apiKey,
     super.baseUrl = "https://api.openai.com/v1",
@@ -72,4 +72,28 @@ class OpenAIConnector extends ChatConnector {
       usage: usage,
     );
   }
+
+  @override
+  Future<List<double>> embed({
+    required String model,
+    required String text,
+    int? dimensions,
+  }) => lc.OpenAIEmbeddings(
+    model: model,
+    apiKey: apiKey,
+    baseUrl: baseUrl,
+    dimensions: dimensions,
+  ).embedDocuments([lc.Document(pageContent: text)]).then((i) => i.first);
+
+  @override
+  Future<List<List<double>>> embedMultiple({
+    required String model,
+    required List<String> texts,
+    int? dimensions,
+  }) => lc.OpenAIEmbeddings(
+    model: model,
+    apiKey: apiKey,
+    baseUrl: baseUrl,
+    dimensions: dimensions,
+  ).embedDocuments(texts.map((i) => lc.Document(pageContent: i)).toList());
 }

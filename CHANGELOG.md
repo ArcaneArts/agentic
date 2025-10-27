@@ -1,3 +1,6 @@
+# 1.1.8
+* Advanced chunking support
+
 # 1.1.7
 * Support Naga models https://naga.ac/platform/models 
 * Support openai + ollama + naga embedding models

@@ -10,6 +10,7 @@ import 'dart:math';
 
 import 'package:agentic/ingest/distiller.dart';
 import 'package:artifact/artifact.dart';
+import 'package:chunky/chunky.dart' as chunky;
 import 'package:fast_log/fast_log.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -47,6 +48,60 @@ class IChunker {
         maxPostOverlap < maxChunkSize,
         "Post overlap must be less than chunk size",
       );
+
+  int get _chunkyChunkSize => max(1, maxChunkSize - maxPostOverlap);
+
+  chunky.Chunker get _chunkyChunker =>
+      chunky.Chunker(chunkSize: _chunkyChunkSize);
+
+  Stream<IChunk> _adaptChunkStream(Stream<chunky.Chunk> chunks) async* {
+    chunky.Chunk? previous;
+
+    await for (final chunk in chunks) {
+      if (previous != null) {
+        yield _adaptChunk(previous, next: chunk);
+      }
+
+      previous = chunk;
+    }
+
+    if (previous != null) {
+      yield _adaptChunk(previous);
+    }
+  }
+
+  IChunk _adaptChunk(chunky.Chunk chunk, {chunky.Chunk? next}) {
+    final postContent = _buildPostContent(next?.content ?? "");
+
+    return IChunk(
+      index: chunk.id,
+      content: chunk.content,
+      postContent: postContent,
+      charStart: chunk.start,
+      charEnd: chunk.start + chunk.content.length + postContent.length,
+      lod: 0,
+      from: const [],
+    );
+  }
+
+  String _buildPostContent(String nextContent) {
+    if (maxPostOverlap <= 0 || nextContent.isEmpty) {
+      return "";
+    }
+
+    if (nextContent.length <= maxPostOverlap) {
+      return nextContent;
+    }
+
+    final capped = nextContent.substring(0, maxPostOverlap);
+    final whitespace = capped.lastIndexOf(RegExp(r'\s'));
+
+    if (whitespace <= 0) {
+      return capped;
+    }
+
+    return capped.substring(0, whitespace + 1);
+  }
 
   Stream<IChunk> recursiveDistillChunks({
     required Stream<IChunk> chunks,
@@ -128,19 +183,21 @@ class IChunker {
     IChunkExploder2(maxChunkSize: maxChunkSize, maxPostOverlap: maxPostOverlap),
   );
 
-  Stream<IChunk> chunkByteStream(Stream<List<int>> stream) => chunkStringStream(
-    stream.transform(utf8.decoder).transform(const LineSplitter()),
+  Stream<IChunk> chunkByteStream(Stream<List<int>> stream) => _adaptChunkStream(
+    _chunkyChunker.transform(stream.transform(utf8.decoder)),
   );
 
   Stream<IChunk> chunkString(String str) =>
-      chunkStringStream(Stream.value(str));
+      _adaptChunkStream(_chunkyChunker.transformString(str));
 
-  Stream<IChunk> chunkStringStream(Stream<String> str) => str
-      .map((v) => "$v\n")
-      .transform(TXPieceSplitter(min(maxChunkSize, maxPostOverlap)))
-      .transform(TXChunkMerger(maxSize: maxChunkSize, maxPost: maxPostOverlap));
+  Stream<IChunk> chunkStringStream(Stream<String> str) => _adaptChunkStream(
+    _chunkyChunker.transform(
+      str.map((value) => value.endsWith('\n') ? value : "$value\n"),
+    ),
+  );
 
-  Stream<IChunk> chunkTextFile(File file) => chunkByteStream(file.openRead());
+  Stream<IChunk> chunkTextFile(File file) =>
+      _adaptChunkStream(_chunkyChunker.transformFile(file));
 }
 
 class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {

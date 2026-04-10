@@ -1,3 +1,14 @@
+# 1.2.1
+* Switch Agentic's ingestion backend over to Chunky while keeping `IChunker` and `IDistiller` as the compatibility layer
+* Re-export Chunky from `package:agentic/agentic.dart` so `Chunker`, `FileStringer`, and `Embedder` are available from the main barrel import
+* Update chunking and ingestion docs to show both the Agentic wrapper flow and direct Chunky usage
+* Depend on the published `chunky ^1.0.3` release instead of a local path package
+
+# 1.2.0
+* Add `OpenRouterManagementClient` for management-key API key lifecycle operations
+* Add OpenRouter embeddings support through `OpenRouterConnector.embed(...)` and `embedMultiple(...)`
+* Update the README with OpenRouter management and embeddings usage examples
+
 # 1.1.9
 * Support for new models and pricing updates
 * Fixed Naga sync

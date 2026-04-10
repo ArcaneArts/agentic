@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: a96e8b390886ee8abb49b7bd3ac8df6f451c621619f52a26e815fdcf568959ff
+      sha256: cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.9"
+    version: "3.6.1"
   args:
     dependency: transitive
     description:
@@ -81,6 +81,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  bpe:
+    dependency: transitive
+    description:
+      name: bpe
+      sha256: fc73143e51be5d72f6ea943acf79b49adb5bba0405db4dd026ee148d46f14f00
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   build:
     dependency: transitive
     description:
@@ -161,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  chunky:
+    dependency: "direct main"
+    description:
+      name: chunky
+      sha256: "50e187e312edf240d44bbb342c520ba2e30f021cde072d8c3438ad3727107095"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   cli_config:
     dependency: transitive
     description:
@@ -249,6 +265,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: "3e0141505477fd8ad55d6eb4e7776d3fe8430be8e497ccb1521370c3f21a3e2b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.8"
+  excel:
+    dependency: transitive
+    description:
+      name: excel
+      sha256: "1a15327dcad260d5db21d1f6e04f04838109b39a2f6a84ea486ceda36e468780"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.6"
   expressions:
     dependency: "direct main"
     description:
@@ -281,14 +313,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.4"
-  ffi:
-    dependency: transitive
-    description:
-      name: ffi
-      sha256: "6d7fd89431262d8f3125e81b50d3847a091d846eafcd4fdb88dd06f36d705a45"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.0"
   file:
     dependency: transitive
     description:
@@ -305,6 +329,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  flutter:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   freezed_annotation:
     dependency: transitive
     description:
@@ -513,6 +542,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.17"
+  material_color_utilities:
+    dependency: transitive
+    description:
+      name: material_color_utilities
+      sha256: "9c337007e82b1889149c82ed242ed1cb24a66044e30979c44912381e9be4c48b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.13.0"
   meta:
     dependency: transitive
     description:
@@ -577,14 +614,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
-  posix:
-    dependency: transitive
-    description:
-      name: posix
-      sha256: "185ef7606574f789b40f289c233efa52e96dead518aed988e040a10737febb07"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.5.0"
   pub_semver:
     dependency: transitive
     description:
@@ -665,6 +694,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  sky_engine:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   source_gen:
     dependency: transitive
     description:
@@ -737,6 +771,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: bee87cdfe527b31705190162e3bd27bf468d591ae7c68182244bdfd94e21f737
+      url: "https://pub.dev"
+    source: hosted
+    version: "29.2.11"
+  syncfusion_flutter_pdf:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_pdf
+      sha256: "08fc998934dab953e980ab3b98482e994beda2e736b88c9fec99cdcf04036509"
+      url: "https://pub.dev"
+    source: hosted
+    version: "29.2.11"
   term_glyph:
     dependency: transitive
     description:
@@ -773,10 +823,10 @@ packages:
     dependency: "direct main"
     description:
       name: threshold
-      sha256: "0a1585947eb84bfbe7ca6a6598c9075d3d71fe969e81668cd6d2122be664fd39"
+      sha256: "8688b26b34b14eca39aba37d87c508ec29876e6e42c66cc735ac4232e28ada2d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.4"
   timing:
     dependency: transitive
     description:
@@ -809,6 +859,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.5.1"
+  vector_math:
+    dependency: transitive
+    description:
+      name: vector_math
+      sha256: d530bd74fea330e6e364cda7a85019c434070188383e1cd8d9777ee586914c5b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   vertex_ai:
     dependency: transitive
     description:
@@ -865,6 +923,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  xml:
+    dependency: transitive
+    description:
+      name: xml
+      sha256: b015a8ad1c488f66851d762d3090a21c600e479dc75e68328c52774040cf9226
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.5.0"
   yaml:
     dependency: transitive
     description:
@@ -882,4 +948,4 @@ packages:
     source: hosted
     version: "2.2.2"
 sdks:
-  dart: ">=3.8.0-0 <4.0.0"
+  dart: ">=3.9.0-0 <4.0.0"

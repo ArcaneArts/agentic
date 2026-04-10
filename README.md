@@ -1,272 +1,522 @@
 # Agentic
 
-Use ai but easier
+`agentic` is a Dart package for building AI-powered apps with one consistent API across multiple providers.
 
-# Chat Connectors
-Chat connectors are basically just AI gateways
+It gives you:
 
-```dart
-ChatConnector openai = OpenAIConnector(apiKey: "sk-proj-...");
-ChatConnector anthropic = AnthropicConnector(apiKey: "sk-ant-api03-...");
-ChatConnector google = GoogleConnector(apiKey: "...");
-ChatConnector xai = XaiConnector(apiKey: "xai-...");
-ChatConnector ollama = OLlamaConnector();
+- direct chat calls through a shared request/response model
+- built-in model metadata for pricing and capabilities
+- a stateful `Agent` abstraction for multi-step tool use
+- structured output via JSON schema
+- embeddings on supported OpenAI-compatible backends
+- an OpenRouter management-key client for API key lifecycle management
+- chunking and recursive distillation utilities for long-form ingestion
+
+## What This Project Is
+
+Agentic is a lightweight wrapper around several LLM providers that normalizes the parts that are usually annoying to re-implement over and over:
+
+- provider-specific request formatting
+- model capability differences
+- tool calling
+- structured outputs
+- token usage and cost tracking
+- stateful chat history for agents
+
+Instead of wiring each provider differently, you work with the same `ChatRequest`, `ChatModel`, `Message`, `Content`, `Tool`, and `Agent` types.
+
+## What It Supports
+
+Out of the box, the package includes connectors for:
+
+- OpenAI
+- Anthropic
+- Google Gemini
+- xAI
+- Inception Labs
+- Ollama
+
+There are also additional OpenAI-compatible connectors in the repo for:
+
+- OpenRouter
+- Naga
+
+Those advanced connectors currently require direct imports instead of the main barrel export.
+
+The package also includes a typed `OpenRouterManagementClient` for managing OpenRouter API keys with a management key.
+
+## Features
+
+- Unified connector interface with `ChatConnector`
+- Built-in model catalog with pricing and capability metadata
+- Exact cost tracking using `Rational`
+- Text and image chat inputs through the shared `Content` model
+- Stateful agents with recursive tool execution
+- Tool schemas with strict JSON-schema-based arguments
+- Structured outputs with `ToolSchema`
+- Embeddings on supported OpenAI-compatible connectors
+- OpenRouter management-key client for creating, listing, updating, and deleting API keys
+- Local model support through Ollama
+- Document chunking, rechunking, distillation, and recursive summarization
+- Generated codecs for Agentic's own data models via `artifact`
+
+## Installation
+
+```bash
+dart pub add agentic
 ```
 
-# Chat Models
-Most models are already properly defined for you such as `ChatModel.openai4_1;`. However you can define your own models as needed
+If you want generated schemas/codecs for your own tool input/output models, also add:
 
-```dart
-const ChatModel openaiO3 = ChatModel(
-    // The real model id
-    id: "o3",
-    
-    // The display name if desired (optional)
-    displayName: "o3",
-    
-    // How much the model costs in USD
-    cost: ChatModelCost(input: 10, output: 40),
-    
-    // Capabilities of this model
-    capabilities: ChatModelCapabilities(
-      
-      // Can it use tools?
-      tools: true,
-      
-      // Makes system messages appear as user messages prefixed (system):
-      // Also makes tool messages user messages prefixed (tool <id>):
-      ultraCompatibleMode: false,
-      
-      // There are 3 system modes.
-      // - supported: Full support can see system messages
-      // - merged: System messages are merged into a systemPrompt field
-      // - unsupported: System messages are converted into user messages
-      systemMode: ChatModelSystemMode.supported,
-      
-      // The context window in tokens
-      contextWindow: 200000,
-      
-      // The maximum token output
-      maxTokenOutput: 100000,
-      
-      // What modalities this model can use as inputs
-      inputModalities: [Modality.text, Modality.image],
-      
-      // What modalities this model can use as outputs
-      outputModalities: [Modality.text],
-      
-      // Does this model "reason"
-      reasoning: true,
-      
-      // Does this model support structured outputs?
-      structuredOutput: true,
-      
-      // Is this model streamable output?
-      streaming: true,
-      
-      // Can this model see tool messages? If not
-      // They will be prefixed user messages
-      seesToolMessages: true,
-    ),
-);
+```bash
+dart pub add artifact
+dart pub add dev:build_runner
+dart pub add dev:artifact_gen
 ```
 
-# Basic Usage
+Then run:
 
-```dart
-ChatResult result = await openai(
-  ChatRequest(
-    // Some messages
-    messages: [
-      Message.system("You are a helpful assistant"),
-      Message.user("Why is the sky blue?"),
-    ],
-    
-    // And the model
-    model: ChatModel.openai4_1Mini,
-  ),
-);
-
-print(result.message.content);
-
-// Get the real cost by storing as a fraction
-Rational realCost = result.realCost;
-
-// Convert to double with some precision loss
-double estimateCost = realCost.toDouble();
+```bash
+dart run build_runner build --delete-conflicting-outputs
 ```
 
-# Agents
-Agents make tool calling and multi-step pipelines much easier
+## Core Concepts
+
+- `ChatConnector`: a provider client such as `OpenAIConnector` or `GoogleConnector`
+- `ChatModel`: a model definition with id, pricing, and capabilities
+- `ChatRequest`: the normalized request object sent to a connector
+- `Message` and `Content`: shared chat/message primitives
+- `Agent`: a stateful wrapper that reads history, calls the model, runs tools, and appends results
+- `Tool`: a callable unit the model can invoke
+- `ToolSchema`: a JSON schema for structured model output
+- `IChunker` and `IDistiller`: ingestion helpers for breaking down and compressing large documents
+
+## Basic Usage
 
 ```dart
-Agent agent = Agent(
-    // Our connector will use openai
-    connector: openai,
+import 'package:agentic/agentic.dart';
 
-    // We will use a standard model gpt-4.1
-    model: ChatModel.openai4_1,
+Future<void> main() async {
+  final openai = OpenAIConnector(apiKey: 'sk-proj-...');
 
-    // Now, let's setup the initial messages for the agent to run
-    chatProvider: MemoryChatProvider(
+  final result = await openai(
+    ChatRequest(
+      model: ChatModel.openai4_1Mini,
       messages: [
-        // You can use full content 
-        // with SystemMessage(content: Content.text("..."))
-        Message.system("You are a helpful assistant"),
-        Message.user("Why is the sky blue?"),
+        Message.system('You are brief and helpful.'),
+        Message.user('Give me three weekend side-project ideas.'),
       ],
     ),
-);
+  );
+
+  print(result.message.content);
+  print('Input tokens: ${result.usage.inputTokens}');
+  print('Output tokens: ${result.usage.outputTokens}');
+  print('Approx cost: \$${result.realCost.toDouble()}');
+}
 ```
 
-Then you can use the agent
+What this does:
+
+- sends a normalized `ChatRequest`
+- returns an `AgentMessage` inside `ChatResult`
+- tracks token usage and exact estimated cost
+
+## Connector Examples
 
 ```dart
-// Run the agent and get the response message
-// Note: The response message is already added to the chat
-AgentMessage message = await agent();
-agent.addMessage(Message.user("Make a poem out of this"));
-AgentMessage message = await agent();
-// and so on.
+import 'package:agentic/agentic.dart';
+
+final openai = OpenAIConnector(apiKey: 'sk-proj-...');
+final anthropic = AnthropicConnector(apiKey: 'sk-ant-...');
+final google = GoogleConnector(apiKey: '...');
+final xai = XaiConnector(apiKey: 'xai-...');
+final inception = InceptionLabsConnector(apiKey: '...');
+final ollama = OLlamaConnector();
 ```
 
-Tools and response format can be added in the agent call as well
-
-# Full Example 
+If you want a connected model object for agents, use `connect`:
 
 ```dart
-void main() async {
-  // First, we setup the agent
-  Agent agent = Agent(
-    // Our connector will use openai
-    connector: OpenAIConnector(apiKey: "sk-proj-..."),
+final llm = OpenAIConnector(apiKey: 'sk-proj-...')
+    .connect(ChatModel.openai4_1Mini);
+```
 
-    // We will use a standard model gpt-4.1
-    model: ChatModel.openai4_1,
+## OpenRouter Management Keys
 
-    // Now, let's setup the initial messages for the agent to run
+`OpenRouterManagementClient` is a separate utility client for OpenRouter's management-key API. You pass it a management key such as `sk-management-...` and use it to create, list, inspect, update, enable, disable, and delete OpenRouter API keys.
+
+Unlike `OpenRouterConnector`, this is not a chat connector. It is an HTTP client for key administration.
+
+```dart
+import 'package:agentic/agentic.dart';
+
+Future<void> main() async {
+  final client = OpenRouterManagementClient('sk-management-key');
+
+  final recurring = await client.createRecurringKey(
+    name: 'Analytics Service Key',
+    limit: 100,
+    reset: OpenRouterApiKeyLimitReset.weekly,
+    includeByokInLimit: false,
+  );
+
+  print('New key secret: ${recurring.key}');
+  print('New key hash: ${recurring.data.hash}');
+
+  final oneTime = await client.createOneTimeUseBurnKey(
+    name: 'Temporary Burn Key',
+    limit: 15,
+    expiresAt: DateTime.utc(2029, 11, 30, 23, 59, 59),
+  );
+
+  final keys = await client.listApiKeys(includeDisabled: true);
+  print('Managed key count: ${keys.length}');
+
+  final current = await client.getCurrentApiKey();
+  print('Is management key: ${current.isManagementKey}');
+
+  final updated = await client.setRecurringLimit(
+    recurring.data.hash,
+    name: 'Updated Analytics Key',
+    limit: 75,
+    reset: OpenRouterApiKeyLimitReset.daily,
+  );
+
+  print('Updated limit reset: ${updated.limitReset}');
+
+  await client.disableKey(oneTime.data.hash);
+  await client.removeApiKey(oneTime.data.hash);
+
+  client.close();
+}
+```
+
+Common methods:
+
+- `getCurrentApiKey()` or `getCurrentKey()`
+- `listApiKeys()` or `listKeys()`
+- `getApiKey(hash)` or `getKey(hash)`
+- `createApiKey(request)` or `createKey(request)`
+- `createRecurringKey(...)`
+- `createOneTimeUseBurnKey(...)`
+- `updateApiKey(hash, request)` or `updateKey(hash, request)`
+- `setRecurringLimit(...)`
+- `setOneTimeUseBurnLimit(...)`
+- `enableKey(hash)`
+- `disableKey(hash)`
+- `removeApiKey(hash)` or `deleteApiKey(hash)`
+
+Request helpers:
+
+- `OpenRouterCreateApiKeyRequest.recurring(...)` creates a key with a recurring budget reset such as daily, weekly, or monthly
+- `OpenRouterCreateApiKeyRequest.oneTimeUseBurn(...)` creates a fixed-spend burn key with no recurring reset
+- `OpenRouterCreateApiKeyRequest.unlimited(...)` creates a key with no spending limit
+- `OpenRouterUpdateApiKeyRequest.recurring(...)` changes a key to a recurring budget
+- `OpenRouterUpdateApiKeyRequest.oneTimeUseBurn(...)` changes a key to a one-time burn budget
+- `OpenRouterUpdateApiKeyRequest.unlimited(...)` clears spending limits and recurring resets
+
+Notes:
+
+- `createRecurringKey` and `createOneTimeUseBurnKey` return an `OpenRouterCreatedApiKey`, which includes both the created key metadata and the actual secret key string.
+- The secret key value is only returned at creation time by OpenRouter, so you should store it when you create it.
+- `expiresAt` is sent as a UTC ISO 8601 timestamp.
+- `limitReset` uses `OpenRouterApiKeyLimitReset.daily`, `.weekly`, or `.monthly`.
+
+## Stateful Agents
+
+`Agent` is the higher-level abstraction in this package. It keeps chat history in a `ChatProvider`, calls the model, executes tools, appends tool responses, and can continue recursively.
+
+`MemoryChatProvider` is available, but it currently needs a direct import:
+
+```dart
+import 'package:agentic/agentic.dart';
+import 'package:agentic/chat/agent/chat_provider.dart';
+
+Future<void> main() async {
+  final agent = Agent(
+    llm: OpenAIConnector(apiKey: 'sk-proj-...')
+        .connect(ChatModel.openai4_1Mini),
     chatProvider: MemoryChatProvider(
       messages: [
-        SystemMessage(content: Content.text("You are a helpful assistant")),
+        Message.system('You are a helpful assistant.'),
+        Message.user('Explain what this library does in one sentence.'),
+      ],
+    ),
+  );
+
+  final firstReply = await agent();
+  print(firstReply.content);
+
+  await agent.addMessage(
+    Message.user('Now rewrite that for a README tagline.'),
+  );
+
+  final secondReply = await agent();
+  print(secondReply.content);
+}
+```
+
+## Tool Example
+
+```dart
+import 'package:agentic/agentic.dart';
+import 'package:agentic/chat/agent/chat_provider.dart';
+
+class UppercaseTool extends Tool {
+  UppercaseTool()
+      : super(
+          name: 'uppercase',
+          description: 'Convert a string to uppercase.',
+        );
+
+  @override
+  Map<String, dynamic> get schema => {
+        'type': 'object',
+        'additionalProperties': false,
+        'required': ['text'],
+        'properties': {
+          'text': {
+            'type': 'string',
+            'description': 'The text to convert to uppercase.',
+          },
+        },
+      };
+
+  @override
+  Future<String> call({
+    required Agent agent,
+    required Map<String, dynamic> arguments,
+  }) async {
+    return (arguments['text'] as String).toUpperCase();
+  }
+}
+
+Future<void> main() async {
+  final agent = Agent(
+    llm: OpenAIConnector(apiKey: 'sk-proj-...')
+        .connect(ChatModel.openai4_1Mini),
+    chatProvider: MemoryChatProvider(
+      messages: [
+        Message.system('Use tools when they help.'),
+        Message.user('Turn "agentic makes wrappers easier" into uppercase.'),
+      ],
+    ),
+  );
+
+  final reply = await agent(tools: [UppercaseTool()]);
+  print(reply.content);
+}
+```
+
+## Structured Output Example
+
+Use `responseFormat` when you want a strict JSON object back instead of free-form text.
+
+```dart
+import 'dart:convert';
+
+import 'package:agentic/agentic.dart';
+
+Future<void> main() async {
+  final openai = OpenAIConnector(apiKey: 'sk-proj-...');
+
+  final result = await openai(
+    ChatRequest(
+      model: ChatModel.openai4_1Mini,
+      messages: [
+        Message.user('Summarize Agentic in one sentence and give it 3 tags.'),
+      ],
+      responseFormat: const ToolSchema(
+        name: 'project_summary',
+        description: 'A short summary and tags for the project.',
+        schema: {
+          'type': 'object',
+          'additionalProperties': false,
+          'required': ['summary', 'tags'],
+          'properties': {
+            'summary': {'type': 'string'},
+            'tags': {
+              'type': 'array',
+              'items': {'type': 'string'},
+            },
+          },
+        },
+      ),
+    ),
+  );
+
+  final json = jsonDecode(result.message.content.toString())
+      as Map<String, dynamic>;
+
+  print(json['summary']);
+  print(json['tags']);
+}
+```
+
+This is currently a good fit for connectors in this package that support structured output, such as OpenAI and Google.
+
+## Multimodal Example
+
+For multimodal prompts, build a `UserMessage` manually with grouped content:
+
+```dart
+import 'package:agentic/agentic.dart';
+
+Future<void> main() async {
+  final google = GoogleConnector(apiKey: '...');
+
+  final result = await google(
+    ChatRequest(
+      model: ChatModel.googleGemini2_5Flash,
+      messages: [
+        Message.system('Answer in one sentence.'),
         UserMessage(
-          content: Content.text("Do red and yellow confetti on the screen"),
+          content: Content.group([
+            Content.text('What is happening in this image?'),
+            Content.imageUrl('https://example.com/example.png'),
+          ]),
         ),
       ],
     ),
   );
 
-  // Now, we invoke the agent with this state
-  // Note how we add our tool (see below) so the agent can use it
-  await agent(tools: [ConfettiTool()]);
-  await agent.addMessage(
-    UserMessage(content: Content.text("Was confetti run?")),
-  );
-  await agent(
-    responseFormat: ToolSchema(
-      name: "Output",
-      description: "An output of if confetti was run or not",
-      schema: $ConfettiCheck.schema,
+  print(result.message.content);
+}
+```
+
+## Local Models With Ollama
+
+For local or custom OpenAI-compatible models, define the model yourself:
+
+```dart
+import 'package:agentic/agentic.dart';
+
+Future<void> main() async {
+  final ollama = OLlamaConnector();
+
+  final result = await ollama(
+    ChatRequest(
+      model: ChatModel.basic('gpt-oss:20b'),
+      messages: [
+        Message.user('Write a haiku about clean APIs.'),
+      ],
     ),
   );
-  // At THIS point, the agent has run, then the tool ran, then the agent ran again without tools to explain itself.
 
-  // This is just some stuff to print the final chat state but we could run more stuff too
-  print("---");
-  for (Message i in await agent.readMessages()) {
-    print(
-      "${i.runtimeType.toString().replaceAll("Message", "")}: ${i.content}",
-    );
+  print(result.message.content);
+}
+```
+
+Use:
+
+- `ChatModel.basic(...)` when the backend behaves like a modern tool/JSON-capable model
+- `ChatModel.safe(...)` when you want a conservative fallback with fewer assumptions
+
+## Embeddings Example
+
+OpenAI-compatible connectors that implement embeddings expose `embed` and `embedMultiple`.
+
+```dart
+import 'package:agentic/agentic.dart';
+
+Future<void> main() async {
+  final openai = OpenAIConnector(apiKey: 'sk-proj-...');
+
+  final vector = await openai.embed(
+    model: 'text-embedding-3-small',
+    text: 'Agentic wraps multiple providers behind one Dart API.',
+    dimensions: 256,
+  );
+
+  print('Embedding dimensions: ${vector.length}');
+}
+```
+
+## Chunking And Distillation
+
+`IChunker` helps you split long text into overlapping chunks. `IDistiller` uses an LLM to recursively compress or summarize those chunks.
+
+`IDistiller` currently needs a direct import:
+
+```dart
+import 'package:agentic/agentic.dart';
+import 'package:agentic/ingest/distiller.dart';
+
+const longDocumentText = '''
+Put a long body of text here.
+It can be OCR output, a transcript, notes, or raw document text.
+''';
+
+Future<void> main() async {
+  final chunker = IChunker(maxChunkSize: 500, maxPostOverlap: 100);
+  final distiller = IDistiller(
+    llm: OpenAIConnector(apiKey: 'sk-proj-...')
+        .connect(ChatModel.openai4_1Mini),
+    targetOutputSize: 400,
+  );
+
+  await for (final chunk in chunker.recursiveDistillChunks(
+    chunks: chunker.chunkString(longDocumentText),
+    distiller: distiller,
+    factor: 4,
+    parallelism: 4,
+  )) {
+    print('L${chunk.lod} #${chunk.index}: ${chunk.fullContent}');
   }
-  print("---");
-
-  print("Total usage: ${agent.totalUsage}");
-}
-
-// To make it easy on ourselves, lets actually data model the tool input json
-@Artifact(generateSchema: true) // artifact will generate a schema for us
-class ConfettiToolSchema {
-  // We need to describe parameters so the ai know what the fuck they are for
-  @describe("An array of colors to be used for the confetti colors")
-  final List<ConfettiColor> colors;
-
-  const ConfettiToolSchema({this.colors = const []});
-}
-
-// Now we define the actual color object which the tool can support multiple of
-@Artifact(generateSchema: true)
-class ConfettiColor {
-  @describe("The red channel of this color 0-255")
-  final int r;
-
-  @describe("The green channel of this color 0-255")
-  final int g;
-
-  @describe("The blue channel of this color 0-255")
-  final int b;
-
-  const ConfettiColor({required this.r, required this.g, required this.b});
-
-  @override
-  String toString() => "($r,$g,$b)";
-}
-
-// Ok finally, we can actually make the tool with ease
-class ConfettiTool extends TransformerTool<ConfettiToolSchema, String> {
-  // 1. Override the name and description so the ai knows what this tool is
-  ConfettiTool({
-    super.name = "confetti",
-    super.description =
-        "Plays confetti on the user's screen with multiple color options",
-  });
-
-  // Lets tell the tool what our schema is. Since we're using artifact, this is cake
-  @override
-  Map<String, dynamic> get schema => $ConfettiToolSchema.schema;
-
-  @override
-  Future<String> callTransform(Agent agent, ConfettiToolSchema request) async {
-    // 2. Actually do something
-    print("Playing Confetti in ${request.colors.join(" AND ")}");
-
-    // 3. Return a string to the ai so it can explain what the tool did, or an output.
-    // The ai sees this but not necessarily the the end user depending on ux
-    // The ai will use this to explain itself after all tools have been run by the ai
-    return "Confetti played in ${request.colors.join(" , ")}";
-  }
-
-  // This is how we decode the ai arguments
-  @override
-  ConfettiToolSchema decodeInput(Map<String, dynamic> input) =>
-      $ConfettiToolSchema.fromMap(input);
-
-  // Since we're just returning a string to the ai we dont need to encode it
-  @override
-  String encodeOutput(String output) => output;
-}
-
-// This is used to check if the ai actually played confetti
-@Artifact(generateSchema: true)
-class ConfettiCheck {
-  @describe("If confetti was played")
-  final bool played;
-
-  const ConfettiCheck({this.played = false});
 }
 ```
 
-Which results in
+This is useful for:
 
-```
-Playing Confetti in (255,0,0) AND (255,255,0)
+- hierarchical summarization
+- document ingestion pipelines
+- cleaning up noisy OCR text
+- compressing large inputs before later prompts
 
----
-System: You are a helpful assistant
-User: Do red and yellow confetti on the screen
-Agent: 
-Tool: Confetti played in (255,0,0) , (255,255,0)
-Agent: Here's a burst of red and yellow confetti on your screen! 🎉
-If you need more celebrations or want to use different colors, just let me know!
-User: Was confetti run?
-Agent: {"played":true}
----
+## Advanced Imports
+
+The main barrel export is:
+
+```dart
+import 'package:agentic/agentic.dart';
 ```
+
+A few useful pieces currently live behind direct imports:
+
+```dart
+import 'package:agentic/chat/agent/chat_provider.dart';
+import 'package:agentic/chat/connector/connector_naga.dart';
+import 'package:agentic/chat/connector/connector_openrouter.dart';
+import 'package:agentic/ingest/distiller.dart';
+import 'package:agentic/util/naga_models.dart';
+import 'package:agentic/util/open_router_models.dart';
+```
+
+That gives you access to:
+
+- `MemoryChatProvider`
+- `NagaConnector`
+- `OpenRouterConnector`
+- `IDistiller`
+- live or cached model catalogs for Naga and OpenRouter
+
+## Notes And Limitations
+
+- `AnthropicConnector` in this package does not currently support `responseFormat`; it throws if structured output is requested.
+- `OpenRouterConnector` exists, but its embedding methods are intentionally unimplemented.
+- `OpenRouterManagementClient` is for management-key administration, not chat completions.
+- Audio content types exist in the shared content model, but the current LangChain bridge only wires text and images for chat requests.
+- `OpenRouterConnector` and `NagaConnector` are present in the repo, but they are not exported from the main `agentic.dart` barrel yet.
+
+## Why Use It
+
+Agentic is a good fit if you want a small Dart-first library that lets you:
+
+- swap providers without rewriting your application code
+- build tool-using agents without wiring a loop from scratch
+- keep model metadata and cost tracking close to your call site
+- use local and hosted models through the same abstractions
+- add document chunking and distillation without a second package
+
+If you want one package that covers direct prompting, agents, tools, structured output, cost tracking, and ingestion utilities, that is what this repo is built for.

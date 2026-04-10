@@ -1,3 +1,7 @@
+# 1.1.9
+* Support for new models and pricing updates
+* Fixed Naga sync
+
 # 1.1.8
 * Advanced chunking support
 

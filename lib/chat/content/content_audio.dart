@@ -1,7 +1,6 @@
 import 'package:agentic/agentic.dart';
-import 'package:artifact/artifact.dart';
 
-@artifact
+@dmodel
 class AudioContent extends Content {
   final String? audioUrl;
   final String? base64Audio;

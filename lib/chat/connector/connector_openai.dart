@@ -63,9 +63,8 @@ class OpenAIConnector extends ChatConnector with EmbedProvider {
 
     return ChatResult(
       message: result.output.toAgentic as AgentMessage,
-      realCost: request.model.cost.getRealCost(
-        usage.inputTokens,
-        usage.outputTokens,
+      realCost: ARational.fromRational(
+        request.model.cost.getRealCost(usage.inputTokens, usage.outputTokens),
       ),
       metadata: result.metadata,
       finishReason: result.finishReason.toAgentic,

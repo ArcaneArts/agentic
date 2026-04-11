@@ -1,8 +1,7 @@
 import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/content/text_content.dart';
-import 'package:artifact/artifact.dart';
 
-@artifact
+@dmodel
 class Content {
   const Content();
 

@@ -8,13 +8,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:agentic/chat/agent/agent.dart';
 import 'package:agentic/ingest/distiller.dart';
-import 'package:artifact/artifact.dart';
 import 'package:chunky/chunky.dart' as chunky;
 import 'package:fast_log/fast_log.dart';
 import 'package:rxdart/rxdart.dart';
 
-@artifact
+@dmodel
 class IChunk {
   final int index;
   final String content;
@@ -22,7 +22,7 @@ class IChunk {
   final int charStart;
   final int charEnd;
   final int lod;
-  final List<int> from;
+  final List<int> froms;
 
   const IChunk({
     required this.index,
@@ -31,7 +31,7 @@ class IChunk {
     this.charStart = 0,
     this.charEnd = 0,
     this.lod = 0,
-    this.from = const [],
+    this.froms = const [],
   });
 
   String get fullContent => "$content$postContent";
@@ -80,7 +80,7 @@ class IChunker {
       charStart: chunk.start,
       charEnd: chunk.start + chunk.content.length + postContent.length,
       lod: 0,
-      from: const [],
+      froms: const [],
     );
   }
 
@@ -301,7 +301,7 @@ class IChunkExploder2 extends StreamTransformerBase<IChunk, IChunk> {
             charEnd: i.charEnd,
             charStart: i.charStart,
             lod: level,
-            from: referenceBuffer.take(factor + 1).toList(),
+            froms: referenceBuffer.take(factor + 1).toList(),
           );
           if (referenceBuffer.isNotEmpty && referenceBuffer.length > factor) {
             for (int i = 0; i < factor - 1; i++) {
@@ -320,7 +320,7 @@ class IChunkExploder2 extends StreamTransformerBase<IChunk, IChunk> {
 
     await for (IChunk chunk in stream) {
       level = max(level, chunk.lod);
-      referenceBuffer.addAll(chunk.from);
+      referenceBuffer.addAll(chunk.froms);
       buffer.add(chunk.fullContent);
 
       while (outQueue.isNotEmpty) {

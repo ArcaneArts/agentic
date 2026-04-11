@@ -1,8 +1,8 @@
+import 'package:agentic/chat/agent/agent.dart';
 import 'package:agentic/util/cost.dart';
-import 'package:artifact/artifact.dart';
 import 'package:rational/rational.dart';
 
-@artifact
+@dmodel
 class ChatModelCapabilities {
   /// First all tool response messages are converted to system response messages prefixed with (tool <tool_id> called): <tool_response>
   /// Then, all system messages are replaced into user messages prefixed with (system): <system_message>
@@ -70,7 +70,7 @@ enum ChatModelSystemMode {
   unsupported,
 }
 
-@artifact
+@dmodel
 class ChatModelCost {
   // USD per 1m input tokens
   final double input;

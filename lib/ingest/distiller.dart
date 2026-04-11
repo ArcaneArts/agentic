@@ -22,7 +22,7 @@ class IDistiller {
   }) async => IChunk(
     index: index,
     lod: chunks.first.lod + 1,
-    from: chunks.map((i) => i.index).toList(),
+    froms: chunks.map((i) => i.index).toList(),
     content: await distill(
       input: chunks
           .mapIndexed(

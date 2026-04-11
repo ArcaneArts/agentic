@@ -1,10 +1,6 @@
 import 'package:agentic/agentic.dart';
-import 'package:agentic/chat/connector/model.dart';
-import 'package:agentic/chat/tool/tool.dart';
-import 'package:agentic/util/chat_models.dart';
-import 'package:artifact/artifact.dart';
 
-@artifact
+@dmodel
 class ChatRequest {
   final List<Message> messages;
   final List<Tool> tools;

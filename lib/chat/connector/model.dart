@@ -1,8 +1,7 @@
 import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/connector/connected_model.dart';
-import 'package:artifact/artifact.dart';
 
-@artifact
+@dmodel
 class ChatModel {
   final String id;
   final String? displayName;

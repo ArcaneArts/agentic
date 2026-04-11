@@ -1,7 +1,6 @@
 import 'package:agentic/agentic.dart';
-import 'package:artifact/artifact.dart';
 
-@artifact
+@dmodel
 class Message {
   final Content content;
 

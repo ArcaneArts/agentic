@@ -1,7 +1,6 @@
 import 'package:agentic/agentic.dart';
-import 'package:artifact/artifact.dart';
 
-@artifact
+@dmodel
 class ImageContent extends Content {
   final String? imageUrl;
   final String? base64Image;

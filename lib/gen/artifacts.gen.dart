@@ -5,222 +5,264 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: library_private_types_in_public_api
 // ignore_for_file: unused_element
-import "package:agentic/chat/content/content_audio.dart";import "package:agentic/chat/content/content_group.dart";import "package:agentic/chat/content/content.dart";import "package:agentic/chat/content/content_image.dart";import "package:agentic/chat/content/text_content.dart";import "package:agentic/chat/message/message.dart";import "package:agentic/chat/message/message_user.dart";import "package:agentic/chat/message/message_system.dart";import "package:agentic/chat/message/message_agent.dart";import "package:agentic/chat/message/message_tool.dart";import "package:agentic/chat/connector/model.dart";import "package:agentic/chat/connector/chat_request.dart";import "package:agentic/chat/connector/result.dart";import "package:agentic/chat/tool/tool_call.dart";import "package:agentic/chat/tool/tool_schema.dart";import "package:agentic/util/chat_models.dart";import "package:agentic/util/naga_models.dart";import "package:agentic/util/open_router_models.dart";import "package:agentic/ingest/chunker.dart";import "package:artifact/artifact.dart";import "dart:core";import "package:agentic/chat/tool/tool.dart";import "package:rational/rational.dart";
-typedef _0=ArtifactCodecUtil;typedef _1=Map<String, dynamic>;typedef _2=List<String>;typedef _3=String;typedef _4=dynamic;typedef _5=int;typedef _6=AudioContent;typedef _7=ContentGroup;typedef _8=Content;typedef _9=ImageContent;typedef _a=TextContent;typedef _b=Message;typedef _c=UserMessage;typedef _d=SystemMessage;typedef _e=AgentMessage;typedef _f=ToolMessage;typedef _g=ChatModel;typedef _h=ChatRequest;typedef _i=ChatResult;typedef _j=ChatUsage;typedef _k=ToolCall;typedef _l=ToolSchema;typedef _m=ChatModelCapabilities;typedef _n=ChatModelCost;typedef _o=NagaModelsListResponse;typedef _p=NagaModel;typedef _q=NagaArchitecture;typedef _r=NagaPricing;typedef _s=OpenRouterModelsListResponse;typedef _t=OpenRouterModel;typedef _u=OpenRouterArchitecture;typedef _v=OpenRouterPricing;typedef _w=IChunk;typedef _x=bool;typedef _y=List;typedef _z=List<Content>;typedef _10=ArgumentError;typedef _11=List<ToolCall>;typedef _12=Tool;typedef _13=List<Message>;typedef _14=List<Tool>;typedef _15=MapEntry;typedef _16=MapEntry<String, dynamic>;typedef _17=Rational;typedef _18=ChatFinishReason;typedef _19=ChatModelSystemMode;typedef _1a=List<Modality>;typedef _1b=double;typedef _1c=List<NagaModel>;typedef _1d=List<OpenRouterModel>;typedef _1e=List<int>;typedef _1f=List<dynamic>;
-const _2 _S=['_subclass_Content','audioUrl','base64Audio','contents','AudioContent','ContentGroup','ImageContent','TextContent','imageUrl','base64Image','text','content','_subclass_Message','UserMessage','SystemMessage','AgentMessage','ToolMessage','Missing required Message."content" in map ','Missing required UserMessage."content" in map ','Missing required SystemMessage."content" in map ','toolCalls','Missing required AgentMessage."content" in map ','toolCallId','Missing required ToolMessage."content" in map ','Missing required ToolMessage."toolCallId" in map ','displayName','cost','capabilities','deprecated','Missing required ChatModel."id" in map ','Missing required ChatModel."cost" in map ','Missing required ChatModel."capabilities" in map ','messages','tools','model','systemPrompt','user','responseFormat','Missing required ChatRequest."messages" in map ','Missing required ChatRequest."model" in map ','message','realCost','finishReason','metadata','usage','Missing required ChatResult."message" in map ','Missing required ChatResult."realCost" in map ','inputTokens','outputTokens','name','arguments','Missing required ToolCall."id" in map ','Missing required ToolCall."name" in map ','Missing required ToolCall."arguments" in map ','description','schema','Missing required ToolSchema."name" in map ','Missing required ToolSchema."description" in map ','Missing required ToolSchema."schema" in map ','ultraCompatibleMode','systemMode','contextWindow','maxTokenOutput','inputModalities','outputModalities','reasoning','structuredOutput','streaming','seesToolMessages','Missing required ChatModelCapabilities."tools" in map ','Missing required ChatModelCapabilities."ultraCompatibleMode" in map ','Missing required ChatModelCapabilities."systemMode" in map ','Missing required ChatModelCapabilities."contextWindow" in map ','Missing required ChatModelCapabilities."maxTokenOutput" in map ','Missing required ChatModelCapabilities."inputModalities" in map ','Missing required ChatModelCapabilities."outputModalities" in map ','Missing required ChatModelCapabilities."reasoning" in map ','Missing required ChatModelCapabilities."structuredOutput" in map ','Missing required ChatModelCapabilities."streaming" in map ','Missing required ChatModelCapabilities."seesToolMessages" in map ','input','output','Missing required ChatModelCost."input" in map ','Missing required ChatModelCost."output" in map ','data','context_length','architecture','supported_parameters','pricing','Missing required NagaModel."id" in map ','Missing required NagaModel."architecture" in map ','input_modalities','output_modalities','tokenizer','prompt','completion','request','image','web_search','audio','internal_reasoning','canonical_slug','created','Missing required OpenRouterModel."id" in map ','Missing required OpenRouterModel."canonical_slug" in map ','Missing required OpenRouterModel."name" in map ','Missing required OpenRouterModel."created" in map ','Missing required OpenRouterModel."context_length" in map ','Missing required OpenRouterModel."architecture" in map ','modality','Missing required OpenRouterArchitecture."modality" in map ','Missing required OpenRouterArchitecture."tokenizer" in map ','index','postContent','charStart','charEnd','from','Missing required IChunk."index" in map ','Missing required IChunk."content" in map '];const _1f _V=[<_8>[],<_k>[],false,<_12>[],ChatFinishReason.unspecified,<_3,_4>{},ChatUsage(),<_p>[],200000,<_3>[],NagaPricing(),<_t>[],OpenRouterPricing(),<_5>[]];const _x _T=true;const _x _F=false;const _5 _ = 0;
-extension $AudioContent on _6{
-  _6 get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[0]: 'AudioContent',_S[1]:_0.ea(audioUrl),_S[2]:_0.ea(base64Audio),}.$nn;}
-  static _6 fromJson(String j)=>fromMap(_0.o(j));
-  static _6 fromMap(_1 r){_;_1 m=r.$nn;return _6(audioUrl: m.$c(_S[1]) ?  _0.da(m[_S[1]], _3) as _3? : null,base64Audio: m.$c(_S[2]) ?  _0.da(m[_S[2]], _3) as _3? : null,);}
-  _6 copyWith({_3? audioUrl,_x deleteAudioUrl=_F,_3? base64Audio,_x deleteBase64Audio=_F,})=>_6(audioUrl: deleteAudioUrl?null:(audioUrl??_H.audioUrl),base64Audio: deleteBase64Audio?null:(base64Audio??_H.base64Audio),);
-}
-extension $ContentGroup on _7{
-  _7 get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[0]: 'ContentGroup',_S[3]:contents.$m((e)=> e.toMap()).$l,}.$nn;}
-  static _7 fromJson(String j)=>fromMap(_0.o(j));
-  static _7 fromMap(_1 r){_;_1 m=r.$nn;return _7(contents: m.$c(_S[3]) ?  (m[_S[3]] as _y).$m((e)=>$Content.fromMap((e) as _1)).$l : _V[0],);}
-  _7 copyWith({_z? contents,_x resetContents=_F,_z? appendContents,_z? removeContents,})=>_7(contents: ((resetContents?_V[0]:(contents??_H.contents)) as _z).$u(appendContents,removeContents),);
-}
-extension $Content on _8{
-  _8 get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;if (_H is _6){return (_H as _6).toMap();}if (_H is _7){return (_H as _7).toMap();}if (_H is _9){return (_H as _9).toMap();}if (_H is _a){return (_H as _a).toMap();}return <_3, _4>{}.$nn;}
-  static _8 fromJson(String j)=>fromMap(_0.o(j));
-  static _8 fromMap(_1 r){_;_1 m=r.$nn;if(m.$c(_S[0])){String _I=m[_S[0]] as _3;if(_I==_S[4]){return $AudioContent.fromMap(m);}if(_I==_S[5]){return $ContentGroup.fromMap(m);}if(_I==_S[6]){return $ImageContent.fromMap(m);}if(_I==_S[7]){return $TextContent.fromMap(m);}}return _8();}
-}
-extension $ImageContent on _9{
-  _9 get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[0]: 'ImageContent',_S[8]:_0.ea(imageUrl),_S[9]:_0.ea(base64Image),}.$nn;}
-  static _9 fromJson(String j)=>fromMap(_0.o(j));
-  static _9 fromMap(_1 r){_;_1 m=r.$nn;return _9(imageUrl: m.$c(_S[8]) ?  _0.da(m[_S[8]], _3) as _3? : null,base64Image: m.$c(_S[9]) ?  _0.da(m[_S[9]], _3) as _3? : null,);}
-  _9 copyWith({_3? imageUrl,_x deleteImageUrl=_F,_3? base64Image,_x deleteBase64Image=_F,})=>_9(imageUrl: deleteImageUrl?null:(imageUrl??_H.imageUrl),base64Image: deleteBase64Image?null:(base64Image??_H.base64Image),);
-}
-extension $TextContent on _a{
-  _a get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[0]: 'TextContent',_S[10]:_0.ea(text),}.$nn;}
-  static _a fromJson(String j)=>fromMap(_0.o(j));
-  static _a fromMap(_1 r){_;_1 m=r.$nn;return _a(text: m.$c(_S[10]) ?  _0.da(m[_S[10]], _3) as _3 : "",);}
-  _a copyWith({_3? text,_x resetText=_F,})=>_a(text: resetText?"":(text??_H.text),);
-}
-extension $Message on _b{
-  _b get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;if (_H is _c){return (_H as _c).toMap();}if (_H is _d){return (_H as _d).toMap();}if (_H is _e){return (_H as _e).toMap();}if (_H is _f){return (_H as _f).toMap();}return <_3, _4>{_S[11]:content.toMap(),}.$nn;}
-  static _b fromJson(String j)=>fromMap(_0.o(j));
-  static _b fromMap(_1 r){_;_1 m=r.$nn;if(m.$c(_S[12])){String _I=m[_S[12]] as _3;if(_I==_S[13]){return $UserMessage.fromMap(m);}if(_I==_S[14]){return $SystemMessage.fromMap(m);}if(_I==_S[15]){return $AgentMessage.fromMap(m);}if(_I==_S[16]){return $ToolMessage.fromMap(m);}}return _b(content: m.$c(_S[11])?$Content.fromMap((m[_S[11]]) as _1):(throw _10('${_S[17]}$m.')),);}
-  _b copyWith({_8? content,}){if (_H is _c){return (_H as _c).copyWith(content: content,);}if (_H is _d){return (_H as _d).copyWith(content: content,);}if (_H is _e){return (_H as _e).copyWith(content: content,);}if (_H is _f){return (_H as _f).copyWith(content: content,);}return _b(content: content??_H.content,);}
-}
-extension $UserMessage on _c{
-  _c get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[12]: 'UserMessage',_S[11]:content.toMap(),}.$nn;}
-  static _c fromJson(String j)=>fromMap(_0.o(j));
-  static _c fromMap(_1 r){_;_1 m=r.$nn;return _c(content: m.$c(_S[11])?$Content.fromMap((m[_S[11]]) as _1):(throw _10('${_S[18]}$m.')),);}
-  _c copyWith({_8? content,})=>_c(content: content??_H.content,);
-}
-extension $SystemMessage on _d{
+import "package:agentic/chat/connector/chat_request.dart";import "package:agentic/chat/connector/model.dart";import "package:agentic/chat/connector/result.dart";import "package:agentic/chat/content/content.dart";import "package:agentic/chat/content/content_audio.dart";import "package:agentic/chat/content/content_group.dart";import "package:agentic/chat/content/content_image.dart";import "package:agentic/chat/content/text_content.dart";import "package:agentic/chat/message/message.dart";import "package:agentic/chat/message/message_agent.dart";import "package:agentic/chat/message/message_system.dart";import "package:agentic/chat/message/message_tool.dart";import "package:agentic/chat/message/message_user.dart";import "package:agentic/chat/tool/tool_call.dart";import "package:agentic/chat/tool/tool_schema.dart";import "package:agentic/ingest/chunker.dart";import "package:agentic/util/chat_models.dart";import "package:agentic/util/naga_models.dart";import "package:agentic/util/open_router_models.dart";import "package:agentic/chat/tool/tool.dart";import "package:artifact/artifact.dart";import "dart:core";
+typedef _0=ArtifactCodecUtil;typedef _1=ArtifactDataUtil;typedef _2=ArtifactSecurityUtil;typedef _3=ArtifactReflection;typedef _4=ArtifactMirror;typedef _5=Map<String,dynamic>;typedef _6=List<String>;typedef _7=String;typedef _8=dynamic;typedef _9=int;typedef _a=ArtifactModelExporter;typedef _b=ArgumentError;typedef _c=Exception;typedef _d=ChatRequest;typedef _e=ChatModel;typedef _f=ARational;typedef _g=ChatResult;typedef _h=ChatUsage;typedef _i=Content;typedef _j=AudioContent;typedef _k=ContentGroup;typedef _l=ImageContent;typedef _m=TextContent;typedef _n=Message;typedef _o=AgentMessage;typedef _p=SystemMessage;typedef _q=ToolMessage;typedef _r=UserMessage;typedef _s=ToolCall;typedef _t=ToolSchema;typedef _u=IChunk;typedef _v=ChatModelCapabilities;typedef _w=ChatModelCost;typedef _x=NagaModelsListResponse;typedef _y=NagaModel;typedef _z=NagaArchitecture;typedef _10=NagaPricing;typedef _11=OpenRouterModelsListResponse;typedef _12=OpenRouterModel;typedef _13=OpenRouterArchitecture;typedef _14=OpenRouterPricing;typedef _15=ArtifactModelImporter<ChatRequest>;typedef _16=List;typedef _17=Tool;typedef _18=List<Message>;typedef _19=bool;typedef _1a=List<Tool>;typedef _1b=ArtifactModelImporter<ChatModel>;typedef _1c=ArtifactModelImporter<ARational>;typedef _1d=MapEntry;typedef _1e=MapEntry<String, dynamic>;typedef _1f=ArtifactModelImporter<ChatResult>;typedef _1g=ChatFinishReason;typedef _1h=Map<String, dynamic>;typedef _1i=ArtifactModelImporter<ChatUsage>;typedef _1j=ArtifactModelImporter<Content>;typedef _1k=ArtifactModelImporter<AudioContent>;typedef _1l=ArtifactModelImporter<ContentGroup>;typedef _1m=List<Content>;typedef _1n=ArtifactModelImporter<ImageContent>;typedef _1o=ArtifactModelImporter<TextContent>;typedef _1p=ArtifactModelImporter<Message>;typedef _1q=ArtifactModelImporter<AgentMessage>;typedef _1r=List<ToolCall>;typedef _1s=ArtifactModelImporter<SystemMessage>;typedef _1t=ArtifactModelImporter<ToolMessage>;typedef _1u=ArtifactModelImporter<UserMessage>;typedef _1v=ArtifactModelImporter<ToolCall>;typedef _1w=ArtifactModelImporter<ToolSchema>;typedef _1x=ArtifactModelImporter<IChunk>;typedef _1y=List<int>;typedef _1z=ArtifactModelImporter<ChatModelCapabilities>;typedef _20=ChatModelSystemMode;typedef _21=List<Modality>;typedef _22=ArtifactModelImporter<ChatModelCost>;typedef _23=double;typedef _24=ArtifactModelImporter<NagaModelsListResponse>;typedef _25=List<NagaModel>;typedef _26=ArtifactModelImporter<NagaModel>;typedef _27=ArtifactModelImporter<NagaArchitecture>;typedef _28=ArtifactModelImporter<NagaPricing>;typedef _29=ArtifactModelImporter<OpenRouterModelsListResponse>;typedef _2a=List<OpenRouterModel>;typedef _2b=ArtifactModelImporter<OpenRouterModel>;typedef _2c=ArtifactModelImporter<OpenRouterArchitecture>;typedef _2d=ArtifactModelImporter<OpenRouterPricing>;typedef _2e=ArtifactAccessor;typedef _2f=List<dynamic>;
+_b __x(_7 c,_7 f)=>_b('${_S[89]}$c.$f');
+const _6 _S=['messages','tools','model','systemPrompt','user','responseFormat','ChatRequest','displayName','cost','capabilities','deprecated','ChatModel','ARational','message','realCost','finishReason','metadata','usage','ChatResult','inputTokens','outputTokens','_subclass_Content','AudioContent','ContentGroup','ImageContent','TextContent','audioUrl','base64Audio','contents','imageUrl','base64Image','text','content','_subclass_Message','AgentMessage','SystemMessage','ToolMessage','UserMessage','Message','toolCalls','toolCallId','name','arguments','ToolCall','description','schema','ToolSchema','index','postContent','charStart','charEnd','froms','IChunk','ultraCompatibleMode','systemMode','contextWindow','maxTokenOutput','inputModalities','outputModalities','reasoning','structuredOutput','streaming','seesToolMessages','ChatModelCapabilities','input','output','ChatModelCost','data','context_length','architecture','supported_parameters','pricing','NagaModel','input_modalities','output_modalities','tokenizer','prompt','completion','request','image','web_search','audio','internal_reasoning','canonical_slug','created','OpenRouterModel','modality','OpenRouterArchitecture','agentic','Missing required '];const _2f _V=[<_17>[],false,ChatFinishReason.unspecified,<_7,_8>{},ChatUsage(),<_i>[],<_s>[],<_9>[],<_y>[],200000,<_7>[],NagaPricing(),<_12>[],OpenRouterPricing()];const _19 _T=true;const _19 _F=false;_9 _ = ((){if(!_2e.$i(_S[88])){_2e.$r(_S[88],_2e(isArtifact: $isArtifact,artifactMirror:{},constructArtifact:$constructArtifact,artifactToMap:$artifactToMap,artifactFromMap:$artifactFromMap));}return 0;})();
+
+extension $ChatRequest on _d{
   _d get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[12]: 'SystemMessage',_S[11]:content.toMap(),}.$nn;}
-  static _d fromJson(String j)=>fromMap(_0.o(j));
-  static _d fromMap(_1 r){_;_1 m=r.$nn;return _d(content: m.$c(_S[11])?$Content.fromMap((m[_S[11]]) as _1):(throw _10('${_S[19]}$m.')),);}
-  _d copyWith({_8? content,})=>_d(content: content??_H.content,);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[0]:messages.$m((e)=> e.toMap()).$l,_S[1]:tools.$m((e)=> _0.ea(e)).$l,_S[2]:model.toMap(),_S[3]:_0.ea(systemPrompt),_S[4]:_0.ea(user),_S[5]:responseFormat?.toMap(),}.$nn;}
+  static _15 get from=>_15(fromMap);
+  static _d fromMap(_5 r){_;_5 m=r.$nn;return _d(messages: m.$c(_S[0])? (m[_S[0]] as _16).$m((e)=>$Message.fromMap((e) as Map<String, dynamic>)).$l:throw __x(_S[6],_S[0]),tools: m.$c(_S[1]) ?  (m[_S[1]] as _16).$m((e)=> _0.da(e, _17) as _17).$l : _V[0],model: m.$c(_S[2])?$ChatModel.fromMap((m[_S[2]]) as Map<String, dynamic>):throw __x(_S[6],_S[2]),systemPrompt: m.$c(_S[3]) ?  _0.da(m[_S[3]], _7) as _7? : null,user: m.$c(_S[4]) ?  _0.da(m[_S[4]], _7) as _7? : null,responseFormat: m.$c(_S[5]) ? $ToolSchema.fromMap((m[_S[5]]) as Map<String, dynamic>) : null,);}
+  _d copyWith({_18? messages,_18? appendMessages,_18? removeMessages,_1a? tools,_19 resetTools=_F,_1a? appendTools,_1a? removeTools,_e? model,_7? systemPrompt,_19 deleteSystemPrompt=_F,_7? user,_19 deleteUser=_F,_t? responseFormat,_19 deleteResponseFormat=_F,})=>_d(messages: (messages??_H.messages).$u(appendMessages,removeMessages),tools: ((resetTools?_V[0]:(tools??_H.tools)) as _1a).$u(appendTools,removeTools),model: model??_H.model,systemPrompt: deleteSystemPrompt?null:(systemPrompt??_H.systemPrompt),user: deleteUser?null:(user??_H.user),responseFormat: deleteResponseFormat?null:(responseFormat??_H.responseFormat),);
+  static _d get newInstance=>_d(messages: [],model: $ChatModel.newInstance,);
 }
-extension $AgentMessage on _e{
+extension $ChatModel on _e{
   _e get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[12]: 'AgentMessage',_S[11]:content.toMap(),_S[20]:toolCalls.$m((e)=> e.toMap()).$l,}.$nn;}
-  static _e fromJson(String j)=>fromMap(_0.o(j));
-  static _e fromMap(_1 r){_;_1 m=r.$nn;return _e(content: m.$c(_S[11])?$Content.fromMap((m[_S[11]]) as _1):(throw _10('${_S[21]}$m.')),toolCalls: m.$c(_S[20]) ?  (m[_S[20]] as _y).$m((e)=>$ToolCall.fromMap((e) as _1)).$l : _V[1],);}
-  _e copyWith({_8? content,_11? toolCalls,_x resetToolCalls=_F,_11? appendToolCalls,_11? removeToolCalls,})=>_e(content: content??_H.content,toolCalls: ((resetToolCalls?_V[1]:(toolCalls??_H.toolCalls)) as _11).$u(appendToolCalls,removeToolCalls),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{'id':_0.ea(id),_S[7]:_0.ea(displayName),_S[8]:cost.toMap(),_S[9]:capabilities.toMap(),_S[10]:_0.ea(deprecated),}.$nn;}
+  static _1b get from=>_1b(fromMap);
+  static _e fromMap(_5 r){_;_5 m=r.$nn;return _e(id: m.$c('id')? _0.da(m['id'], _7) as _7:throw __x(_S[11],'id'),displayName: m.$c(_S[7]) ?  _0.da(m[_S[7]], _7) as _7? : null,cost: m.$c(_S[8])?$ChatModelCost.fromMap((m[_S[8]]) as Map<String, dynamic>):throw __x(_S[11],_S[8]),capabilities: m.$c(_S[9])?$ChatModelCapabilities.fromMap((m[_S[9]]) as Map<String, dynamic>):throw __x(_S[11],_S[9]),deprecated: m.$c(_S[10]) ?  _0.da(m[_S[10]], _19) as _19 : _V[1],);}
+  _e copyWith({_7? id,_7? displayName,_19 deleteDisplayName=_F,_w? cost,_v? capabilities,_19? deprecated,_19 resetDeprecated=_F,})=>_e(id: id??_H.id,displayName: deleteDisplayName?null:(displayName??_H.displayName),cost: cost??_H.cost,capabilities: capabilities??_H.capabilities,deprecated: resetDeprecated?_V[1]:(deprecated??_H.deprecated),);
+  static _e get newInstance=>_e(id: '',cost: $ChatModelCost.newInstance,capabilities: $ChatModelCapabilities.newInstance,);
 }
-extension $ToolMessage on _f{
+extension $ARational on _f{
   _f get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[12]: 'ToolMessage',_S[11]:content.toMap(),_S[22]:_0.ea(toolCallId),}.$nn;}
-  static _f fromJson(String j)=>fromMap(_0.o(j));
-  static _f fromMap(_1 r){_;_1 m=r.$nn;return _f(content: m.$c(_S[11])?$Content.fromMap((m[_S[11]]) as _1):(throw _10('${_S[23]}$m.')),toolCallId: m.$c(_S[22])? _0.da(m[_S[22]], _3) as _3:(throw _10('${_S[24]}$m.')),);}
-  _f copyWith({_8? content,_3? toolCallId,})=>_f(content: content??_H.content,toolCallId: toolCallId??_H.toolCallId,);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{'n':_0.ea(n),'d':_0.ea(d),}.$nn;}
+  static _1c get from=>_1c(fromMap);
+  static _f fromMap(_5 r){_;_5 m=r.$nn;return _f(n: m.$c('n')? _0.da(m['n'], _7) as _7:throw __x(_S[12],'n'),d: m.$c('d') ?  _0.da(m['d'], _7) as _7 : "1",);}
+  _f copyWith({_7? n,_7? d,_19 resetD=_F,})=>_f(n: n??_H.n,d: resetD?"1":(d??_H.d),);
+  static _f get newInstance=>_f(n: '',);
 }
-extension $ChatModel on _g{
+extension $ChatResult on _g{
   _g get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{'id':_0.ea(id),_S[25]:_0.ea(displayName),_S[26]:cost.toMap(),_S[27]:capabilities.toMap(),_S[28]:_0.ea(deprecated),}.$nn;}
-  static _g fromJson(String j)=>fromMap(_0.o(j));
-  static _g fromMap(_1 r){_;_1 m=r.$nn;return _g(id: m.$c('id')? _0.da(m['id'], _3) as _3:(throw _10('${_S[29]}$m.')),displayName: m.$c(_S[25]) ?  _0.da(m[_S[25]], _3) as _3? : null,cost: m.$c(_S[26])?$ChatModelCost.fromMap((m[_S[26]]) as _1):(throw _10('${_S[30]}$m.')),capabilities: m.$c(_S[27])?$ChatModelCapabilities.fromMap((m[_S[27]]) as _1):(throw _10('${_S[31]}$m.')),deprecated: m.$c(_S[28]) ?  _0.da(m[_S[28]], _x) as _x : _V[2],);}
-  _g copyWith({_3? id,_3? displayName,_x deleteDisplayName=_F,_n? cost,_m? capabilities,_x? deprecated,_x resetDeprecated=_F,})=>_g(id: id??_H.id,displayName: deleteDisplayName?null:(displayName??_H.displayName),cost: cost??_H.cost,capabilities: capabilities??_H.capabilities,deprecated: resetDeprecated?_V[2]:(deprecated??_H.deprecated),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[13]:message.toMap(),_S[14]:realCost.toMap(),_S[15]:finishReason.name,_S[16]:metadata.$m((k,v)=>_1d(k,v)),_S[17]:usage.toMap(),}.$nn;}
+  static _1f get from=>_1f(fromMap);
+  static _g fromMap(_5 r){_;_5 m=r.$nn;return _g(message: m.$c(_S[13])?$AgentMessage.fromMap((m[_S[13]]) as Map<String, dynamic>):throw __x(_S[18],_S[13]),realCost: m.$c(_S[14])?$ARational.fromMap((m[_S[14]]) as Map<String, dynamic>):throw __x(_S[18],_S[14]),finishReason: m.$c(_S[15]) ? _1.e(ChatFinishReason.values, m[_S[15]]) as ChatFinishReason : _V[2],metadata: m.$c(_S[16]) ?  _1.fe((m[_S[16]] as Map).$e.$m((e)=>_1e(e.key,e.value))) : _V[3],usage: m.$c(_S[17]) ? $ChatUsage.fromMap((m[_S[17]]) as Map<String, dynamic>) : _V[4],);}
+  _g copyWith({_o? message,_f? realCost,_1g? finishReason,_19 resetFinishReason=_F,_1h? metadata,_19 resetMetadata=_F,_h? usage,_19 resetUsage=_F,})=>_g(message: message??_H.message,realCost: realCost??_H.realCost,finishReason: resetFinishReason?_V[2]:(finishReason??_H.finishReason),metadata: resetMetadata?_V[3]:(metadata??_H.metadata),usage: resetUsage?_V[4]:(usage??_H.usage),);
+  static _g get newInstance=>_g(message: $AgentMessage.newInstance,realCost: $ARational.newInstance,);
 }
-extension $ChatRequest on _h{
+extension $ChatUsage on _h{
   _h get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[32]:messages.$m((e)=> e.toMap()).$l,_S[33]:tools.$m((e)=> _0.ea(e)).$l,_S[34]:model.toMap(),_S[35]:_0.ea(systemPrompt),_S[36]:_0.ea(user),_S[37]:responseFormat?.toMap(),}.$nn;}
-  static _h fromJson(String j)=>fromMap(_0.o(j));
-  static _h fromMap(_1 r){_;_1 m=r.$nn;return _h(messages: m.$c(_S[32])? (m[_S[32]] as _y).$m((e)=>$Message.fromMap((e) as _1)).$l:(throw _10('${_S[38]}$m.')),tools: m.$c(_S[33]) ?  (m[_S[33]] as _y).$m((e)=> _0.da(e, _12) as _12).$l : _V[3],model: m.$c(_S[34])?$ChatModel.fromMap((m[_S[34]]) as _1):(throw _10('${_S[39]}$m.')),systemPrompt: m.$c(_S[35]) ?  _0.da(m[_S[35]], _3) as _3? : null,user: m.$c(_S[36]) ?  _0.da(m[_S[36]], _3) as _3? : null,responseFormat: m.$c(_S[37]) ? $ToolSchema.fromMap((m[_S[37]]) as _1) : null,);}
-  _h copyWith({_13? messages,_13? appendMessages,_13? removeMessages,_14? tools,_x resetTools=_F,_14? appendTools,_14? removeTools,_g? model,_3? systemPrompt,_x deleteSystemPrompt=_F,_3? user,_x deleteUser=_F,_l? responseFormat,_x deleteResponseFormat=_F,})=>_h(messages: (messages??_H.messages).$u(appendMessages,removeMessages),tools: ((resetTools?_V[3]:(tools??_H.tools)) as _14).$u(appendTools,removeTools),model: model??_H.model,systemPrompt: deleteSystemPrompt?null:(systemPrompt??_H.systemPrompt),user: deleteUser?null:(user??_H.user),responseFormat: deleteResponseFormat?null:(responseFormat??_H.responseFormat),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[19]:_0.ea(inputTokens),_S[20]:_0.ea(outputTokens),}.$nn;}
+  static _1i get from=>_1i(fromMap);
+  static _h fromMap(_5 r){_;_5 m=r.$nn;return _h(inputTokens: m.$c(_S[19]) ?  _0.da(m[_S[19]], _9) as _9 : 0,outputTokens: m.$c(_S[20]) ?  _0.da(m[_S[20]], _9) as _9 : 0,);}
+  _h copyWith({_9? inputTokens,_19 resetInputTokens=_F,_9? deltaInputTokens,_9? outputTokens,_19 resetOutputTokens=_F,_9? deltaOutputTokens,})=>_h(inputTokens: deltaInputTokens!=null?(inputTokens??_H.inputTokens)+deltaInputTokens:resetInputTokens?0:(inputTokens??_H.inputTokens),outputTokens: deltaOutputTokens!=null?(outputTokens??_H.outputTokens)+deltaOutputTokens:resetOutputTokens?0:(outputTokens??_H.outputTokens),);
+  static _h get newInstance=>_h();
 }
-extension $ChatResult on _i{
+extension $Content on _i{
   _i get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[40]:message.toMap(),_S[41]:_0.ea(realCost),_S[42]:finishReason.name,_S[43]:metadata.$m((k,v)=>_15(k,v)),_S[44]:usage.toMap(),}.$nn;}
-  static _i fromJson(String j)=>fromMap(_0.o(j));
-  static _i fromMap(_1 r){_;_1 m=r.$nn;return _i(message: m.$c(_S[40])?$AgentMessage.fromMap((m[_S[40]]) as _1):(throw _10('${_S[45]}$m.')),realCost: m.$c(_S[41])? _0.da(m[_S[41]], _17) as _17:(throw _10('${_S[46]}$m.')),finishReason: m.$c(_S[42]) ? _0.e(ChatFinishReason.values, m[_S[42]]) as ChatFinishReason : _V[4],metadata: m.$c(_S[43]) ?  _0.fe((m[_S[43]] as Map).$e.$m((e)=>_16(e.key,e.value))) : _V[5],usage: m.$c(_S[44]) ? $ChatUsage.fromMap((m[_S[44]]) as _1) : _V[6],);}
-  _i copyWith({_e? message,_17? realCost,_18? finishReason,_x resetFinishReason=_F,_1? metadata,_x resetMetadata=_F,_j? usage,_x resetUsage=_F,})=>_i(message: message??_H.message,realCost: realCost??_H.realCost,finishReason: resetFinishReason?_V[4]:(finishReason??_H.finishReason),metadata: resetMetadata?_V[5]:(metadata??_H.metadata),usage: resetUsage?_V[6]:(usage??_H.usage),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;if (_H is _j){return (_H as _j).toMap();}if (_H is _k){return (_H as _k).toMap();}if (_H is _l){return (_H as _l).toMap();}if (_H is _m){return (_H as _m).toMap();}return<_7,_8>{}.$nn;}
+  static _1j get from=>_1j(fromMap);
+  static _i fromMap(_5 r){_;_5 m=r.$nn;if(m.$c(_S[21])){String _I=m[_S[21]] as _7;if(_I==_S[22]){return $AudioContent.fromMap(m);}if(_I==_S[23]){return $ContentGroup.fromMap(m);}if(_I==_S[24]){return $ImageContent.fromMap(m);}if(_I==_S[25]){return $TextContent.fromMap(m);}}return _i();}
+  static _i get newInstance=>_i();
 }
-extension $ChatUsage on _j{
+extension $AudioContent on _j{
   _j get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[47]:_0.ea(inputTokens),_S[48]:_0.ea(outputTokens),}.$nn;}
-  static _j fromJson(String j)=>fromMap(_0.o(j));
-  static _j fromMap(_1 r){_;_1 m=r.$nn;return _j(inputTokens: m.$c(_S[47]) ?  _0.da(m[_S[47]], _5) as _5 : 0,outputTokens: m.$c(_S[48]) ?  _0.da(m[_S[48]], _5) as _5 : 0,);}
-  _j copyWith({_5? inputTokens,_x resetInputTokens=_F,_5? deltaInputTokens,_5? outputTokens,_x resetOutputTokens=_F,_5? deltaOutputTokens,})=>_j(inputTokens: deltaInputTokens!=null?(inputTokens??_H.inputTokens)+deltaInputTokens:resetInputTokens?0:(inputTokens??_H.inputTokens),outputTokens: deltaOutputTokens!=null?(outputTokens??_H.outputTokens)+deltaOutputTokens:resetOutputTokens?0:(outputTokens??_H.outputTokens),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[21]: 'AudioContent',_S[26]:_0.ea(audioUrl),_S[27]:_0.ea(base64Audio),}.$nn;}
+  static _1k get from=>_1k(fromMap);
+  static _j fromMap(_5 r){_;_5 m=r.$nn;return _j(audioUrl: m.$c(_S[26]) ?  _0.da(m[_S[26]], _7) as _7? : null,base64Audio: m.$c(_S[27]) ?  _0.da(m[_S[27]], _7) as _7? : null,);}
+  _j copyWith({_7? audioUrl,_19 deleteAudioUrl=_F,_7? base64Audio,_19 deleteBase64Audio=_F,})=>_j(audioUrl: deleteAudioUrl?null:(audioUrl??_H.audioUrl),base64Audio: deleteBase64Audio?null:(base64Audio??_H.base64Audio),);
+  static _j get newInstance=>_j();
 }
-extension $ToolCall on _k{
+extension $ContentGroup on _k{
   _k get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{'id':_0.ea(id),_S[49]:_0.ea(name),_S[50]:_0.ea(arguments),}.$nn;}
-  static _k fromJson(String j)=>fromMap(_0.o(j));
-  static _k fromMap(_1 r){_;_1 m=r.$nn;return _k(id: m.$c('id')? _0.da(m['id'], _3) as _3:(throw _10('${_S[51]}$m.')),name: m.$c(_S[49])? _0.da(m[_S[49]], _3) as _3:(throw _10('${_S[52]}$m.')),arguments: m.$c(_S[50])? _0.da(m[_S[50]], _3) as _3:(throw _10('${_S[53]}$m.')),);}
-  _k copyWith({_3? id,_3? name,_3? arguments,})=>_k(id: id??_H.id,name: name??_H.name,arguments: arguments??_H.arguments,);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[21]: 'ContentGroup',_S[28]:contents.$m((e)=> e.toMap()).$l,}.$nn;}
+  static _1l get from=>_1l(fromMap);
+  static _k fromMap(_5 r){_;_5 m=r.$nn;return _k(contents: m.$c(_S[28]) ?  (m[_S[28]] as _16).$m((e)=>$Content.fromMap((e) as _1h)).$l : _V[5],);}
+  _k copyWith({_1m? contents,_19 resetContents=_F,_1m? appendContents,_1m? removeContents,})=>_k(contents: ((resetContents?_V[5]:(contents??_H.contents)) as _1m).$u(appendContents,removeContents),);
+  static _k get newInstance=>_k();
 }
-extension $ToolSchema on _l{
+extension $ImageContent on _l{
   _l get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[49]:_0.ea(name),_S[54]:_0.ea(description),_S[55]:schema.$m((k,v)=>_15(k,v)),}.$nn;}
-  static _l fromJson(String j)=>fromMap(_0.o(j));
-  static _l fromMap(_1 r){_;_1 m=r.$nn;return _l(name: m.$c(_S[49])? _0.da(m[_S[49]], _3) as _3:(throw _10('${_S[56]}$m.')),description: m.$c(_S[54])? _0.da(m[_S[54]], _3) as _3:(throw _10('${_S[57]}$m.')),schema: m.$c(_S[55])? _0.fe((m[_S[55]] as Map).$e.$m((e)=>_16(e.key,e.value))):(throw _10('${_S[58]}$m.')),);}
-  _l copyWith({_3? name,_3? description,_1? schema,})=>_l(name: name??_H.name,description: description??_H.description,schema: schema??_H.schema,);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[21]: 'ImageContent',_S[29]:_0.ea(imageUrl),_S[30]:_0.ea(base64Image),}.$nn;}
+  static _1n get from=>_1n(fromMap);
+  static _l fromMap(_5 r){_;_5 m=r.$nn;return _l(imageUrl: m.$c(_S[29]) ?  _0.da(m[_S[29]], _7) as _7? : null,base64Image: m.$c(_S[30]) ?  _0.da(m[_S[30]], _7) as _7? : null,);}
+  _l copyWith({_7? imageUrl,_19 deleteImageUrl=_F,_7? base64Image,_19 deleteBase64Image=_F,})=>_l(imageUrl: deleteImageUrl?null:(imageUrl??_H.imageUrl),base64Image: deleteBase64Image?null:(base64Image??_H.base64Image),);
+  static _l get newInstance=>_l();
 }
-extension $ChatModelCapabilities on _m{
+extension $TextContent on _m{
   _m get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[33]:_0.ea(tools),_S[59]:_0.ea(ultraCompatibleMode),_S[60]:systemMode.name,_S[61]:_0.ea(contextWindow),_S[62]:_0.ea(maxTokenOutput),_S[63]:inputModalities.$m((e)=> e.name).$l,_S[64]:outputModalities.$m((e)=> e.name).$l,_S[65]:_0.ea(reasoning),_S[66]:_0.ea(structuredOutput),_S[67]:_0.ea(streaming),_S[68]:_0.ea(seesToolMessages),}.$nn;}
-  static _m fromJson(String j)=>fromMap(_0.o(j));
-  static _m fromMap(_1 r){_;_1 m=r.$nn;return _m(tools: m.$c(_S[33])? _0.da(m[_S[33]], _x) as _x:(throw _10('${_S[69]}$m.')),ultraCompatibleMode: m.$c(_S[59])? _0.da(m[_S[59]], _x) as _x:(throw _10('${_S[70]}$m.')),systemMode: m.$c(_S[60])?_0.e(ChatModelSystemMode.values, m[_S[60]]) as ChatModelSystemMode:(throw _10('${_S[71]}$m.')),contextWindow: m.$c(_S[61])? _0.da(m[_S[61]], _5) as _5:(throw _10('${_S[72]}$m.')),maxTokenOutput: m.$c(_S[62])? _0.da(m[_S[62]], _5) as _5:(throw _10('${_S[73]}$m.')),inputModalities: m.$c(_S[63])? (m[_S[63]] as _y).$m((e)=>_0.e(Modality.values, e) as Modality).$l:(throw _10('${_S[74]}$m.')),outputModalities: m.$c(_S[64])? (m[_S[64]] as _y).$m((e)=>_0.e(Modality.values, e) as Modality).$l:(throw _10('${_S[75]}$m.')),reasoning: m.$c(_S[65])? _0.da(m[_S[65]], _x) as _x:(throw _10('${_S[76]}$m.')),structuredOutput: m.$c(_S[66])? _0.da(m[_S[66]], _x) as _x:(throw _10('${_S[77]}$m.')),streaming: m.$c(_S[67])? _0.da(m[_S[67]], _x) as _x:(throw _10('${_S[78]}$m.')),seesToolMessages: m.$c(_S[68])? _0.da(m[_S[68]], _x) as _x:(throw _10('${_S[79]}$m.')),);}
-  _m copyWith({_x? tools,_x? ultraCompatibleMode,_19? systemMode,_5? contextWindow,_5? deltaContextWindow,_5? maxTokenOutput,_5? deltaMaxTokenOutput,_1a? inputModalities,_1a? appendInputModalities,_1a? removeInputModalities,_1a? outputModalities,_1a? appendOutputModalities,_1a? removeOutputModalities,_x? reasoning,_x? structuredOutput,_x? streaming,_x? seesToolMessages,})=>_m(tools: tools??_H.tools,ultraCompatibleMode: ultraCompatibleMode??_H.ultraCompatibleMode,systemMode: systemMode??_H.systemMode,contextWindow: deltaContextWindow!=null?(contextWindow??_H.contextWindow)+deltaContextWindow:contextWindow??_H.contextWindow,maxTokenOutput: deltaMaxTokenOutput!=null?(maxTokenOutput??_H.maxTokenOutput)+deltaMaxTokenOutput:maxTokenOutput??_H.maxTokenOutput,inputModalities: (inputModalities??_H.inputModalities).$u(appendInputModalities,removeInputModalities),outputModalities: (outputModalities??_H.outputModalities).$u(appendOutputModalities,removeOutputModalities),reasoning: reasoning??_H.reasoning,structuredOutput: structuredOutput??_H.structuredOutput,streaming: streaming??_H.streaming,seesToolMessages: seesToolMessages??_H.seesToolMessages,);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[21]: 'TextContent',_S[31]:_0.ea(text),}.$nn;}
+  static _1o get from=>_1o(fromMap);
+  static _m fromMap(_5 r){_;_5 m=r.$nn;return _m(text: m.$c(_S[31]) ?  _0.da(m[_S[31]], _7) as _7 : "",);}
+  _m copyWith({_7? text,_19 resetText=_F,})=>_m(text: resetText?"":(text??_H.text),);
+  static _m get newInstance=>_m();
 }
-extension $ChatModelCost on _n{
+extension $Message on _n{
   _n get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[80]:_0.ea(input),_S[81]:_0.ea(output),}.$nn;}
-  static _n fromJson(String j)=>fromMap(_0.o(j));
-  static _n fromMap(_1 r){_;_1 m=r.$nn;return _n(input: m.$c(_S[80])? _0.da(m[_S[80]], _1b) as _1b:(throw _10('${_S[82]}$m.')),output: m.$c(_S[81])? _0.da(m[_S[81]], _1b) as _1b:(throw _10('${_S[83]}$m.')),);}
-  _n copyWith({_1b? input,_1b? deltaInput,_1b? output,_1b? deltaOutput,})=>_n(input: deltaInput!=null?(input??_H.input)+deltaInput:input??_H.input,output: deltaOutput!=null?(output??_H.output)+deltaOutput:output??_H.output,);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;if (_H is _o){return (_H as _o).toMap();}if (_H is _p){return (_H as _p).toMap();}if (_H is _q){return (_H as _q).toMap();}if (_H is _r){return (_H as _r).toMap();}return<_7,_8>{_S[32]:content.toMap(),}.$nn;}
+  static _1p get from=>_1p(fromMap);
+  static _n fromMap(_5 r){_;_5 m=r.$nn;if(m.$c(_S[33])){String _I=m[_S[33]] as _7;if(_I==_S[34]){return $AgentMessage.fromMap(m);}if(_I==_S[35]){return $SystemMessage.fromMap(m);}if(_I==_S[36]){return $ToolMessage.fromMap(m);}if(_I==_S[37]){return $UserMessage.fromMap(m);}}return _n(content: m.$c(_S[32])?$Content.fromMap((m[_S[32]]) as _1h):throw __x(_S[38],_S[32]),);}
+  _n copyWith({_i? content,}){if (_H is _o){return (_H as _o).copyWith(content: content,);}if (_H is _p){return (_H as _p).copyWith(content: content,);}if (_H is _q){return (_H as _q).copyWith(content: content,);}if (_H is _r){return (_H as _r).copyWith(content: content,);}return _n(content: content??_H.content,);}
+  static _n get newInstance=>_n(content: $Content.newInstance,);
 }
-extension $NagaModelsListResponse on _o{
+extension $AgentMessage on _o{
   _o get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[84]:data.$m((e)=> e.toMap()).$l,}.$nn;}
-  static _o fromJson(String j)=>fromMap(_0.o(j));
-  static _o fromMap(_1 r){_;_1 m=r.$nn;return _o(data: m.$c(_S[84]) ?  (m[_S[84]] as _y).$m((e)=>$NagaModel.fromMap((e) as _1)).$l : _V[7],);}
-  _o copyWith({_1c? data,_x resetData=_F,_1c? appendData,_1c? removeData,})=>_o(data: ((resetData?_V[7]:(data??_H.data)) as _1c).$u(appendData,removeData),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[33]: 'AgentMessage',_S[32]:content.toMap(),_S[39]:toolCalls.$m((e)=> e.toMap()).$l,}.$nn;}
+  static _1q get from=>_1q(fromMap);
+  static _o fromMap(_5 r){_;_5 m=r.$nn;return _o(content: m.$c(_S[32])?$Content.fromMap((m[_S[32]]) as _1h):throw __x(_S[34],_S[32]),toolCalls: m.$c(_S[39]) ?  (m[_S[39]] as _16).$m((e)=>$ToolCall.fromMap((e) as _1h)).$l : _V[6],);}
+  _o copyWith({_i? content,_1r? toolCalls,_19 resetToolCalls=_F,_1r? appendToolCalls,_1r? removeToolCalls,})=>_o(content: content??_H.content,toolCalls: ((resetToolCalls?_V[6]:(toolCalls??_H.toolCalls)) as _1r).$u(appendToolCalls,removeToolCalls),);
+  static _o get newInstance=>_o(content: $Content.newInstance,);
 }
-extension $NagaModel on _p{
+extension $SystemMessage on _p{
   _p get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{'id':_0.ea(id),_S[85]:_0.ea(context_length),_S[86]:architecture.toMap(),_S[87]:supported_parameters.$m((e)=> _0.ea(e)).$l,_S[88]:pricing.toMap(),}.$nn;}
-  static _p fromJson(String j)=>fromMap(_0.o(j));
-  static _p fromMap(_1 r){_;_1 m=r.$nn;return _p(id: m.$c('id')? _0.da(m['id'], _3) as _3:(throw _10('${_S[89]}$m.')),context_length: m.$c(_S[85]) ?  _0.da(m[_S[85]], _5) as _5 : _V[8],architecture: m.$c(_S[86])?$NagaArchitecture.fromMap((m[_S[86]]) as _1):(throw _10('${_S[90]}$m.')),supported_parameters: m.$c(_S[87]) ?  (m[_S[87]] as _y).$m((e)=> _0.da(e, _3) as _3).$l : _V[9],pricing: m.$c(_S[88]) ? $NagaPricing.fromMap((m[_S[88]]) as _1) : _V[10],);}
-  _p copyWith({_3? id,_5? context_length,_x resetContext_length=_F,_5? deltaContext_length,_q? architecture,_2? supported_parameters,_x resetSupported_parameters=_F,_2? appendSupported_parameters,_2? removeSupported_parameters,_r? pricing,_x resetPricing=_F,})=>_p(id: id??_H.id,context_length: deltaContext_length!=null?(context_length??_H.context_length)+deltaContext_length:resetContext_length?_V[8]:(context_length??_H.context_length),architecture: architecture??_H.architecture,supported_parameters: ((resetSupported_parameters?_V[9]:(supported_parameters??_H.supported_parameters)) as _2).$u(appendSupported_parameters,removeSupported_parameters),pricing: resetPricing?_V[10]:(pricing??_H.pricing),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[33]: 'SystemMessage',_S[32]:content.toMap(),}.$nn;}
+  static _1s get from=>_1s(fromMap);
+  static _p fromMap(_5 r){_;_5 m=r.$nn;return _p(content: m.$c(_S[32])?$Content.fromMap((m[_S[32]]) as _1h):throw __x(_S[35],_S[32]),);}
+  _p copyWith({_i? content,})=>_p(content: content??_H.content,);
+  static _p get newInstance=>_p(content: $Content.newInstance,);
 }
-extension $NagaArchitecture on _q{
+extension $ToolMessage on _q{
   _q get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[91]:input_modalities.$m((e)=> _0.ea(e)).$l,_S[92]:output_modalities.$m((e)=> _0.ea(e)).$l,_S[93]:_0.ea(tokenizer),}.$nn;}
-  static _q fromJson(String j)=>fromMap(_0.o(j));
-  static _q fromMap(_1 r){_;_1 m=r.$nn;return _q(input_modalities: m.$c(_S[91]) ?  (m[_S[91]] as _y).$m((e)=> _0.da(e, _3) as _3).$l : _V[9],output_modalities: m.$c(_S[92]) ?  (m[_S[92]] as _y).$m((e)=> _0.da(e, _3) as _3).$l : _V[9],tokenizer: m.$c(_S[93]) ?  _0.da(m[_S[93]], _3) as _3? : null,);}
-  _q copyWith({_2? input_modalities,_x resetInput_modalities=_F,_2? appendInput_modalities,_2? removeInput_modalities,_2? output_modalities,_x resetOutput_modalities=_F,_2? appendOutput_modalities,_2? removeOutput_modalities,_3? tokenizer,_x deleteTokenizer=_F,})=>_q(input_modalities: ((resetInput_modalities?_V[9]:(input_modalities??_H.input_modalities)) as _2).$u(appendInput_modalities,removeInput_modalities),output_modalities: ((resetOutput_modalities?_V[9]:(output_modalities??_H.output_modalities)) as _2).$u(appendOutput_modalities,removeOutput_modalities),tokenizer: deleteTokenizer?null:(tokenizer??_H.tokenizer),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[33]: 'ToolMessage',_S[32]:content.toMap(),_S[40]:_0.ea(toolCallId),}.$nn;}
+  static _1t get from=>_1t(fromMap);
+  static _q fromMap(_5 r){_;_5 m=r.$nn;return _q(content: m.$c(_S[32])?$Content.fromMap((m[_S[32]]) as _1h):throw __x(_S[36],_S[32]),toolCallId: m.$c(_S[40])? _0.da(m[_S[40]], _7) as _7:throw __x(_S[36],_S[40]),);}
+  _q copyWith({_i? content,_7? toolCallId,})=>_q(content: content??_H.content,toolCallId: toolCallId??_H.toolCallId,);
+  static _q get newInstance=>_q(content: $Content.newInstance,toolCallId: '',);
 }
-extension $NagaPricing on _r{
+extension $UserMessage on _r{
   _r get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[94]:_0.ea(prompt),_S[95]:_0.ea(completion),_S[96]:_0.ea(request),_S[97]:_0.ea(image),_S[98]:_0.ea(web_search),_S[99]:_0.ea(audio),_S[100]:_0.ea(internal_reasoning),}.$nn;}
-  static _r fromJson(String j)=>fromMap(_0.o(j));
-  static _r fromMap(_1 r){_;_1 m=r.$nn;return _r(prompt: m.$c(_S[94]) ?  _0.da(m[_S[94]], _3) as _3 : "0",completion: m.$c(_S[95]) ?  _0.da(m[_S[95]], _3) as _3 : "0",request: m.$c(_S[96]) ?  _0.da(m[_S[96]], _3) as _3 : "0",image: m.$c(_S[97]) ?  _0.da(m[_S[97]], _3) as _3 : "0",web_search: m.$c(_S[98]) ?  _0.da(m[_S[98]], _3) as _3 : "0",audio: m.$c(_S[99]) ?  _0.da(m[_S[99]], _3) as _3 : "0",internal_reasoning: m.$c(_S[100]) ?  _0.da(m[_S[100]], _3) as _3 : "0",);}
-  _r copyWith({_3? prompt,_x resetPrompt=_F,_3? completion,_x resetCompletion=_F,_3? request,_x resetRequest=_F,_3? image,_x resetImage=_F,_3? web_search,_x resetWeb_search=_F,_3? audio,_x resetAudio=_F,_3? internal_reasoning,_x resetInternal_reasoning=_F,})=>_r(prompt: resetPrompt?"0":(prompt??_H.prompt),completion: resetCompletion?"0":(completion??_H.completion),request: resetRequest?"0":(request??_H.request),image: resetImage?"0":(image??_H.image),web_search: resetWeb_search?"0":(web_search??_H.web_search),audio: resetAudio?"0":(audio??_H.audio),internal_reasoning: resetInternal_reasoning?"0":(internal_reasoning??_H.internal_reasoning),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[33]: 'UserMessage',_S[32]:content.toMap(),}.$nn;}
+  static _1u get from=>_1u(fromMap);
+  static _r fromMap(_5 r){_;_5 m=r.$nn;return _r(content: m.$c(_S[32])?$Content.fromMap((m[_S[32]]) as _1h):throw __x(_S[37],_S[32]),);}
+  _r copyWith({_i? content,})=>_r(content: content??_H.content,);
+  static _r get newInstance=>_r(content: $Content.newInstance,);
 }
-extension $OpenRouterModelsListResponse on _s{
+extension $ToolCall on _s{
   _s get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[84]:data.$m((e)=> e.toMap()).$l,}.$nn;}
-  static _s fromJson(String j)=>fromMap(_0.o(j));
-  static _s fromMap(_1 r){_;_1 m=r.$nn;return _s(data: m.$c(_S[84]) ?  (m[_S[84]] as _y).$m((e)=>$OpenRouterModel.fromMap((e) as _1)).$l : _V[11],);}
-  _s copyWith({_1d? data,_x resetData=_F,_1d? appendData,_1d? removeData,})=>_s(data: ((resetData?_V[11]:(data??_H.data)) as _1d).$u(appendData,removeData),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{'id':_0.ea(id),_S[41]:_0.ea(name),_S[42]:_0.ea(arguments),}.$nn;}
+  static _1v get from=>_1v(fromMap);
+  static _s fromMap(_5 r){_;_5 m=r.$nn;return _s(id: m.$c('id')? _0.da(m['id'], _7) as _7:throw __x(_S[43],'id'),name: m.$c(_S[41])? _0.da(m[_S[41]], _7) as _7:throw __x(_S[43],_S[41]),arguments: m.$c(_S[42])? _0.da(m[_S[42]], _7) as _7:throw __x(_S[43],_S[42]),);}
+  _s copyWith({_7? id,_7? name,_7? arguments,})=>_s(id: id??_H.id,name: name??_H.name,arguments: arguments??_H.arguments,);
+  static _s get newInstance=>_s(id: '',name: '',arguments: '',);
 }
-extension $OpenRouterModel on _t{
+extension $ToolSchema on _t{
   _t get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{'id':_0.ea(id),_S[101]:_0.ea(canonical_slug),_S[49]:_0.ea(name),_S[102]:_0.ea(created),_S[85]:_0.ea(context_length),_S[86]:architecture.toMap(),_S[87]:supported_parameters.$m((e)=> _0.ea(e)).$l,_S[88]:pricing.toMap(),}.$nn;}
-  static _t fromJson(String j)=>fromMap(_0.o(j));
-  static _t fromMap(_1 r){_;_1 m=r.$nn;return _t(id: m.$c('id')? _0.da(m['id'], _3) as _3:(throw _10('${_S[103]}$m.')),canonical_slug: m.$c(_S[101])? _0.da(m[_S[101]], _3) as _3:(throw _10('${_S[104]}$m.')),name: m.$c(_S[49])? _0.da(m[_S[49]], _3) as _3:(throw _10('${_S[105]}$m.')),created: m.$c(_S[102])? _0.da(m[_S[102]], _5) as _5:(throw _10('${_S[106]}$m.')),context_length: m.$c(_S[85])? _0.da(m[_S[85]], _5) as _5:(throw _10('${_S[107]}$m.')),architecture: m.$c(_S[86])?$OpenRouterArchitecture.fromMap((m[_S[86]]) as _1):(throw _10('${_S[108]}$m.')),supported_parameters: m.$c(_S[87]) ?  (m[_S[87]] as _y).$m((e)=> _0.da(e, _3) as _3).$l : _V[9],pricing: m.$c(_S[88]) ? $OpenRouterPricing.fromMap((m[_S[88]]) as _1) : _V[12],);}
-  _t copyWith({_3? id,_3? canonical_slug,_3? name,_5? created,_5? deltaCreated,_5? context_length,_5? deltaContext_length,_u? architecture,_2? supported_parameters,_x resetSupported_parameters=_F,_2? appendSupported_parameters,_2? removeSupported_parameters,_v? pricing,_x resetPricing=_F,})=>_t(id: id??_H.id,canonical_slug: canonical_slug??_H.canonical_slug,name: name??_H.name,created: deltaCreated!=null?(created??_H.created)+deltaCreated:created??_H.created,context_length: deltaContext_length!=null?(context_length??_H.context_length)+deltaContext_length:context_length??_H.context_length,architecture: architecture??_H.architecture,supported_parameters: ((resetSupported_parameters?_V[9]:(supported_parameters??_H.supported_parameters)) as _2).$u(appendSupported_parameters,removeSupported_parameters),pricing: resetPricing?_V[12]:(pricing??_H.pricing),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[41]:_0.ea(name),_S[44]:_0.ea(description),_S[45]:schema.$m((k,v)=>_1d(k,v)),}.$nn;}
+  static _1w get from=>_1w(fromMap);
+  static _t fromMap(_5 r){_;_5 m=r.$nn;return _t(name: m.$c(_S[41])? _0.da(m[_S[41]], _7) as _7:throw __x(_S[46],_S[41]),description: m.$c(_S[44])? _0.da(m[_S[44]], _7) as _7:throw __x(_S[46],_S[44]),schema: m.$c(_S[45])? _1.fe((m[_S[45]] as Map).$e.$m((e)=>_1e(e.key,e.value))):throw __x(_S[46],_S[45]),);}
+  _t copyWith({_7? name,_7? description,_1h? schema,})=>_t(name: name??_H.name,description: description??_H.description,schema: schema??_H.schema,);
+  static _t get newInstance=>_t(name: '',description: '',schema: {},);
 }
-extension $OpenRouterArchitecture on _u{
+extension $IChunk on _u{
   _u get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[109]:_0.ea(modality),_S[91]:input_modalities.$m((e)=> _0.ea(e)).$l,_S[92]:output_modalities.$m((e)=> _0.ea(e)).$l,_S[93]:_0.ea(tokenizer),}.$nn;}
-  static _u fromJson(String j)=>fromMap(_0.o(j));
-  static _u fromMap(_1 r){_;_1 m=r.$nn;return _u(modality: m.$c(_S[109])? _0.da(m[_S[109]], _3) as _3:(throw _10('${_S[110]}$m.')),input_modalities: m.$c(_S[91]) ?  (m[_S[91]] as _y).$m((e)=> _0.da(e, _3) as _3).$l : _V[9],output_modalities: m.$c(_S[92]) ?  (m[_S[92]] as _y).$m((e)=> _0.da(e, _3) as _3).$l : _V[9],tokenizer: m.$c(_S[93])? _0.da(m[_S[93]], _3) as _3:(throw _10('${_S[111]}$m.')),);}
-  _u copyWith({_3? modality,_2? input_modalities,_x resetInput_modalities=_F,_2? appendInput_modalities,_2? removeInput_modalities,_2? output_modalities,_x resetOutput_modalities=_F,_2? appendOutput_modalities,_2? removeOutput_modalities,_3? tokenizer,})=>_u(modality: modality??_H.modality,input_modalities: ((resetInput_modalities?_V[9]:(input_modalities??_H.input_modalities)) as _2).$u(appendInput_modalities,removeInput_modalities),output_modalities: ((resetOutput_modalities?_V[9]:(output_modalities??_H.output_modalities)) as _2).$u(appendOutput_modalities,removeOutput_modalities),tokenizer: tokenizer??_H.tokenizer,);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[47]:_0.ea(index),_S[32]:_0.ea(content),_S[48]:_0.ea(postContent),_S[49]:_0.ea(charStart),_S[50]:_0.ea(charEnd),'lod':_0.ea(lod),_S[51]:froms.$m((e)=> _0.ea(e)).$l,}.$nn;}
+  static _1x get from=>_1x(fromMap);
+  static _u fromMap(_5 r){_;_5 m=r.$nn;return _u(index: m.$c(_S[47])? _0.da(m[_S[47]], _9) as _9:throw __x(_S[52],_S[47]),content: m.$c(_S[32])? _0.da(m[_S[32]], _7) as _7:throw __x(_S[52],_S[32]),postContent: m.$c(_S[48]) ?  _0.da(m[_S[48]], _7) as _7 : "",charStart: m.$c(_S[49]) ?  _0.da(m[_S[49]], _9) as _9 : 0,charEnd: m.$c(_S[50]) ?  _0.da(m[_S[50]], _9) as _9 : 0,lod: m.$c('lod') ?  _0.da(m['lod'], _9) as _9 : 0,froms: m.$c(_S[51]) ?  (m[_S[51]] as _16).$m((e)=> _0.da(e, _9) as _9).$l : _V[7],);}
+  _u copyWith({_9? index,_9? deltaIndex,_7? content,_7? postContent,_19 resetPostContent=_F,_9? charStart,_19 resetCharStart=_F,_9? deltaCharStart,_9? charEnd,_19 resetCharEnd=_F,_9? deltaCharEnd,_9? lod,_19 resetLod=_F,_9? deltaLod,_1y? froms,_19 resetFroms=_F,_1y? appendFroms,_1y? removeFroms,})=>_u(index: deltaIndex!=null?(index??_H.index)+deltaIndex:index??_H.index,content: content??_H.content,postContent: resetPostContent?"":(postContent??_H.postContent),charStart: deltaCharStart!=null?(charStart??_H.charStart)+deltaCharStart:resetCharStart?0:(charStart??_H.charStart),charEnd: deltaCharEnd!=null?(charEnd??_H.charEnd)+deltaCharEnd:resetCharEnd?0:(charEnd??_H.charEnd),lod: deltaLod!=null?(lod??_H.lod)+deltaLod:resetLod?0:(lod??_H.lod),froms: ((resetFroms?_V[7]:(froms??_H.froms)) as _1y).$u(appendFroms,removeFroms),);
+  static _u get newInstance=>_u(index: 0,content: '',);
 }
-extension $OpenRouterPricing on _v{
+extension $ChatModelCapabilities on _v{
   _v get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[94]:_0.ea(prompt),_S[95]:_0.ea(completion),_S[96]:_0.ea(request),_S[97]:_0.ea(image),_S[98]:_0.ea(web_search),_S[99]:_0.ea(audio),_S[100]:_0.ea(internal_reasoning),}.$nn;}
-  static _v fromJson(String j)=>fromMap(_0.o(j));
-  static _v fromMap(_1 r){_;_1 m=r.$nn;return _v(prompt: m.$c(_S[94]) ?  _0.da(m[_S[94]], _3) as _3 : "0",completion: m.$c(_S[95]) ?  _0.da(m[_S[95]], _3) as _3 : "0",request: m.$c(_S[96]) ?  _0.da(m[_S[96]], _3) as _3 : "0",image: m.$c(_S[97]) ?  _0.da(m[_S[97]], _3) as _3 : "0",web_search: m.$c(_S[98]) ?  _0.da(m[_S[98]], _3) as _3 : "0",audio: m.$c(_S[99]) ?  _0.da(m[_S[99]], _3) as _3 : "0",internal_reasoning: m.$c(_S[100]) ?  _0.da(m[_S[100]], _3) as _3 : "0",);}
-  _v copyWith({_3? prompt,_x resetPrompt=_F,_3? completion,_x resetCompletion=_F,_3? request,_x resetRequest=_F,_3? image,_x resetImage=_F,_3? web_search,_x resetWeb_search=_F,_3? audio,_x resetAudio=_F,_3? internal_reasoning,_x resetInternal_reasoning=_F,})=>_v(prompt: resetPrompt?"0":(prompt??_H.prompt),completion: resetCompletion?"0":(completion??_H.completion),request: resetRequest?"0":(request??_H.request),image: resetImage?"0":(image??_H.image),web_search: resetWeb_search?"0":(web_search??_H.web_search),audio: resetAudio?"0":(audio??_H.audio),internal_reasoning: resetInternal_reasoning?"0":(internal_reasoning??_H.internal_reasoning),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[1]:_0.ea(tools),_S[53]:_0.ea(ultraCompatibleMode),_S[54]:systemMode.name,_S[55]:_0.ea(contextWindow),_S[56]:_0.ea(maxTokenOutput),_S[57]:inputModalities.$m((e)=> e.name).$l,_S[58]:outputModalities.$m((e)=> e.name).$l,_S[59]:_0.ea(reasoning),_S[60]:_0.ea(structuredOutput),_S[61]:_0.ea(streaming),_S[62]:_0.ea(seesToolMessages),}.$nn;}
+  static _1z get from=>_1z(fromMap);
+  static _v fromMap(_5 r){_;_5 m=r.$nn;return _v(tools: m.$c(_S[1])? _0.da(m[_S[1]], _19) as _19:throw __x(_S[63],_S[1]),ultraCompatibleMode: m.$c(_S[53])? _0.da(m[_S[53]], _19) as _19:throw __x(_S[63],_S[53]),systemMode: m.$c(_S[54])?_1.e(ChatModelSystemMode.values, m[_S[54]]) as ChatModelSystemMode:throw __x(_S[63],_S[54]),contextWindow: m.$c(_S[55])? _0.da(m[_S[55]], _9) as _9:throw __x(_S[63],_S[55]),maxTokenOutput: m.$c(_S[56])? _0.da(m[_S[56]], _9) as _9:throw __x(_S[63],_S[56]),inputModalities: m.$c(_S[57])? (m[_S[57]] as _16).$m((e)=>_1.e(Modality.values, e) as Modality).$l:throw __x(_S[63],_S[57]),outputModalities: m.$c(_S[58])? (m[_S[58]] as _16).$m((e)=>_1.e(Modality.values, e) as Modality).$l:throw __x(_S[63],_S[58]),reasoning: m.$c(_S[59])? _0.da(m[_S[59]], _19) as _19:throw __x(_S[63],_S[59]),structuredOutput: m.$c(_S[60])? _0.da(m[_S[60]], _19) as _19:throw __x(_S[63],_S[60]),streaming: m.$c(_S[61])? _0.da(m[_S[61]], _19) as _19:throw __x(_S[63],_S[61]),seesToolMessages: m.$c(_S[62])? _0.da(m[_S[62]], _19) as _19:throw __x(_S[63],_S[62]),);}
+  _v copyWith({_19? tools,_19? ultraCompatibleMode,_20? systemMode,_9? contextWindow,_9? deltaContextWindow,_9? maxTokenOutput,_9? deltaMaxTokenOutput,_21? inputModalities,_21? appendInputModalities,_21? removeInputModalities,_21? outputModalities,_21? appendOutputModalities,_21? removeOutputModalities,_19? reasoning,_19? structuredOutput,_19? streaming,_19? seesToolMessages,})=>_v(tools: tools??_H.tools,ultraCompatibleMode: ultraCompatibleMode??_H.ultraCompatibleMode,systemMode: systemMode??_H.systemMode,contextWindow: deltaContextWindow!=null?(contextWindow??_H.contextWindow)+deltaContextWindow:contextWindow??_H.contextWindow,maxTokenOutput: deltaMaxTokenOutput!=null?(maxTokenOutput??_H.maxTokenOutput)+deltaMaxTokenOutput:maxTokenOutput??_H.maxTokenOutput,inputModalities: (inputModalities??_H.inputModalities).$u(appendInputModalities,removeInputModalities),outputModalities: (outputModalities??_H.outputModalities).$u(appendOutputModalities,removeOutputModalities),reasoning: reasoning??_H.reasoning,structuredOutput: structuredOutput??_H.structuredOutput,streaming: streaming??_H.streaming,seesToolMessages: seesToolMessages??_H.seesToolMessages,);
+  static _v get newInstance=>_v(tools: _F,ultraCompatibleMode: _F,systemMode: _20.values.first,contextWindow: 0,maxTokenOutput: 0,inputModalities: [],outputModalities: [],reasoning: _F,structuredOutput: _F,streaming: _F,seesToolMessages: _F,);
 }
-extension $IChunk on _w{
+extension $ChatModelCost on _w{
   _w get _H=>this;
-  _3 toJson({bool pretty=_F})=>_0.j(pretty, toMap);
-  _1 toMap(){_;return <_3, _4>{_S[112]:_0.ea(index),_S[11]:_0.ea(content),_S[113]:_0.ea(postContent),_S[114]:_0.ea(charStart),_S[115]:_0.ea(charEnd),'lod':_0.ea(lod),_S[116]:from.$m((e)=> _0.ea(e)).$l,}.$nn;}
-  static _w fromJson(String j)=>fromMap(_0.o(j));
-  static _w fromMap(_1 r){_;_1 m=r.$nn;return _w(index: m.$c(_S[112])? _0.da(m[_S[112]], _5) as _5:(throw _10('${_S[117]}$m.')),content: m.$c(_S[11])? _0.da(m[_S[11]], _3) as _3:(throw _10('${_S[118]}$m.')),postContent: m.$c(_S[113]) ?  _0.da(m[_S[113]], _3) as _3 : "",charStart: m.$c(_S[114]) ?  _0.da(m[_S[114]], _5) as _5 : 0,charEnd: m.$c(_S[115]) ?  _0.da(m[_S[115]], _5) as _5 : 0,lod: m.$c('lod') ?  _0.da(m['lod'], _5) as _5 : 0,from: m.$c(_S[116]) ?  (m[_S[116]] as _y).$m((e)=> _0.da(e, _5) as _5).$l : _V[13],);}
-  _w copyWith({_5? index,_5? deltaIndex,_3? content,_3? postContent,_x resetPostContent=_F,_5? charStart,_x resetCharStart=_F,_5? deltaCharStart,_5? charEnd,_x resetCharEnd=_F,_5? deltaCharEnd,_5? lod,_x resetLod=_F,_5? deltaLod,_1e? from,_x resetFrom=_F,_1e? appendFrom,_1e? removeFrom,})=>_w(index: deltaIndex!=null?(index??_H.index)+deltaIndex:index??_H.index,content: content??_H.content,postContent: resetPostContent?"":(postContent??_H.postContent),charStart: deltaCharStart!=null?(charStart??_H.charStart)+deltaCharStart:resetCharStart?0:(charStart??_H.charStart),charEnd: deltaCharEnd!=null?(charEnd??_H.charEnd)+deltaCharEnd:resetCharEnd?0:(charEnd??_H.charEnd),lod: deltaLod!=null?(lod??_H.lod)+deltaLod:resetLod?0:(lod??_H.lod),from: ((resetFrom?_V[13]:(from??_H.from)) as _1e).$u(appendFrom,removeFrom),);
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[64]:_0.ea(input),_S[65]:_0.ea(output),}.$nn;}
+  static _22 get from=>_22(fromMap);
+  static _w fromMap(_5 r){_;_5 m=r.$nn;return _w(input: m.$c(_S[64])? _0.da(m[_S[64]], _23) as _23:throw __x(_S[66],_S[64]),output: m.$c(_S[65])? _0.da(m[_S[65]], _23) as _23:throw __x(_S[66],_S[65]),);}
+  _w copyWith({_23? input,_23? deltaInput,_23? output,_23? deltaOutput,})=>_w(input: deltaInput!=null?(input??_H.input)+deltaInput:input??_H.input,output: deltaOutput!=null?(output??_H.output)+deltaOutput:output??_H.output,);
+  static _w get newInstance=>_w(input: 0,output: 0,);
+}
+extension $NagaModelsListResponse on _x{
+  _x get _H=>this;
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[67]:data.$m((e)=> e.toMap()).$l,}.$nn;}
+  static _24 get from=>_24(fromMap);
+  static _x fromMap(_5 r){_;_5 m=r.$nn;return _x(data: m.$c(_S[67]) ?  (m[_S[67]] as _16).$m((e)=>$NagaModel.fromMap((e) as _1h)).$l : _V[8],);}
+  _x copyWith({_25? data,_19 resetData=_F,_25? appendData,_25? removeData,})=>_x(data: ((resetData?_V[8]:(data??_H.data)) as _25).$u(appendData,removeData),);
+  static _x get newInstance=>_x();
+}
+extension $NagaModel on _y{
+  _y get _H=>this;
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{'id':_0.ea(id),_S[68]:_0.ea(context_length),_S[69]:architecture.toMap(),_S[70]:supported_parameters.$m((e)=> _0.ea(e)).$l,_S[71]:pricing.toMap(),}.$nn;}
+  static _26 get from=>_26(fromMap);
+  static _y fromMap(_5 r){_;_5 m=r.$nn;return _y(id: m.$c('id')? _0.da(m['id'], _7) as _7:throw __x(_S[72],'id'),context_length: m.$c(_S[68]) ?  _0.da(m[_S[68]], _9) as _9 : _V[9],architecture: m.$c(_S[69])?$NagaArchitecture.fromMap((m[_S[69]]) as _1h):throw __x(_S[72],_S[69]),supported_parameters: m.$c(_S[70]) ?  (m[_S[70]] as _16).$m((e)=> _0.da(e, _7) as _7).$l : _V[10],pricing: m.$c(_S[71]) ? $NagaPricing.fromMap((m[_S[71]]) as _1h) : _V[11],);}
+  _y copyWith({_7? id,_9? context_length,_19 resetContext_length=_F,_9? deltaContext_length,_z? architecture,_6? supported_parameters,_19 resetSupported_parameters=_F,_6? appendSupported_parameters,_6? removeSupported_parameters,_10? pricing,_19 resetPricing=_F,})=>_y(id: id??_H.id,context_length: deltaContext_length!=null?(context_length??_H.context_length)+deltaContext_length:resetContext_length?_V[9]:(context_length??_H.context_length),architecture: architecture??_H.architecture,supported_parameters: ((resetSupported_parameters?_V[10]:(supported_parameters??_H.supported_parameters)) as _6).$u(appendSupported_parameters,removeSupported_parameters),pricing: resetPricing?_V[11]:(pricing??_H.pricing),);
+  static _y get newInstance=>_y(id: '',architecture: $NagaArchitecture.newInstance,);
+}
+extension $NagaArchitecture on _z{
+  _z get _H=>this;
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[73]:input_modalities.$m((e)=> _0.ea(e)).$l,_S[74]:output_modalities.$m((e)=> _0.ea(e)).$l,_S[75]:_0.ea(tokenizer),}.$nn;}
+  static _27 get from=>_27(fromMap);
+  static _z fromMap(_5 r){_;_5 m=r.$nn;return _z(input_modalities: m.$c(_S[73]) ?  (m[_S[73]] as _16).$m((e)=> _0.da(e, _7) as _7).$l : _V[10],output_modalities: m.$c(_S[74]) ?  (m[_S[74]] as _16).$m((e)=> _0.da(e, _7) as _7).$l : _V[10],tokenizer: m.$c(_S[75]) ?  _0.da(m[_S[75]], _7) as _7? : null,);}
+  _z copyWith({_6? input_modalities,_19 resetInput_modalities=_F,_6? appendInput_modalities,_6? removeInput_modalities,_6? output_modalities,_19 resetOutput_modalities=_F,_6? appendOutput_modalities,_6? removeOutput_modalities,_7? tokenizer,_19 deleteTokenizer=_F,})=>_z(input_modalities: ((resetInput_modalities?_V[10]:(input_modalities??_H.input_modalities)) as _6).$u(appendInput_modalities,removeInput_modalities),output_modalities: ((resetOutput_modalities?_V[10]:(output_modalities??_H.output_modalities)) as _6).$u(appendOutput_modalities,removeOutput_modalities),tokenizer: deleteTokenizer?null:(tokenizer??_H.tokenizer),);
+  static _z get newInstance=>_z();
+}
+extension $NagaPricing on _10{
+  _10 get _H=>this;
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[76]:_0.ea(prompt),_S[77]:_0.ea(completion),_S[78]:_0.ea(request),_S[79]:_0.ea(image),_S[80]:_0.ea(web_search),_S[81]:_0.ea(audio),_S[82]:_0.ea(internal_reasoning),}.$nn;}
+  static _28 get from=>_28(fromMap);
+  static _10 fromMap(_5 r){_;_5 m=r.$nn;return _10(prompt: m.$c(_S[76]) ?  _0.da(m[_S[76]], _7) as _7 : "0",completion: m.$c(_S[77]) ?  _0.da(m[_S[77]], _7) as _7 : "0",request: m.$c(_S[78]) ?  _0.da(m[_S[78]], _7) as _7 : "0",image: m.$c(_S[79]) ?  _0.da(m[_S[79]], _7) as _7 : "0",web_search: m.$c(_S[80]) ?  _0.da(m[_S[80]], _7) as _7 : "0",audio: m.$c(_S[81]) ?  _0.da(m[_S[81]], _7) as _7 : "0",internal_reasoning: m.$c(_S[82]) ?  _0.da(m[_S[82]], _7) as _7 : "0",);}
+  _10 copyWith({_7? prompt,_19 resetPrompt=_F,_7? completion,_19 resetCompletion=_F,_7? request,_19 resetRequest=_F,_7? image,_19 resetImage=_F,_7? web_search,_19 resetWeb_search=_F,_7? audio,_19 resetAudio=_F,_7? internal_reasoning,_19 resetInternal_reasoning=_F,})=>_10(prompt: resetPrompt?"0":(prompt??_H.prompt),completion: resetCompletion?"0":(completion??_H.completion),request: resetRequest?"0":(request??_H.request),image: resetImage?"0":(image??_H.image),web_search: resetWeb_search?"0":(web_search??_H.web_search),audio: resetAudio?"0":(audio??_H.audio),internal_reasoning: resetInternal_reasoning?"0":(internal_reasoning??_H.internal_reasoning),);
+  static _10 get newInstance=>_10();
+}
+extension $OpenRouterModelsListResponse on _11{
+  _11 get _H=>this;
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[67]:data.$m((e)=> e.toMap()).$l,}.$nn;}
+  static _29 get from=>_29(fromMap);
+  static _11 fromMap(_5 r){_;_5 m=r.$nn;return _11(data: m.$c(_S[67]) ?  (m[_S[67]] as _16).$m((e)=>$OpenRouterModel.fromMap((e) as _1h)).$l : _V[12],);}
+  _11 copyWith({_2a? data,_19 resetData=_F,_2a? appendData,_2a? removeData,})=>_11(data: ((resetData?_V[12]:(data??_H.data)) as _2a).$u(appendData,removeData),);
+  static _11 get newInstance=>_11();
+}
+extension $OpenRouterModel on _12{
+  _12 get _H=>this;
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{'id':_0.ea(id),_S[83]:_0.ea(canonical_slug),_S[41]:_0.ea(name),_S[84]:_0.ea(created),_S[68]:_0.ea(context_length),_S[69]:architecture.toMap(),_S[70]:supported_parameters.$m((e)=> _0.ea(e)).$l,_S[71]:pricing.toMap(),}.$nn;}
+  static _2b get from=>_2b(fromMap);
+  static _12 fromMap(_5 r){_;_5 m=r.$nn;return _12(id: m.$c('id')? _0.da(m['id'], _7) as _7:throw __x(_S[85],'id'),canonical_slug: m.$c(_S[83])? _0.da(m[_S[83]], _7) as _7:throw __x(_S[85],_S[83]),name: m.$c(_S[41])? _0.da(m[_S[41]], _7) as _7:throw __x(_S[85],_S[41]),created: m.$c(_S[84])? _0.da(m[_S[84]], _9) as _9:throw __x(_S[85],_S[84]),context_length: m.$c(_S[68])? _0.da(m[_S[68]], _9) as _9:throw __x(_S[85],_S[68]),architecture: m.$c(_S[69])?$OpenRouterArchitecture.fromMap((m[_S[69]]) as _1h):throw __x(_S[85],_S[69]),supported_parameters: m.$c(_S[70]) ?  (m[_S[70]] as _16).$m((e)=> _0.da(e, _7) as _7).$l : _V[10],pricing: m.$c(_S[71]) ? $OpenRouterPricing.fromMap((m[_S[71]]) as _1h) : _V[13],);}
+  _12 copyWith({_7? id,_7? canonical_slug,_7? name,_9? created,_9? deltaCreated,_9? context_length,_9? deltaContext_length,_13? architecture,_6? supported_parameters,_19 resetSupported_parameters=_F,_6? appendSupported_parameters,_6? removeSupported_parameters,_14? pricing,_19 resetPricing=_F,})=>_12(id: id??_H.id,canonical_slug: canonical_slug??_H.canonical_slug,name: name??_H.name,created: deltaCreated!=null?(created??_H.created)+deltaCreated:created??_H.created,context_length: deltaContext_length!=null?(context_length??_H.context_length)+deltaContext_length:context_length??_H.context_length,architecture: architecture??_H.architecture,supported_parameters: ((resetSupported_parameters?_V[10]:(supported_parameters??_H.supported_parameters)) as _6).$u(appendSupported_parameters,removeSupported_parameters),pricing: resetPricing?_V[13]:(pricing??_H.pricing),);
+  static _12 get newInstance=>_12(id: '',canonical_slug: '',name: '',created: 0,context_length: 0,architecture: $OpenRouterArchitecture.newInstance,);
+}
+extension $OpenRouterArchitecture on _13{
+  _13 get _H=>this;
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[86]:_0.ea(modality),_S[73]:input_modalities.$m((e)=> _0.ea(e)).$l,_S[74]:output_modalities.$m((e)=> _0.ea(e)).$l,_S[75]:_0.ea(tokenizer),}.$nn;}
+  static _2c get from=>_2c(fromMap);
+  static _13 fromMap(_5 r){_;_5 m=r.$nn;return _13(modality: m.$c(_S[86])? _0.da(m[_S[86]], _7) as _7:throw __x(_S[87],_S[86]),input_modalities: m.$c(_S[73]) ?  (m[_S[73]] as _16).$m((e)=> _0.da(e, _7) as _7).$l : _V[10],output_modalities: m.$c(_S[74]) ?  (m[_S[74]] as _16).$m((e)=> _0.da(e, _7) as _7).$l : _V[10],tokenizer: m.$c(_S[75])? _0.da(m[_S[75]], _7) as _7:throw __x(_S[87],_S[75]),);}
+  _13 copyWith({_7? modality,_6? input_modalities,_19 resetInput_modalities=_F,_6? appendInput_modalities,_6? removeInput_modalities,_6? output_modalities,_19 resetOutput_modalities=_F,_6? appendOutput_modalities,_6? removeOutput_modalities,_7? tokenizer,})=>_13(modality: modality??_H.modality,input_modalities: ((resetInput_modalities?_V[10]:(input_modalities??_H.input_modalities)) as _6).$u(appendInput_modalities,removeInput_modalities),output_modalities: ((resetOutput_modalities?_V[10]:(output_modalities??_H.output_modalities)) as _6).$u(appendOutput_modalities,removeOutput_modalities),tokenizer: tokenizer??_H.tokenizer,);
+  static _13 get newInstance=>_13(modality: '',tokenizer: '',);
+}
+extension $OpenRouterPricing on _14{
+  _14 get _H=>this;
+  _a get to=>_a(toMap);
+  _5 toMap(){_;return<_7,_8>{_S[76]:_0.ea(prompt),_S[77]:_0.ea(completion),_S[78]:_0.ea(request),_S[79]:_0.ea(image),_S[80]:_0.ea(web_search),_S[81]:_0.ea(audio),_S[82]:_0.ea(internal_reasoning),}.$nn;}
+  static _2d get from=>_2d(fromMap);
+  static _14 fromMap(_5 r){_;_5 m=r.$nn;return _14(prompt: m.$c(_S[76]) ?  _0.da(m[_S[76]], _7) as _7 : "0",completion: m.$c(_S[77]) ?  _0.da(m[_S[77]], _7) as _7 : "0",request: m.$c(_S[78]) ?  _0.da(m[_S[78]], _7) as _7 : "0",image: m.$c(_S[79]) ?  _0.da(m[_S[79]], _7) as _7 : "0",web_search: m.$c(_S[80]) ?  _0.da(m[_S[80]], _7) as _7 : "0",audio: m.$c(_S[81]) ?  _0.da(m[_S[81]], _7) as _7 : "0",internal_reasoning: m.$c(_S[82]) ?  _0.da(m[_S[82]], _7) as _7 : "0",);}
+  _14 copyWith({_7? prompt,_19 resetPrompt=_F,_7? completion,_19 resetCompletion=_F,_7? request,_19 resetRequest=_F,_7? image,_19 resetImage=_F,_7? web_search,_19 resetWeb_search=_F,_7? audio,_19 resetAudio=_F,_7? internal_reasoning,_19 resetInternal_reasoning=_F,})=>_14(prompt: resetPrompt?"0":(prompt??_H.prompt),completion: resetCompletion?"0":(completion??_H.completion),request: resetRequest?"0":(request??_H.request),image: resetImage?"0":(image??_H.image),web_search: resetWeb_search?"0":(web_search??_H.web_search),audio: resetAudio?"0":(audio??_H.audio),internal_reasoning: resetInternal_reasoning?"0":(internal_reasoning??_H.internal_reasoning),);
+  static _14 get newInstance=>_14();
 }
 
+bool $isArtifact(dynamic v)=>v==null?false : v is! Type ?$isArtifact(v.runtimeType):v == _d ||v == _e ||v == _f ||v == _g ||v == _h ||v == _i ||v == _j ||v == _k ||v == _l ||v == _m ||v == _n ||v == _o ||v == _p ||v == _q ||v == _r ||v == _s ||v == _t ||v == _u ||v == _v ||v == _w ||v == _x ||v == _y ||v == _z ||v == _10 ||v == _11 ||v == _12 ||v == _13 ||v == _14 ;
+T $constructArtifact<T>() => T==_d ?$ChatRequest.newInstance as T :T==_e ?$ChatModel.newInstance as T :T==_f ?$ARational.newInstance as T :T==_g ?$ChatResult.newInstance as T :T==_h ?$ChatUsage.newInstance as T :T==_i ?$Content.newInstance as T :T==_j ?$AudioContent.newInstance as T :T==_k ?$ContentGroup.newInstance as T :T==_l ?$ImageContent.newInstance as T :T==_m ?$TextContent.newInstance as T :T==_n ?$Message.newInstance as T :T==_o ?$AgentMessage.newInstance as T :T==_p ?$SystemMessage.newInstance as T :T==_q ?$ToolMessage.newInstance as T :T==_r ?$UserMessage.newInstance as T :T==_s ?$ToolCall.newInstance as T :T==_t ?$ToolSchema.newInstance as T :T==_u ?$IChunk.newInstance as T :T==_v ?$ChatModelCapabilities.newInstance as T :T==_w ?$ChatModelCost.newInstance as T :T==_x ?$NagaModelsListResponse.newInstance as T :T==_y ?$NagaModel.newInstance as T :T==_z ?$NagaArchitecture.newInstance as T :T==_10 ?$NagaPricing.newInstance as T :T==_11 ?$OpenRouterModelsListResponse.newInstance as T :T==_12 ?$OpenRouterModel.newInstance as T :T==_13 ?$OpenRouterArchitecture.newInstance as T :T==_14 ?$OpenRouterPricing.newInstance as T : throw _c();
+_5 $artifactToMap(Object o)=>o is _d ?o.toMap():o is _e ?o.toMap():o is _f ?o.toMap():o is _g ?o.toMap():o is _h ?o.toMap():o is _i ?o.toMap():o is _j ?o.toMap():o is _k ?o.toMap():o is _l ?o.toMap():o is _m ?o.toMap():o is _n ?o.toMap():o is _o ?o.toMap():o is _p ?o.toMap():o is _q ?o.toMap():o is _r ?o.toMap():o is _s ?o.toMap():o is _t ?o.toMap():o is _u ?o.toMap():o is _v ?o.toMap():o is _w ?o.toMap():o is _x ?o.toMap():o is _y ?o.toMap():o is _z ?o.toMap():o is _10 ?o.toMap():o is _11 ?o.toMap():o is _12 ?o.toMap():o is _13 ?o.toMap():o is _14 ?o.toMap():throw _c();
+T $artifactFromMap<T>(_5 m)=>T==_d ?$ChatRequest.fromMap(m) as T:T==_e ?$ChatModel.fromMap(m) as T:T==_f ?$ARational.fromMap(m) as T:T==_g ?$ChatResult.fromMap(m) as T:T==_h ?$ChatUsage.fromMap(m) as T:T==_i ?$Content.fromMap(m) as T:T==_j ?$AudioContent.fromMap(m) as T:T==_k ?$ContentGroup.fromMap(m) as T:T==_l ?$ImageContent.fromMap(m) as T:T==_m ?$TextContent.fromMap(m) as T:T==_n ?$Message.fromMap(m) as T:T==_o ?$AgentMessage.fromMap(m) as T:T==_p ?$SystemMessage.fromMap(m) as T:T==_q ?$ToolMessage.fromMap(m) as T:T==_r ?$UserMessage.fromMap(m) as T:T==_s ?$ToolCall.fromMap(m) as T:T==_t ?$ToolSchema.fromMap(m) as T:T==_u ?$IChunk.fromMap(m) as T:T==_v ?$ChatModelCapabilities.fromMap(m) as T:T==_w ?$ChatModelCost.fromMap(m) as T:T==_x ?$NagaModelsListResponse.fromMap(m) as T:T==_y ?$NagaModel.fromMap(m) as T:T==_z ?$NagaArchitecture.fromMap(m) as T:T==_10 ?$NagaPricing.fromMap(m) as T:T==_11 ?$OpenRouterModelsListResponse.fromMap(m) as T:T==_12 ?$OpenRouterModel.fromMap(m) as T:T==_13 ?$OpenRouterArchitecture.fromMap(m) as T:T==_14 ?$OpenRouterPricing.fromMap(m) as T:throw _c();

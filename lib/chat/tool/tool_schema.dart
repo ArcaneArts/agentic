@@ -1,6 +1,6 @@
-import 'package:artifact/artifact.dart';
+import 'package:agentic/chat/agent/agent.dart';
 
-@artifact
+@dmodel
 class ToolSchema {
   final String name;
   final String description;

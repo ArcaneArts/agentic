@@ -1,7 +1,6 @@
 import 'package:agentic/agentic.dart';
-import 'package:artifact/artifact.dart';
 
-@artifact
+@dmodel
 class AgentMessage extends Message {
   final List<ToolCall> toolCalls;
 

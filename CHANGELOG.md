@@ -1,3 +1,6 @@
+# 1.2.2
+* Fix models and upgrade artifact
+
 # 1.2.1
 * Switch Agentic's ingestion backend over to Chunky while keeping `IChunker` and `IDistiller` as the compatibility layer
 * Re-export Chunky from `package:agentic/agentic.dart` so `Chunker`, `FileStringer`, and `Embedder` are available from the main barrel import

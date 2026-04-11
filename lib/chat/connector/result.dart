@@ -1,14 +1,29 @@
 import 'package:agentic/agentic.dart';
-import 'package:artifact/artifact.dart';
 import 'package:rational/rational.dart';
 
-@artifact
+@dmodel
+class ARational {
+  final String n;
+  final String d;
+
+  const ARational({required this.n, this.d = "1"});
+
+  Rational get toRational => Rational(
+    BigInt.tryParse(n) ?? BigInt.zero,
+    BigInt.tryParse(d) ?? BigInt.one,
+  );
+
+  static ARational fromRational(Rational r) =>
+      ARational(n: r.numerator.toString(), d: r.denominator.toString());
+}
+
+@dmodel
 class ChatResult {
   final AgentMessage message;
   final ChatFinishReason finishReason;
   final Map<String, dynamic> metadata;
   final ChatUsage usage;
-  final Rational realCost;
+  final ARational realCost;
 
   const ChatResult({
     required this.message,
@@ -19,7 +34,7 @@ class ChatResult {
   });
 }
 
-@artifact
+@dmodel
 class ChatUsage {
   final int inputTokens;
   final int outputTokens;

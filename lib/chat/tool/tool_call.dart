@@ -1,6 +1,6 @@
-import 'package:artifact/artifact.dart';
+import 'package:agentic/chat/agent/agent.dart';
 
-@artifact
+@dmodel
 class ToolCall {
   final String id;
   final String name;

@@ -5,6 +5,7 @@ import 'package:agentic/chat/agent/chat_provider.dart';
 import 'package:agentic/chat/connector/chat_request.dart';
 import 'package:agentic/chat/connector/connected_model.dart';
 import 'package:agentic/chat/connector/result.dart';
+import 'package:artifact/artifact.dart';
 import 'package:rational/rational.dart';
 import 'package:toxic/extensions/iterable.dart';
 
@@ -50,7 +51,8 @@ class Agent {
 
     await Future.wait(
       agentUsageListeners.map(
-        (i) => i(AgentUsageEvent(this, result.usage, result.realCost)),
+        (i) =>
+            i(AgentUsageEvent(this, result.usage, result.realCost.toRational)),
       ),
     );
 
@@ -103,3 +105,9 @@ class AgentUsageEvent {
 }
 
 List<Future<void> Function(AgentUsageEvent)> agentUsageListeners = [];
+
+const Artifact dmodel = Artifact(
+  compression: true,
+  reflection: false,
+  generateSchema: false,
+);

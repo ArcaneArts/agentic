@@ -7,14 +7,14 @@ class ChatModel {
   final String? displayName;
   final ChatModelCost cost;
   final ChatModelCapabilities capabilities;
-  final bool deprecated;
+  final bool isDeprecated;
 
   const ChatModel({
     required this.id,
     this.displayName,
     required this.cost,
     required this.capabilities,
-    this.deprecated = false,
+    this.isDeprecated = false,
   });
 
   const ChatModel.safe(this.id)
@@ -33,7 +33,7 @@ class ChatModel {
         ultraCompatibleMode: true,
         systemMode: ChatModelSystemMode.unsupported,
       ),
-      deprecated = false;
+      isDeprecated = false;
 
   const ChatModel.basic(this.id)
     : displayName = null,
@@ -51,7 +51,7 @@ class ChatModel {
         ultraCompatibleMode: false,
         systemMode: ChatModelSystemMode.supported,
       ),
-      deprecated = false;
+      isDeprecated = false;
 
   ConnectedChatModel connect(ChatConnector connector) =>
       ConnectedChatModel(model: this, connector: connector);
@@ -239,7 +239,7 @@ class ChatModel {
 
   static const ChatModel googleGemini2Flash = ChatModel(
     id: "gemini-2.0-flash",
-    deprecated: true,
+    isDeprecated: true,
     displayName: "Gemini 2.0 Flash",
     cost: ChatModelCost(input: 0.1, output: 0.40),
     capabilities: ChatModelCapabilities(
@@ -264,7 +264,7 @@ class ChatModel {
 
   static const ChatModel googleGemini2_5FlashLite = ChatModel(
     id: "gemini-2.5-flash-lite-preview-06-17",
-    deprecated: true,
+    isDeprecated: true,
     displayName: "Gemini 2.5 Flash Lite",
     cost: ChatModelCost(input: 0.10, output: 0.40),
     capabilities: ChatModelCapabilities(
@@ -289,7 +289,7 @@ class ChatModel {
 
   static const ChatModel googleGemini2FlashLite = ChatModel(
     id: "gemini-2.0-flash-lite",
-    deprecated: true,
+    isDeprecated: true,
     displayName: "Gemini 2.0 Flash Lite",
     cost: ChatModelCost(input: 0.075, output: 0.30),
     capabilities: ChatModelCapabilities(
@@ -354,7 +354,7 @@ class ChatModel {
     id: "claude-3-7-sonnet-latest",
     displayName: "Claude 3.7 Sonnet",
     cost: ChatModelCost(input: 3, output: 15),
-    deprecated: true,
+    isDeprecated: true,
     capabilities: ChatModelCapabilities(
       tools: true,
       ultraCompatibleMode: false,
@@ -429,7 +429,7 @@ class ChatModel {
 
   static const ChatModel openaiO3Mini = ChatModel(
     id: "o3-mini",
-    deprecated: true,
+    isDeprecated: true,
     displayName: "o3 Mini",
     cost: ChatModelCost(input: 1.10, output: 4.40),
     capabilities: ChatModelCapabilities(
@@ -449,7 +449,7 @@ class ChatModel {
 
   static const ChatModel openaiO1Pro = ChatModel(
     id: "o1-pro",
-    deprecated: true,
+    isDeprecated: true,
     displayName: "o1 Pro",
     cost: ChatModelCost(input: 150, output: 600),
     capabilities: ChatModelCapabilities(
@@ -469,7 +469,7 @@ class ChatModel {
 
   static const ChatModel openaiO1 = ChatModel(
     id: "o1",
-    deprecated: true,
+    isDeprecated: true,
     displayName: "o1",
     cost: ChatModelCost(input: 15, output: 60),
     capabilities: ChatModelCapabilities(
@@ -489,7 +489,7 @@ class ChatModel {
 
   static const ChatModel openaiO1Mini = ChatModel(
     id: "o1-mini",
-    deprecated: true,
+    isDeprecated: true,
     displayName: "o1 Mini",
     cost: ChatModelCost(input: 1.10, output: 4.40),
     capabilities: ChatModelCapabilities(
@@ -566,7 +566,7 @@ class ChatModel {
 
   static const ChatModel openai4o = ChatModel(
     id: "gpt-4o",
-    deprecated: true,
+    isDeprecated: true,
     displayName: "4o",
     cost: ChatModelCost(input: 2.50, output: 10),
     capabilities: ChatModelCapabilities(
@@ -586,7 +586,7 @@ class ChatModel {
 
   static const ChatModel openai4oMini = ChatModel(
     id: "gpt-4o-mini",
-    deprecated: true,
+    isDeprecated: true,
     displayName: "4o Mini",
     cost: ChatModelCost(input: 0.15, output: 0.60),
     capabilities: ChatModelCapabilities(

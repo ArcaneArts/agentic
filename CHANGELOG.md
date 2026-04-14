@@ -1,6 +1,13 @@
+# 1.3.1
+* Remove first-party Google Gemini provider support and the remaining Gemini/OpenAI-Google connector references
+* Remove the remaining Gemini model constants from `ChatModel`
+* Add chunking sanity tests for `IChunker`
+
 # 1.3.0
 * Fix langchain deps
 * BREAKING renamed Embedder to ConnectedEmbeddingModel
+* Inline BPE-backed chunking inside `IChunker` instead of delegating chunking to Chunky
+* BREAKING stop re-exporting Chunky from `package:agentic/agentic.dart`
 
 # 1.2.2
 * Fix models and upgrade artifact

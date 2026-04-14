@@ -1,7 +1,11 @@
-import 'package:agentic/agentic.dart';
+import 'package:agentic/chat/agent/agent.dart';
 import 'package:agentic/chat/agent/chat_provider.dart';
 import 'package:agentic/chat/connector/connected_model.dart';
+import 'package:agentic/chat/message/message.dart';
+import 'package:agentic/chat/message/message_agent.dart';
 import 'package:toxic/extensions/iterable.dart';
+
+import 'chunker.dart';
 
 class IDistiller {
   final ConnectedChatModel llm;

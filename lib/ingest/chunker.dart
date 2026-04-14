@@ -1,7 +1,3 @@
-// Chunk index is an incrementing integer starting from 0. Each chunk increments by 1.
-// Chunk content is the string content of the chunk.
-// Char start is the starting character index of the chunk in the original source object (inclusive)
-// Char end is the ending character index of the chunk in the original source object (exclusive)
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
@@ -10,7 +6,7 @@ import 'dart:math';
 
 import 'package:agentic/chat/agent/agent.dart';
 import 'package:agentic/ingest/distiller.dart';
-import 'package:chunky/chunky.dart' as chunky;
+import 'package:bpe/bpe.dart';
 import 'package:fast_log/fast_log.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -49,15 +45,16 @@ class IChunker {
         "Post overlap must be less than chunk size",
       );
 
-  int get _chunkyChunkSize => max(1, maxChunkSize - maxPostOverlap);
+  int get _contentChunkSize => max(1, maxChunkSize - maxPostOverlap);
 
-  chunky.Chunker get _chunkyChunker =>
-      chunky.Chunker(chunkSize: _chunkyChunkSize);
+  int get _cleanChunkSize => max(1, _contentChunkSize ~/ 2);
 
-  Stream<IChunk> _adaptChunkStream(Stream<chunky.Chunk> chunks) async* {
-    chunky.Chunk? previous;
+  int get _cleanChunkGrace => max(1, _contentChunkSize ~/ 4);
 
-    await for (final chunk in chunks) {
+  Stream<IChunk> _adaptChunkStream(Stream<SourceChunk> chunks) async* {
+    SourceChunk? previous;
+
+    await for (SourceChunk chunk in chunks) {
       if (previous != null) {
         yield _adaptChunk(previous, next: chunk);
       }
@@ -70,15 +67,55 @@ class IChunker {
     }
   }
 
-  IChunk _adaptChunk(chunky.Chunk chunk, {chunky.Chunk? next}) {
-    final postContent = _buildPostContent(next?.content ?? "");
+  Stream<SourceChunk> _chunkStream(Stream<String> rawFeed) async* {
+    int start = 0;
+    int lengthBuffer = 0;
+    List<String> buffer = [];
+    int index = 0;
+
+    await for (String piece in rawFeed.cleanChunks(
+      size: _cleanChunkSize,
+      grace: _cleanChunkGrace,
+    )) {
+      buffer.add(piece);
+      lengthBuffer += piece.length;
+
+      if (lengthBuffer >= _contentChunkSize &&
+          lengthBuffer - piece.length <= _contentChunkSize) {
+        String content = buffer.sublist(0, buffer.length - 1).join();
+        SourceChunk chunk = SourceChunk(
+          index: index++,
+          start: start,
+          length: lengthBuffer - piece.length,
+          content: content,
+        );
+
+        start += chunk.length;
+        lengthBuffer = piece.length;
+        buffer = [piece];
+        yield chunk;
+      }
+    }
+
+    if (buffer.isNotEmpty) {
+      yield SourceChunk(
+        index: index++,
+        start: start,
+        length: lengthBuffer,
+        content: buffer.join(),
+      );
+    }
+  }
+
+  IChunk _adaptChunk(SourceChunk chunk, {SourceChunk? next}) {
+    String postContent = _buildPostContent(next?.content ?? "");
 
     return IChunk(
-      index: chunk.id,
+      index: chunk.index,
       content: chunk.content,
       postContent: postContent,
       charStart: chunk.start,
-      charEnd: chunk.start + chunk.content.length + postContent.length,
+      charEnd: chunk.start + chunk.length + postContent.length,
       lod: 0,
       froms: const [],
     );
@@ -93,8 +130,8 @@ class IChunker {
       return nextContent;
     }
 
-    final capped = nextContent.substring(0, maxPostOverlap);
-    final whitespace = capped.lastIndexOf(RegExp(r'\s'));
+    String capped = nextContent.substring(0, maxPostOverlap);
+    int whitespace = capped.lastIndexOf(RegExp(r'\s'));
 
     if (whitespace <= 0) {
       return capped;
@@ -183,21 +220,33 @@ class IChunker {
     IChunkExploder2(maxChunkSize: maxChunkSize, maxPostOverlap: maxPostOverlap),
   );
 
-  Stream<IChunk> chunkByteStream(Stream<List<int>> stream) => _adaptChunkStream(
-    _chunkyChunker.transform(stream.transform(utf8.decoder)),
-  );
+  Stream<IChunk> chunkByteStream(Stream<List<int>> stream) =>
+      _adaptChunkStream(_chunkStream(stream.transform(utf8.decoder)));
 
   Stream<IChunk> chunkString(String str) =>
-      _adaptChunkStream(_chunkyChunker.transformString(str));
+      _adaptChunkStream(_chunkStream(Stream.value(str)));
 
   Stream<IChunk> chunkStringStream(Stream<String> str) => _adaptChunkStream(
-    _chunkyChunker.transform(
-      str.map((value) => value.endsWith('\n') ? value : "$value\n"),
-    ),
+    _chunkStream(str.map((value) => value.endsWith('\n') ? value : "$value\n")),
   );
 
-  Stream<IChunk> chunkTextFile(File file) =>
-      _adaptChunkStream(_chunkyChunker.transformFile(file));
+  Stream<IChunk> chunkTextFile(File file) => chunkStringStream(
+    file.openRead().transform(utf8.decoder).transform(const LineSplitter()),
+  );
+}
+
+class SourceChunk {
+  final int index;
+  final int start;
+  final int length;
+  final String content;
+
+  const SourceChunk({
+    required this.index,
+    required this.start,
+    required this.length,
+    required this.content,
+  });
 }
 
 class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
@@ -215,12 +264,12 @@ class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
     required this.distiller,
   });
 
+  Future<IChunk> _distill(List<IChunk> chunks) =>
+      distiller.distillFrom(header: header, chunks: chunks, index: 0);
+
   @override
   Stream<IChunk> bind(Stream<IChunk> stream) async* {
     Queue<IChunk> chunks = Queue<IChunk>();
-
-    Future<IChunk> onDistill(List<IChunk> chunks) =>
-        distiller.distillFrom(header: header, chunks: chunks, index: 0);
 
     await for (IChunk chunk in stream) {
       chunks.add(chunk);
@@ -229,7 +278,7 @@ class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
         if (chunks.length >= factor * parallelism) {
           List<Future<IChunk>> futures = [];
           for (int i = 0; i < parallelism; i++) {
-            futures.add(onDistill(chunks.take(factor).toList()));
+            futures.add(_distill(chunks.take(factor).toList()));
             for (int j = 0; j < factor; j++) {
               chunks.removeFirst();
             }
@@ -241,7 +290,7 @@ class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
         }
       } else {
         if (chunks.length >= factor) {
-          yield await onDistill(chunks.take(factor).toList());
+          yield await _distill(chunks.take(factor).toList());
           for (int i = 0; i < factor; i++) {
             chunks.removeFirst();
           }
@@ -252,7 +301,7 @@ class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
     if (parallelism > 1) {
       List<Future<IChunk>> futures = [];
       while (chunks.length >= factor) {
-        futures.add(onDistill(chunks.take(factor).toList()));
+        futures.add(_distill(chunks.take(factor).toList()));
         for (int i = 0; i < factor; i++) {
           chunks.removeFirst();
         }
@@ -263,7 +312,7 @@ class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
       }
     } else {
       while (chunks.length >= factor) {
-        yield await onDistill(chunks.take(factor).toList());
+        yield await _distill(chunks.take(factor).toList());
         for (int i = 0; i < factor; i++) {
           chunks.removeFirst();
         }

@@ -1,7 +1,6 @@
 export 'package:agentic/chat/agent/agent.dart';
 export 'package:agentic/chat/connector/connector.dart';
 export 'package:agentic/chat/connector/connector_anthropic.dart';
-export 'package:agentic/chat/connector/connector_gemini.dart';
 export 'package:agentic/chat/connector/connector_inception.dart';
 export 'package:agentic/chat/connector/connector_ollama.dart';
 export 'package:agentic/chat/connector/connector_openai.dart';
@@ -23,4 +22,3 @@ export 'package:agentic/gen/artifacts.gen.dart';
 export 'package:agentic/ingest/chunker.dart';
 export 'package:agentic/util/chat_models.dart';
 export 'package:agentic/util/openrouter_management.dart';
-export 'package:chunky/chunky.dart';

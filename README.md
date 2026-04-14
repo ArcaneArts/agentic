@@ -10,7 +10,7 @@ It gives you:
 - structured output via JSON schema
 - embeddings on supported OpenAI-compatible backends, including OpenRouter
 - an OpenRouter management-key client for API key lifecycle management
-- Chunky-backed chunking plus recursive distillation utilities for long-form ingestion
+- built-in chunking plus recursive distillation utilities for long-form ingestion
 
 ## What This Project Is
 
@@ -31,7 +31,6 @@ Out of the box, the package includes connectors for:
 
 - OpenAI
 - Anthropic
-- Google Gemini
 - xAI
 - Inception Labs
 - Ollama
@@ -57,7 +56,7 @@ The package also includes a typed `OpenRouterManagementClient` for managing Open
 - Embeddings on supported OpenAI-compatible connectors, including OpenRouter
 - OpenRouter management-key client for creating, listing, updating, and deleting API keys
 - Local model support through Ollama
-- Chunky-backed document chunking, file ingestion, rechunking, distillation, and recursive summarization
+- Built-in document chunking, text-file ingestion, rechunking, distillation, and recursive summarization
 - Generated codecs for Agentic's own data models via `artifact`
 
 ## Installation
@@ -82,25 +81,25 @@ dart run build_runner build --delete-conflicting-outputs
 
 ## Core Concepts
 
-- `ChatConnector`: a provider client such as `OpenAIConnector` or `GoogleConnector`
+- `ChatConnector`: a provider client such as `OpenAIConnector` or `AnthropicConnector`
 - `ChatModel`: a model definition with id, pricing, and capabilities
 - `ChatRequest`: the normalized request object sent to a connector
 - `Message` and `Content`: shared chat/message primitives
 - `Agent`: a stateful wrapper that reads history, calls the model, runs tools, and appends results
 - `Tool`: a callable unit the model can invoke
 - `ToolSchema`: a JSON schema for structured model output
-- `IChunker` and `IDistiller`: Agentic's compatibility layer for chunking and LLM-backed distillation
-- `Chunker`, `FileStringer`, and `Embedder`: direct Chunky ingestion primitives re-exported by Agentic
+- `IChunker` and `IDistiller`: built-in helpers for chunking and LLM-backed distillation
 
 ## Basic Usage
 
 ```dart
+import 'package:agentic/chat/connector/result.dart';
 import 'package:agentic/agentic.dart';
 
 Future<void> main() async {
-  final openai = OpenAIConnector(apiKey: 'sk-proj-...');
+  OpenAIConnector openai = OpenAIConnector(apiKey: 'sk-proj-...');
 
-  final result = await openai(
+  ChatResult result = await openai(
     ChatRequest(
       model: ChatModel.openai4_1Mini,
       messages: [
@@ -128,18 +127,20 @@ What this does:
 ```dart
 import 'package:agentic/agentic.dart';
 
-final openai = OpenAIConnector(apiKey: 'sk-proj-...');
-final anthropic = AnthropicConnector(apiKey: 'sk-ant-...');
-final google = GoogleConnector(apiKey: '...');
-final xai = XaiConnector(apiKey: 'xai-...');
-final inception = InceptionLabsConnector(apiKey: '...');
-final ollama = OLlamaConnector();
+OpenAIConnector openai = OpenAIConnector(apiKey: 'sk-proj-...');
+AnthropicConnector anthropic = AnthropicConnector(apiKey: 'sk-ant-...');
+XaiConnector xai = XaiConnector(apiKey: 'xai-...');
+InceptionLabsConnector inception = InceptionLabsConnector(apiKey: '...');
+OLlamaConnector ollama = OLlamaConnector();
 ```
 
 If you want a connected model object for agents, use `connect`:
 
 ```dart
-final llm = OpenAIConnector(apiKey: 'sk-proj-...')
+import 'package:agentic/agentic.dart';
+import 'package:agentic/chat/connector/connected_model.dart';
+
+ConnectedChatModel llm = OpenAIConnector(apiKey: 'sk-proj-...')
     .connect(ChatModel.openai4_1Mini);
 ```
 
@@ -153,9 +154,11 @@ Unlike `OpenRouterConnector`, this is not a chat connector. It is an HTTP client
 import 'package:agentic/agentic.dart';
 
 Future<void> main() async {
-  final client = OpenRouterManagementClient('sk-management-key');
+  OpenRouterManagementClient client = OpenRouterManagementClient(
+    'sk-management-key',
+  );
 
-  final recurring = await client.createRecurringKey(
+  OpenRouterCreatedApiKey recurring = await client.createRecurringKey(
     name: 'Analytics Service Key',
     limit: 100,
     reset: OpenRouterApiKeyLimitReset.weekly,
@@ -165,19 +168,21 @@ Future<void> main() async {
   print('New key secret: ${recurring.key}');
   print('New key hash: ${recurring.data.hash}');
 
-  final oneTime = await client.createOneTimeUseBurnKey(
+  OpenRouterCreatedApiKey oneTime = await client.createOneTimeUseBurnKey(
     name: 'Temporary Burn Key',
     limit: 15,
     expiresAt: DateTime.utc(2029, 11, 30, 23, 59, 59),
   );
 
-  final keys = await client.listApiKeys(includeDisabled: true);
+  List<OpenRouterManagedApiKey> keys = await client.listApiKeys(
+    includeDisabled: true,
+  );
   print('Managed key count: ${keys.length}');
 
-  final current = await client.getCurrentApiKey();
+  OpenRouterCurrentApiKey current = await client.getCurrentApiKey();
   print('Is management key: ${current.isManagementKey}');
 
-  final updated = await client.setRecurringLimit(
+  OpenRouterManagedApiKey updated = await client.setRecurringLimit(
     recurring.data.hash,
     name: 'Updated Analytics Key',
     limit: 75,
@@ -235,7 +240,7 @@ import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/agent/chat_provider.dart';
 
 Future<void> main() async {
-  final agent = Agent(
+  Agent agent = Agent(
     llm: OpenAIConnector(apiKey: 'sk-proj-...')
         .connect(ChatModel.openai4_1Mini),
     chatProvider: MemoryChatProvider(
@@ -246,14 +251,14 @@ Future<void> main() async {
     ),
   );
 
-  final firstReply = await agent();
+  AgentMessage firstReply = await agent();
   print(firstReply.content);
 
   await agent.addMessage(
     Message.user('Now rewrite that for a README tagline.'),
   );
 
-  final secondReply = await agent();
+  AgentMessage secondReply = await agent();
   print(secondReply.content);
 }
 ```
@@ -294,7 +299,7 @@ class UppercaseTool extends Tool {
 }
 
 Future<void> main() async {
-  final agent = Agent(
+  Agent agent = Agent(
     llm: OpenAIConnector(apiKey: 'sk-proj-...')
         .connect(ChatModel.openai4_1Mini),
     chatProvider: MemoryChatProvider(
@@ -305,7 +310,7 @@ Future<void> main() async {
     ),
   );
 
-  final reply = await agent(tools: [UppercaseTool()]);
+  AgentMessage reply = await agent(tools: [UppercaseTool()]);
   print(reply.content);
 }
 ```
@@ -318,11 +323,12 @@ Use `responseFormat` when you want a strict JSON object back instead of free-for
 import 'dart:convert';
 
 import 'package:agentic/agentic.dart';
+import 'package:agentic/chat/connector/result.dart';
 
 Future<void> main() async {
-  final openai = OpenAIConnector(apiKey: 'sk-proj-...');
+  OpenAIConnector openai = OpenAIConnector(apiKey: 'sk-proj-...');
 
-  final result = await openai(
+  ChatResult result = await openai(
     ChatRequest(
       model: ChatModel.openai4_1Mini,
       messages: [
@@ -347,7 +353,7 @@ Future<void> main() async {
     ),
   );
 
-  final json = jsonDecode(result.message.content.toString())
+  Map<String, dynamic> json = jsonDecode(result.message.content.toString())
       as Map<String, dynamic>;
 
   print(json['summary']);
@@ -355,21 +361,22 @@ Future<void> main() async {
 }
 ```
 
-This is currently a good fit for connectors in this package that support structured output, such as OpenAI and Google.
+This is currently a good fit for connectors in this package that support structured output, such as OpenAI and xAI.
 
 ## Multimodal Example
 
 For multimodal prompts, build a `UserMessage` manually with grouped content:
 
 ```dart
+import 'package:agentic/chat/connector/result.dart';
 import 'package:agentic/agentic.dart';
 
 Future<void> main() async {
-  final google = GoogleConnector(apiKey: '...');
+  OpenAIConnector openai = OpenAIConnector(apiKey: 'sk-proj-...');
 
-  final result = await google(
+  ChatResult result = await openai(
     ChatRequest(
-      model: ChatModel.googleGemini2_5Flash,
+      model: ChatModel.openai4_1Mini,
       messages: [
         Message.system('Answer in one sentence.'),
         UserMessage(
@@ -391,12 +398,13 @@ Future<void> main() async {
 For local or custom OpenAI-compatible models, define the model yourself:
 
 ```dart
+import 'package:agentic/chat/connector/result.dart';
 import 'package:agentic/agentic.dart';
 
 Future<void> main() async {
-  final ollama = OLlamaConnector();
+  OLlamaConnector ollama = OLlamaConnector();
 
-  final result = await ollama(
+  ChatResult result = await ollama(
     ChatRequest(
       model: ChatModel.basic('gpt-oss:20b'),
       messages: [
@@ -422,9 +430,9 @@ OpenAI-compatible connectors that implement embeddings expose `embed` and `embed
 import 'package:agentic/agentic.dart';
 
 Future<void> main() async {
-  final openai = OpenAIConnector(apiKey: 'sk-proj-...');
+  OpenAIConnector openai = OpenAIConnector(apiKey: 'sk-proj-...');
 
-  final vector = await openai.embed(
+  List<double> vector = await openai.embed(
     model: 'text-embedding-3-small',
     text: 'Agentic wraps multiple providers behind one Dart API.',
     dimensions: 256,
@@ -440,9 +448,11 @@ OpenRouter embeddings are also supported through `OpenRouterConnector`, which cu
 import 'package:agentic/chat/connector/connector_openrouter.dart';
 
 Future<void> main() async {
-  final openrouter = OpenRouterConnector(apiKey: 'sk-or-v1-...');
+  OpenRouterConnector openrouter = OpenRouterConnector(
+    apiKey: 'sk-or-v1-...',
+  );
 
-  final vector = await openrouter.embed(
+  List<double> vector = await openrouter.embed(
     model: 'perplexity/pplx-embed-v1-4b',
     text: 'Agentic wraps multiple providers behind one Dart API.',
     dimensions: 256,
@@ -454,10 +464,7 @@ Future<void> main() async {
 
 ## Chunking And Distillation
 
-Agentic now uses Chunky as its ingestion backend. That gives you two supported paths:
-
-- stay on `IChunker` when you want Agentic's existing chunk metadata and recursive distillation workflow
-- use Chunky's `Chunker`, `FileStringer`, and `Embedder` directly when you want lower-level ingestion helpers
+`IChunker` is built into Agentic and uses BPE-assisted splitting to break long text into chunk content plus a small post-overlap window. `IDistiller` uses an LLM to recursively compress or summarize those chunks.
 
 `IDistiller` currently needs a direct import:
 
@@ -471,14 +478,14 @@ It can be OCR output, a transcript, notes, or raw document text.
 ''';
 
 Future<void> main() async {
-  final chunker = IChunker(maxChunkSize: 500, maxPostOverlap: 100);
-  final distiller = IDistiller(
+  IChunker chunker = IChunker(maxChunkSize: 500, maxPostOverlap: 100);
+  IDistiller distiller = IDistiller(
     llm: OpenAIConnector(apiKey: 'sk-proj-...')
         .connect(ChatModel.openai4_1Mini),
     targetOutputSize: 400,
   );
 
-  await for (final chunk in chunker.recursiveDistillChunks(
+  await for (IChunk chunk in chunker.recursiveDistillChunks(
     chunks: chunker.chunkString(longDocumentText),
     distiller: distiller,
     factor: 4,
@@ -495,42 +502,6 @@ This is useful for:
 - document ingestion pipelines
 - cleaning up noisy OCR text
 - compressing large inputs before later prompts
-
-If you want to work with the underlying Chunky primitives directly, they are now re-exported from `package:agentic/agentic.dart`:
-
-```dart
-import 'dart:io';
-
-import 'package:agentic/agentic.dart';
-
-Future<void> main() async {
-  final chunker = Chunker(chunkSize: 400);
-
-  await for (final chunk in chunker.transformString(
-    'Chunky is now the ingestion backend behind Agentic.',
-  )) {
-    print('#${chunk.id} @ ${chunk.start}: ${chunk.content}');
-  }
-
-  await for (final chunk in chunker.transformFile(File('notes.txt'))) {
-    print('File chunk ${chunk.id}: ${chunk.content}');
-  }
-
-  final embedder = Embedder(
-    chunker: chunker,
-    overlap: 80,
-    embedder: (text) async => List<double>.filled(8, text.length.toDouble()),
-  );
-
-  await for (final embedded in embedder.transform(
-    Stream.value('Embed long-form content in one pass.'),
-  )) {
-    print(
-      'Embedded chunk ${embedded.chunk.id}: ${embedded.embedding.length} dims',
-    );
-  }
-}
-```
 
 ## Advanced Imports
 
@@ -564,7 +535,7 @@ That gives you access to:
 - `AnthropicConnector` in this package does not currently support `responseFormat`; it throws if structured output is requested.
 - `OpenRouterConnector` supports embeddings through the same `embed` and `embedMultiple` interface as other OpenAI-compatible connectors.
 - `OpenRouterManagementClient` is for management-key administration, not chat completions.
-- Agentic re-exports Chunky, so `Chunker`, `FileStringer`, and `Embedder` are available from the main barrel import.
+- `chunkTextFile(...)` is intended for UTF-8 text files; richer document parsing lives outside Agentic.
 - Audio content types exist in the shared content model, but the current LangChain bridge only wires text and images for chat requests.
 - `OpenRouterConnector` and `NagaConnector` are present in the repo, but they are not exported from the main `agentic.dart` barrel yet.
 
@@ -576,6 +547,6 @@ Agentic is a good fit if you want a small Dart-first library that lets you:
 - build tool-using agents without wiring a loop from scratch
 - keep model metadata and cost tracking close to your call site
 - use local and hosted models through the same abstractions
-- add document chunking, file ingestion, and distillation without stitching two packages together yourself
+- add chunking, text-file ingestion, and distillation without pulling in a second ingestion package
 
 If you want one package that covers direct prompting, agents, tools, structured output, cost tracking, and ingestion utilities, that is what this repo is built for.

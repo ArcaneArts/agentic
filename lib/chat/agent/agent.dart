@@ -1,10 +1,16 @@
 import 'dart:convert';
 
-import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/agent/chat_provider.dart';
 import 'package:agentic/chat/connector/chat_request.dart';
 import 'package:agentic/chat/connector/connected_model.dart';
 import 'package:agentic/chat/connector/result.dart';
+import 'package:agentic/chat/content/content.dart';
+import 'package:agentic/chat/message/message.dart';
+import 'package:agentic/chat/message/message_agent.dart';
+import 'package:agentic/chat/message/message_tool.dart';
+import 'package:agentic/chat/tool/tool.dart';
+import 'package:agentic/chat/tool/tool_call.dart';
+import 'package:agentic/chat/tool/tool_schema.dart';
 import 'package:artifact/artifact.dart';
 import 'package:fast_log/fast_log.dart';
 import 'package:rational/rational.dart';
@@ -29,6 +35,47 @@ class Agent {
 
   Future<void> addMessage(Message message) => chatProvider.addMessage(message);
 
+  Future<ChatResult> _callChat({
+    required List<Message> messages,
+    required ToolSchema? schema,
+    required List<Tool> tools,
+    int backoff = 1,
+  }) async {
+    try {
+      return await llm.connector(
+        ChatRequest(
+          messages: [
+            if (initialSystemMessage != null)
+              Message.system(initialSystemMessage!),
+            ...messages,
+          ],
+          model: llm.model,
+          responseFormat: schema,
+          tools: tools,
+          user: user,
+        ),
+      );
+    } catch (e) {
+      if (backoff > 512) {
+        rethrow;
+      }
+
+      if (e.toString().contains("429")) {
+        int nextBackoff = backoff * 2;
+        warn("${llm.model.id} Rate limited, retrying in $nextBackoff seconds");
+        await Future.delayed(Duration(seconds: nextBackoff));
+        return _callChat(
+          messages: messages,
+          schema: schema,
+          tools: tools,
+          backoff: nextBackoff,
+        );
+      }
+
+      rethrow;
+    }
+  }
+
   Future<AgentMessage> call({
     ToolSchema? responseFormat,
     List<Tool> tools = const [],
@@ -36,44 +83,11 @@ class Agent {
   }) async {
     List<Message> messages = await readMessages();
     ToolSchema? schema = tools.isNotEmpty ? null : responseFormat;
-    Future<ChatResult> onCallChat() async {
-      int backoff = 1;
-
-      ChatResult? r;
-
-      try {
-        r = await llm.connector(
-          ChatRequest(
-            messages: [
-              if (initialSystemMessage != null)
-                Message.system(initialSystemMessage!),
-              ...messages,
-            ],
-            model: llm.model,
-            responseFormat: schema,
-            tools: tools,
-            user: user,
-          ),
-        );
-      } catch (e, es) {
-        if (backoff > 512) {
-          rethrow;
-        }
-
-        if (e.toString().contains("429")) {
-          backoff *= 2;
-          warn("${llm.model.id} Rate limited, retrying in $backoff seconds");
-          await Future.delayed(Duration(seconds: backoff));
-          return onCallChat();
-        } else {
-          rethrow;
-        }
-      }
-
-      return r;
-    }
-
-    ChatResult result = await onCallChat();
+    ChatResult result = await _callChat(
+      messages: messages,
+      schema: schema,
+      tools: tools,
+    );
 
     await Future.wait(
       agentUsageListeners.map(

@@ -1,3 +1,7 @@
+# 1.3.0
+* Fix langchain deps
+* BREAKING renamed Embedder to ConnectedEmbeddingModel
+
 # 1.2.2
 * Fix models and upgrade artifact
 

@@ -18,6 +18,13 @@ abstract class ChatConnector {
 }
 
 mixin EmbedProvider {
+  ConnectedEmbeddingModel asEmbedder(String model, {int? dimensions}) =>
+      ConnectedEmbeddingModel(
+        model: model,
+        provider: this,
+        dimensions: dimensions,
+      );
+
   Future<List<double>> embed({
     required String model,
     required String text,

@@ -18,15 +18,15 @@ class IDistiller {
     this.organization,
   });
 
-  Future<IChunk> distillFrom({
+  Future<Chunk> distillFrom({
     required String header,
-    required List<IChunk> chunks,
+    required List<Chunk> chunks,
     int index = 0,
     bool summarize = false,
-  }) async => IChunk(
+  }) async => Chunk(
     index: index,
     lod: chunks.first.lod + 1,
-    froms: chunks.map((i) => i.index).toList(),
+    down: chunks.map((i) => i.index).toList(),
     content: await distill(
       input: chunks
           .mapIndexed(

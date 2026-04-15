@@ -8,26 +8,35 @@ import 'package:agentic/chat/agent/agent.dart';
 import 'package:agentic/ingest/distiller.dart';
 import 'package:bpe/bpe.dart';
 import 'package:fast_log/fast_log.dart';
+import 'package:fire_api/fire_api.dart';
 import 'package:rxdart/rxdart.dart';
 
 @dmodel
-class IChunk {
+class Chunk {
   final int index;
   final String content;
   final String postContent;
   final int charStart;
   final int charEnd;
   final int lod;
-  final List<int> froms;
+  final int? up;
+  final List<int>? down;
+  final String? record;
+  final Map<String, dynamic> metadata;
+  final VectorValue? vector;
 
-  const IChunk({
+  const Chunk({
     required this.index,
     required this.content,
+    this.record,
+    this.vector,
+    this.metadata = const {},
     this.postContent = "",
     this.charStart = 0,
     this.charEnd = 0,
     this.lod = 0,
-    this.froms = const [],
+    this.down,
+    this.up,
   });
 
   String get fullContent => "$content$postContent";
@@ -51,7 +60,7 @@ class IChunker {
 
   int get _cleanChunkGrace => max(1, _contentChunkSize ~/ 4);
 
-  Stream<IChunk> _adaptChunkStream(Stream<SourceChunk> chunks) async* {
+  Stream<Chunk> _adaptChunkStream(Stream<SourceChunk> chunks) async* {
     SourceChunk? previous;
 
     await for (SourceChunk chunk in chunks) {
@@ -107,17 +116,16 @@ class IChunker {
     }
   }
 
-  IChunk _adaptChunk(SourceChunk chunk, {SourceChunk? next}) {
+  Chunk _adaptChunk(SourceChunk chunk, {SourceChunk? next}) {
     String postContent = _buildPostContent(next?.content ?? "");
 
-    return IChunk(
+    return Chunk(
       index: chunk.index,
       content: chunk.content,
       postContent: postContent,
       charStart: chunk.start,
       charEnd: chunk.start + chunk.length + postContent.length,
       lod: 0,
-      froms: const [],
     );
   }
 
@@ -140,16 +148,16 @@ class IChunker {
     return capped.substring(0, whitespace + 1);
   }
 
-  Stream<IChunk> recursiveDistillChunks({
-    required Stream<IChunk> chunks,
+  Stream<Chunk> recursiveDistillChunks({
+    required Stream<Chunk> chunks,
     required IDistiller distiller,
     int parallelism = 8,
     int factor = 3,
     bool isBase = true,
   }) async* {
-    Queue<IChunk> buffer = Queue<IChunk>();
+    Queue<Chunk> buffer = Queue<Chunk>();
 
-    Stream<IChunk> distilled =
+    Stream<Chunk> distilled =
         distillChunks(
           chunks: chunks.map((i) {
             if (isBase) buffer.add(i);
@@ -160,12 +168,12 @@ class IChunker {
           parallelism: parallelism,
         ).asBroadcastStream();
 
-    StreamController<IChunk> nextLevelController = StreamController<IChunk>();
+    StreamController<Chunk> nextLevelController = StreamController<Chunk>();
 
     StreamSubscription sub = distilled.listen(nextLevelController.add);
 
     int c = 0;
-    await for (IChunk i in distilled) {
+    await for (Chunk i in distilled) {
       c++;
       if (isBase) {
         while (buffer.isNotEmpty) {
@@ -191,13 +199,13 @@ class IChunker {
     );
   }
 
-  Stream<IChunk> distillChunks({
-    required Stream<IChunk> chunks,
+  Stream<Chunk> distillChunks({
+    required Stream<Chunk> chunks,
     required IDistiller distiller,
     int parallelism = 8,
     int factor = 3,
   }) async* {
-    await for (IChunk i in chunks
+    await for (Chunk i in chunks
         .transform(
           IChunkDistiller(
             distiller: distiller,
@@ -216,21 +224,21 @@ class IChunker {
     }
   }
 
-  Stream<IChunk> reChunk(Stream<IChunk> chunks) => chunks.transform(
+  Stream<Chunk> reChunk(Stream<Chunk> chunks) => chunks.transform(
     IChunkExploder2(maxChunkSize: maxChunkSize, maxPostOverlap: maxPostOverlap),
   );
 
-  Stream<IChunk> chunkByteStream(Stream<List<int>> stream) =>
+  Stream<Chunk> chunkByteStream(Stream<List<int>> stream) =>
       _adaptChunkStream(_chunkStream(stream.transform(utf8.decoder)));
 
-  Stream<IChunk> chunkString(String str) =>
+  Stream<Chunk> chunkString(String str) =>
       _adaptChunkStream(_chunkStream(Stream.value(str)));
 
-  Stream<IChunk> chunkStringStream(Stream<String> str) => _adaptChunkStream(
+  Stream<Chunk> chunkStringStream(Stream<String> str) => _adaptChunkStream(
     _chunkStream(str.map((value) => value.endsWith('\n') ? value : "$value\n")),
   );
 
-  Stream<IChunk> chunkTextFile(File file) => chunkStringStream(
+  Stream<Chunk> chunkTextFile(File file) => chunkStringStream(
     file.openRead().transform(utf8.decoder).transform(const LineSplitter()),
   );
 }
@@ -249,7 +257,7 @@ class SourceChunk {
   });
 }
 
-class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
+class IChunkDistiller extends StreamTransformerBase<Chunk, Chunk> {
   final int factor;
   final IDistiller distiller;
   final bool lossy;
@@ -264,19 +272,19 @@ class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
     required this.distiller,
   });
 
-  Future<IChunk> _distill(List<IChunk> chunks) =>
+  Future<Chunk> _distill(List<Chunk> chunks) =>
       distiller.distillFrom(header: header, chunks: chunks, index: 0);
 
   @override
-  Stream<IChunk> bind(Stream<IChunk> stream) async* {
-    Queue<IChunk> chunks = Queue<IChunk>();
+  Stream<Chunk> bind(Stream<Chunk> stream) async* {
+    Queue<Chunk> chunks = Queue<Chunk>();
 
-    await for (IChunk chunk in stream) {
+    await for (Chunk chunk in stream) {
       chunks.add(chunk);
 
       if (parallelism > 1) {
         if (chunks.length >= factor * parallelism) {
-          List<Future<IChunk>> futures = [];
+          List<Future<Chunk>> futures = [];
           for (int i = 0; i < parallelism; i++) {
             futures.add(_distill(chunks.take(factor).toList()));
             for (int j = 0; j < factor; j++) {
@@ -284,7 +292,7 @@ class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
             }
           }
 
-          for (IChunk c in await Future.wait(futures)) {
+          for (Chunk c in await Future.wait(futures)) {
             yield c;
           }
         }
@@ -299,7 +307,7 @@ class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
     }
 
     if (parallelism > 1) {
-      List<Future<IChunk>> futures = [];
+      List<Future<Chunk>> futures = [];
       while (chunks.length >= factor) {
         futures.add(_distill(chunks.take(factor).toList()));
         for (int i = 0; i < factor; i++) {
@@ -307,7 +315,7 @@ class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
         }
       }
 
-      for (IChunk c in await Future.wait(futures)) {
+      for (Chunk c in await Future.wait(futures)) {
         yield c;
       }
     } else {
@@ -321,7 +329,7 @@ class IChunkDistiller extends StreamTransformerBase<IChunk, IChunk> {
   }
 }
 
-class IChunkExploder2 extends StreamTransformerBase<IChunk, IChunk> {
+class IChunkExploder2 extends StreamTransformerBase<Chunk, Chunk> {
   final int maxChunkSize;
   final int maxPostOverlap;
   final int factor;
@@ -333,24 +341,24 @@ class IChunkExploder2 extends StreamTransformerBase<IChunk, IChunk> {
   });
 
   @override
-  Stream<IChunk> bind(Stream<IChunk> stream) async* {
+  Stream<Chunk> bind(Stream<Chunk> stream) async* {
     int level = 0;
     BehaviorSubject<String> buffer = BehaviorSubject<String>();
     Queue<int> referenceBuffer = Queue<int>();
-    Stream<IChunk> outBuffer = buffer
+    Stream<Chunk> outBuffer = buffer
         .transform(TXPieceSplitter(min(maxChunkSize, maxPostOverlap) ~/ 2))
         .transform(
           TXChunkMerger(maxSize: maxChunkSize, maxPost: maxPostOverlap),
         )
         .map((i) {
-          IChunk c = IChunk(
+          Chunk c = Chunk(
             index: i.index,
             content: i.content,
             postContent: i.postContent,
             charEnd: i.charEnd,
             charStart: i.charStart,
             lod: level,
-            froms: referenceBuffer.take(factor + 1).toList(),
+            down: referenceBuffer.take(factor + 1).toList(),
           );
           if (referenceBuffer.isNotEmpty && referenceBuffer.length > factor) {
             for (int i = 0; i < factor - 1; i++) {
@@ -360,16 +368,16 @@ class IChunkExploder2 extends StreamTransformerBase<IChunk, IChunk> {
 
           return c;
         });
-    Queue<IChunk> outQueue = Queue<IChunk>();
+    Queue<Chunk> outQueue = Queue<Chunk>();
     Completer<bool> onDone = Completer<bool>();
-    StreamSubscription<IChunk> hotSwap = outBuffer.listen(
+    StreamSubscription<Chunk> hotSwap = outBuffer.listen(
       outQueue.add,
       onDone: () => onDone.complete(true),
     );
 
-    await for (IChunk chunk in stream) {
+    await for (Chunk chunk in stream) {
       level = max(level, chunk.lod);
-      referenceBuffer.addAll(chunk.froms);
+      referenceBuffer.addAll(chunk.down ?? []);
       buffer.add(chunk.fullContent);
 
       while (outQueue.isNotEmpty) {
@@ -396,16 +404,16 @@ class IChunkExploder2 extends StreamTransformerBase<IChunk, IChunk> {
   }
 }
 
-class IChunkExploder extends StreamTransformerBase<IChunk, String> {
+class IChunkExploder extends StreamTransformerBase<Chunk, String> {
   final int targetBufferSize;
 
   const IChunkExploder({this.targetBufferSize = 1000});
 
   @override
-  Stream<String> bind(Stream<IChunk> stream) async* {
+  Stream<String> bind(Stream<Chunk> stream) async* {
     StringBuffer buffer = StringBuffer();
 
-    await for (IChunk chunk in stream) {
+    await for (Chunk chunk in stream) {
       buffer.write(chunk.fullContent);
 
       if (buffer.length > targetBufferSize) {
@@ -420,14 +428,14 @@ class IChunkExploder extends StreamTransformerBase<IChunk, String> {
   }
 }
 
-class TXChunkMerger extends StreamTransformerBase<String, IChunk> {
+class TXChunkMerger extends StreamTransformerBase<String, Chunk> {
   final int maxSize;
   final int maxPost;
 
   const TXChunkMerger({required this.maxSize, required this.maxPost});
 
   @override
-  Stream<IChunk> bind(Stream<String> stream) async* {
+  Stream<Chunk> bind(Stream<String> stream) async* {
     try {
       PieceQueue buffer = PieceQueue();
       int index = 0;
@@ -440,7 +448,7 @@ class TXChunkMerger extends StreamTransformerBase<String, IChunk> {
           String content = buffer.take(maxSize - maxPost);
           String post = buffer.peek(maxPost);
 
-          yield IChunk(
+          yield Chunk(
             index: index++,
             content: content,
             postContent: post,
@@ -453,7 +461,7 @@ class TXChunkMerger extends StreamTransformerBase<String, IChunk> {
       if (buffer.isNotEmpty) {
         int startCursor = buffer.startCursor;
         String content = buffer.takeAll();
-        yield IChunk(
+        yield Chunk(
           index: index++,
           content: content,
           postContent: "",

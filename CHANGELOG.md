@@ -1,3 +1,6 @@
+# 1.4.0
+* New chunk class support for parameters and direct vector modeling
+
 # 1.3.1
 * Remove first-party Google Gemini provider support and the remaining Gemini/OpenAI-Google connector references
 * Remove the remaining Gemini model constants from `ChatModel`

@@ -11,17 +11,17 @@ This makes later distillation and retrieval workflows easier to reason about.
 These tests are intentionally small so we can swap in larger fixtures later.
 ''';
 
-Future<List<IChunk>> _collectChunkString({
+Future<List<Chunk>> _collectChunkString({
   required IChunker chunker,
   required String text,
 }) => chunker.chunkString(text).toList();
 
-Future<List<IChunk>> _collectChunkStringStream({
+Future<List<Chunk>> _collectChunkStringStream({
   required IChunker chunker,
   required List<String> lines,
 }) => chunker.chunkStringStream(Stream<String>.fromIterable(lines)).toList();
 
-Future<List<IChunk>> _collectChunkBytes({
+Future<List<Chunk>> _collectChunkBytes({
   required IChunker chunker,
   required String text,
 }) =>
@@ -31,7 +31,7 @@ Future<List<IChunk>> _collectChunkBytes({
         )
         .toList();
 
-Future<List<IChunk>> _collectChunkFile({
+Future<List<Chunk>> _collectChunkFile({
   required IChunker chunker,
   required String text,
 }) async {
@@ -40,19 +40,19 @@ Future<List<IChunk>> _collectChunkFile({
   );
   File file = File('${directory.path}/sample.txt');
   await file.writeAsString(text);
-  List<IChunk> chunks = await chunker.chunkTextFile(file).toList();
+  List<Chunk> chunks = await chunker.chunkTextFile(file).toList();
   await directory.delete(recursive: true);
   return chunks;
 }
 
 void _expectBasicChunkInvariants({
-  required List<IChunk> chunks,
+  required List<Chunk> chunks,
   required int maxPostOverlap,
 }) {
   expect(chunks, isNotEmpty);
 
   for (int index = 0; index < chunks.length; index++) {
-    IChunk chunk = chunks[index];
+    Chunk chunk = chunks[index];
 
     expect(chunk.index, index);
     expect(chunk.content, isNotEmpty);
@@ -63,14 +63,14 @@ void _expectBasicChunkInvariants({
     if (index == 0) {
       expect(chunk.charStart, 0);
     } else {
-      IChunk previous = chunks[index - 1];
+      Chunk previous = chunks[index - 1];
       expect(chunk.charStart, previous.charStart + previous.content.length);
     }
 
     if (index == chunks.length - 1) {
       expect(chunk.postContent, isEmpty);
     } else {
-      IChunk next = chunks[index + 1];
+      Chunk next = chunks[index + 1];
       expect(next.content.startsWith(chunk.postContent), isTrue);
     }
   }
@@ -80,7 +80,7 @@ void main() {
   group('IChunker', () {
     test('keeps short text in a single chunk without overlap', () async {
       IChunker chunker = IChunker(maxChunkSize: 120, maxPostOverlap: 20);
-      List<IChunk> chunks = await _collectChunkString(
+      List<Chunk> chunks = await _collectChunkString(
         chunker: chunker,
         text: 'Short text stays together.',
       );
@@ -96,7 +96,7 @@ void main() {
       'chunks longer text with ordered metadata and bounded overlap',
       () async {
         IChunker chunker = IChunker(maxChunkSize: 64, maxPostOverlap: 16);
-        List<IChunk> chunks = await _collectChunkString(
+        List<Chunk> chunks = await _collectChunkString(
           chunker: chunker,
           text: _sampleText,
         );
@@ -119,11 +119,11 @@ void main() {
         String normalized =
             'first line\nsecond line\nthird line\nfourth line\n';
 
-        List<IChunk> fromStream = await _collectChunkStringStream(
+        List<Chunk> fromStream = await _collectChunkStringStream(
           chunker: chunker,
           lines: lines,
         );
-        List<IChunk> fromString = await _collectChunkString(
+        List<Chunk> fromString = await _collectChunkString(
           chunker: chunker,
           text: normalized,
         );
@@ -143,11 +143,11 @@ void main() {
       'chunkByteStream matches direct string chunking for utf8 text',
       () async {
         IChunker chunker = IChunker(maxChunkSize: 64, maxPostOverlap: 16);
-        List<IChunk> fromBytes = await _collectChunkBytes(
+        List<Chunk> fromBytes = await _collectChunkBytes(
           chunker: chunker,
           text: _sampleText,
         );
-        List<IChunk> fromString = await _collectChunkString(
+        List<Chunk> fromString = await _collectChunkString(
           chunker: chunker,
           text: _sampleText,
         );
@@ -166,11 +166,11 @@ void main() {
         String text =
             'line one\nline two\nline three\nline four\nline five\nline six\n';
 
-        List<IChunk> fromFile = await _collectChunkFile(
+        List<Chunk> fromFile = await _collectChunkFile(
           chunker: chunker,
           text: text,
         );
-        List<IChunk> fromStream = await _collectChunkStringStream(
+        List<Chunk> fromStream = await _collectChunkStringStream(
           chunker: chunker,
           lines: <String>[
             'line one',

@@ -32,8 +32,8 @@ void main() async {
   }
 }
 
-void printChunk(IChunk c) {
+void printChunk(Chunk c) {
   print(
-    "L${c.lod}#${c.index} (${c.charStart}-${c.charEnd})[${c.content.length}+${c.postContent.length}=${c.fullContent.length}]<${c.froms.join(",")}> => ${c.fullContent.replaceAll("\n", "\\n")}",
+    "L${c.lod}#${c.index} (${c.charStart}-${c.charEnd})[${c.content.length}+${c.postContent.length}=${c.fullContent.length}]<${c.down?.join(",") ?? ""}> => ${c.fullContent.replaceAll("\n", "\\n")}",
   );
 }

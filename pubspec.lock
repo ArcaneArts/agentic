@@ -53,10 +53,10 @@ packages:
     dependency: "direct dev"
     description:
       name: artifact_gen
-      sha256: "4069b77bf08d20038f7ea740e1a76e4b33a23e8bab6aabeca8a0fc26e7465bf6"
+      sha256: e37898fd3150bbed57986a83d5de9da772800356d5036a431d89b8e636e59ff9
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.8"
+    version: "1.3.9"
   asn1lib:
     dependency: transitive
     description:
@@ -281,6 +281,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+  fire_api:
+    dependency: "direct main"
+    description:
+      name: fire_api
+      sha256: "4f7c75c2d6d90b2fd95d7fdc9de0e109b033fe02253e98b802c427c177b74372"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.7.0"
   fixnum:
     dependency: transitive
     description:

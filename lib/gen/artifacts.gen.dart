@@ -15,7 +15,7 @@ extension $ChatRequest on _d{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{_S[0]:messages.$m((e)=> e.toMap()).$l,_S[1]:tools.$m((e)=> _0.ea(e)).$l,_S[2]:model.toMap(),_S[3]:_0.ea(systemPrompt),_S[4]:_0.ea(user),_S[5]:responseFormat?.toMap(),}.$nn;}
   static _15 get from=>_15(fromMap);
-  static _d fromMap(_5 r){_;_5 m=r.$nn;return _d(messages: m.$c(_S[0])? (m[_S[0]] as _16).$m((e)=>$Message.fromMap((e) as Map<String, dynamic>)).$l:throw __x(_S[6],_S[0]),tools: m.$c(_S[1]) ?  (m[_S[1]] as _16).$m((e)=> _0.da(e, _17) as _17).$l : _V[0],model: m.$c(_S[2])?$ChatModel.fromMap((m[_S[2]]) as Map<String, dynamic>):throw __x(_S[6],_S[2]),systemPrompt: m.$c(_S[3]) ?  _0.da(m[_S[3]], _7) as _7? : null,user: m.$c(_S[4]) ?  _0.da(m[_S[4]], _7) as _7? : null,responseFormat: m.$c(_S[5]) ? $ToolSchema.fromMap((m[_S[5]]) as Map<String, dynamic>) : null,);}
+  static _d fromMap(_5 r){_;_5 m=r.$nn;return _d(messages: m.$c(_S[0])? (m[_S[0]] as _16).$m((e)=> _1.a<_n>(e,(m)=>$Message.fromMap(m))!).$l:throw __x(_S[6],_S[0]),tools: m.$c(_S[1]) ?  (m[_S[1]] as _16).$m((e)=> _0.da(e, _17) as _17).$l : _V[0],model: m.$c(_S[2])? _1.a<_e>(m[_S[2]],(m)=>$ChatModel.fromMap(m))!:throw __x(_S[6],_S[2]),systemPrompt: m.$c(_S[3]) ?  _0.da(m[_S[3]], _7) as _7? : null,user: m.$c(_S[4]) ?  _0.da(m[_S[4]], _7) as _7? : null,responseFormat: m.$c(_S[5]) ?  _1.a<_t>(m[_S[5]],(m)=>$ToolSchema.fromMap(m)) : null,);}
   _d copyWith({_18? messages,_18? appendMessages,_18? removeMessages,_1a? tools,_19 resetTools=_F,_1a? appendTools,_1a? removeTools,_e? model,_7? systemPrompt,_19 deleteSystemPrompt=_F,_7? user,_19 deleteUser=_F,_t? responseFormat,_19 deleteResponseFormat=_F,})=>_d(messages: (messages??_H.messages).$u(appendMessages,removeMessages),tools: ((resetTools?_V[0]:(tools??_H.tools)) as _1a).$u(appendTools,removeTools),model: model??_H.model,systemPrompt: deleteSystemPrompt?null:(systemPrompt??_H.systemPrompt),user: deleteUser?null:(user??_H.user),responseFormat: deleteResponseFormat?null:(responseFormat??_H.responseFormat),);
   static _d get newInstance=>_d(messages: [],model: $ChatModel.newInstance,);
 }
@@ -24,7 +24,7 @@ extension $ChatModel on _e{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{'id':_0.ea(id),_S[7]:_0.ea(displayName),_S[8]:cost.toMap(),_S[9]:capabilities.toMap(),_S[10]:_0.ea(isDeprecated),}.$nn;}
   static _1b get from=>_1b(fromMap);
-  static _e fromMap(_5 r){_;_5 m=r.$nn;return _e(id: m.$c('id')? _0.da(m['id'], _7) as _7:throw __x(_S[11],'id'),displayName: m.$c(_S[7]) ?  _0.da(m[_S[7]], _7) as _7? : null,cost: m.$c(_S[8])?$ChatModelCost.fromMap((m[_S[8]]) as Map<String, dynamic>):throw __x(_S[11],_S[8]),capabilities: m.$c(_S[9])?$ChatModelCapabilities.fromMap((m[_S[9]]) as Map<String, dynamic>):throw __x(_S[11],_S[9]),isDeprecated: m.$c(_S[10]) ?  _0.da(m[_S[10]], _19) as _19 : _V[1],);}
+  static _e fromMap(_5 r){_;_5 m=r.$nn;return _e(id: m.$c('id')? _0.da(m['id'], _7) as _7:throw __x(_S[11],'id'),displayName: m.$c(_S[7]) ?  _0.da(m[_S[7]], _7) as _7? : null,cost: m.$c(_S[8])? _1.a<_w>(m[_S[8]],(m)=>$ChatModelCost.fromMap(m))!:throw __x(_S[11],_S[8]),capabilities: m.$c(_S[9])? _1.a<_v>(m[_S[9]],(m)=>$ChatModelCapabilities.fromMap(m))!:throw __x(_S[11],_S[9]),isDeprecated: m.$c(_S[10]) ?  _0.da(m[_S[10]], _19) as _19 : _V[1],);}
   _e copyWith({_7? id,_7? displayName,_19 deleteDisplayName=_F,_w? cost,_v? capabilities,_19? isDeprecated,_19 resetIsDeprecated=_F,})=>_e(id: id??_H.id,displayName: deleteDisplayName?null:(displayName??_H.displayName),cost: cost??_H.cost,capabilities: capabilities??_H.capabilities,isDeprecated: resetIsDeprecated?_V[1]:(isDeprecated??_H.isDeprecated),);
   static _e get newInstance=>_e(id: '',cost: $ChatModelCost.newInstance,capabilities: $ChatModelCapabilities.newInstance,);
 }
@@ -42,7 +42,7 @@ extension $ChatResult on _g{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{_S[13]:message.toMap(),_S[14]:realCost.toMap(),_S[15]:finishReason.name,_S[16]:metadata.$m((k,v)=>_1d(k,v)),_S[17]:usage.toMap(),}.$nn;}
   static _1f get from=>_1f(fromMap);
-  static _g fromMap(_5 r){_;_5 m=r.$nn;return _g(message: m.$c(_S[13])?$AgentMessage.fromMap((m[_S[13]]) as Map<String, dynamic>):throw __x(_S[18],_S[13]),realCost: m.$c(_S[14])?$ARational.fromMap((m[_S[14]]) as Map<String, dynamic>):throw __x(_S[18],_S[14]),finishReason: m.$c(_S[15]) ? _1.e(ChatFinishReason.values, m[_S[15]]) as ChatFinishReason : _V[2],metadata: m.$c(_S[16]) ?  _1.fe((m[_S[16]] as Map).$e.$m((e)=>_1e(e.key,e.value))) : _V[3],usage: m.$c(_S[17]) ? $ChatUsage.fromMap((m[_S[17]]) as Map<String, dynamic>) : _V[4],);}
+  static _g fromMap(_5 r){_;_5 m=r.$nn;return _g(message: m.$c(_S[13])? _1.a<_o>(m[_S[13]],(m)=>$AgentMessage.fromMap(m))!:throw __x(_S[18],_S[13]),realCost: m.$c(_S[14])? _1.a<_f>(m[_S[14]],(m)=>$ARational.fromMap(m))!:throw __x(_S[18],_S[14]),finishReason: m.$c(_S[15]) ? _1.e(ChatFinishReason.values, m[_S[15]]) as ChatFinishReason : _V[2],metadata: m.$c(_S[16]) ?  _1.fe((m[_S[16]] as Map).$e.$m((e)=>_1e(e.key,e.value))) : _V[3],usage: m.$c(_S[17]) ?  _1.a<_h>(m[_S[17]],(m)=>$ChatUsage.fromMap(m))! : _V[4],);}
   _g copyWith({_o? message,_f? realCost,_1g? finishReason,_19 resetFinishReason=_F,_1h? metadata,_19 resetMetadata=_F,_h? usage,_19 resetUsage=_F,})=>_g(message: message??_H.message,realCost: realCost??_H.realCost,finishReason: resetFinishReason?_V[2]:(finishReason??_H.finishReason),metadata: resetMetadata?_V[3]:(metadata??_H.metadata),usage: resetUsage?_V[4]:(usage??_H.usage),);
   static _g get newInstance=>_g(message: $AgentMessage.newInstance,realCost: $ARational.newInstance,);
 }
@@ -77,7 +77,7 @@ extension $ContentGroup on _k{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{_S[21]: 'ContentGroup',_S[28]:contents.$m((e)=> e.toMap()).$l,}.$nn;}
   static _1l get from=>_1l(fromMap);
-  static _k fromMap(_5 r){_;_5 m=r.$nn;return _k(contents: m.$c(_S[28]) ?  (m[_S[28]] as _16).$m((e)=>$Content.fromMap((e) as _1h)).$l : _V[5],);}
+  static _k fromMap(_5 r){_;_5 m=r.$nn;return _k(contents: m.$c(_S[28]) ?  (m[_S[28]] as _16).$m((e)=> _1.a<_i>(e,(m)=>$Content.fromMap(m))!).$l : _V[5],);}
   _k copyWith({_1m? contents,_19 resetContents=_F,_1m? appendContents,_1m? removeContents,})=>_k(contents: ((resetContents?_V[5]:(contents??_H.contents)) as _1m).$u(appendContents,removeContents),);
   static _k get newInstance=>_k();
 }
@@ -104,7 +104,7 @@ extension $Message on _n{
   _a get to=>_a(toMap);
   _5 toMap(){_;if (_H is _o){return (_H as _o).toMap();}if (_H is _p){return (_H as _p).toMap();}if (_H is _q){return (_H as _q).toMap();}if (_H is _r){return (_H as _r).toMap();}return<_7,_8>{_S[32]:content.toMap(),}.$nn;}
   static _1p get from=>_1p(fromMap);
-  static _n fromMap(_5 r){_;_5 m=r.$nn;if(m.$c(_S[33])){String _I=m[_S[33]] as _7;if(_I==_S[34]){return $AgentMessage.fromMap(m);}if(_I==_S[35]){return $SystemMessage.fromMap(m);}if(_I==_S[36]){return $ToolMessage.fromMap(m);}if(_I==_S[37]){return $UserMessage.fromMap(m);}}return _n(content: m.$c(_S[32])?$Content.fromMap((m[_S[32]]) as _1h):throw __x(_S[38],_S[32]),);}
+  static _n fromMap(_5 r){_;_5 m=r.$nn;if(m.$c(_S[33])){String _I=m[_S[33]] as _7;if(_I==_S[34]){return $AgentMessage.fromMap(m);}if(_I==_S[35]){return $SystemMessage.fromMap(m);}if(_I==_S[36]){return $ToolMessage.fromMap(m);}if(_I==_S[37]){return $UserMessage.fromMap(m);}}return _n(content: m.$c(_S[32])? _1.a<_i>(m[_S[32]],(m)=>$Content.fromMap(m))!:throw __x(_S[38],_S[32]),);}
   _n copyWith({_i? content,}){if (_H is _o){return (_H as _o).copyWith(content: content,);}if (_H is _p){return (_H as _p).copyWith(content: content,);}if (_H is _q){return (_H as _q).copyWith(content: content,);}if (_H is _r){return (_H as _r).copyWith(content: content,);}return _n(content: content??_H.content,);}
   static _n get newInstance=>_n(content: $Content.newInstance,);
 }
@@ -113,7 +113,7 @@ extension $AgentMessage on _o{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{_S[33]: 'AgentMessage',_S[32]:content.toMap(),_S[39]:toolCalls.$m((e)=> e.toMap()).$l,}.$nn;}
   static _1q get from=>_1q(fromMap);
-  static _o fromMap(_5 r){_;_5 m=r.$nn;return _o(content: m.$c(_S[32])?$Content.fromMap((m[_S[32]]) as _1h):throw __x(_S[34],_S[32]),toolCalls: m.$c(_S[39]) ?  (m[_S[39]] as _16).$m((e)=>$ToolCall.fromMap((e) as _1h)).$l : _V[6],);}
+  static _o fromMap(_5 r){_;_5 m=r.$nn;return _o(content: m.$c(_S[32])? _1.a<_i>(m[_S[32]],(m)=>$Content.fromMap(m))!:throw __x(_S[34],_S[32]),toolCalls: m.$c(_S[39]) ?  (m[_S[39]] as _16).$m((e)=> _1.a<_s>(e,(m)=>$ToolCall.fromMap(m))!).$l : _V[6],);}
   _o copyWith({_i? content,_1r? toolCalls,_19 resetToolCalls=_F,_1r? appendToolCalls,_1r? removeToolCalls,})=>_o(content: content??_H.content,toolCalls: ((resetToolCalls?_V[6]:(toolCalls??_H.toolCalls)) as _1r).$u(appendToolCalls,removeToolCalls),);
   static _o get newInstance=>_o(content: $Content.newInstance,);
 }
@@ -122,7 +122,7 @@ extension $SystemMessage on _p{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{_S[33]: 'SystemMessage',_S[32]:content.toMap(),}.$nn;}
   static _1s get from=>_1s(fromMap);
-  static _p fromMap(_5 r){_;_5 m=r.$nn;return _p(content: m.$c(_S[32])?$Content.fromMap((m[_S[32]]) as _1h):throw __x(_S[35],_S[32]),);}
+  static _p fromMap(_5 r){_;_5 m=r.$nn;return _p(content: m.$c(_S[32])? _1.a<_i>(m[_S[32]],(m)=>$Content.fromMap(m))!:throw __x(_S[35],_S[32]),);}
   _p copyWith({_i? content,})=>_p(content: content??_H.content,);
   static _p get newInstance=>_p(content: $Content.newInstance,);
 }
@@ -131,7 +131,7 @@ extension $ToolMessage on _q{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{_S[33]: 'ToolMessage',_S[32]:content.toMap(),_S[40]:_0.ea(toolCallId),}.$nn;}
   static _1t get from=>_1t(fromMap);
-  static _q fromMap(_5 r){_;_5 m=r.$nn;return _q(content: m.$c(_S[32])?$Content.fromMap((m[_S[32]]) as _1h):throw __x(_S[36],_S[32]),toolCallId: m.$c(_S[40])? _0.da(m[_S[40]], _7) as _7:throw __x(_S[36],_S[40]),);}
+  static _q fromMap(_5 r){_;_5 m=r.$nn;return _q(content: m.$c(_S[32])? _1.a<_i>(m[_S[32]],(m)=>$Content.fromMap(m))!:throw __x(_S[36],_S[32]),toolCallId: m.$c(_S[40])? _0.da(m[_S[40]], _7) as _7:throw __x(_S[36],_S[40]),);}
   _q copyWith({_i? content,_7? toolCallId,})=>_q(content: content??_H.content,toolCallId: toolCallId??_H.toolCallId,);
   static _q get newInstance=>_q(content: $Content.newInstance,toolCallId: '',);
 }
@@ -140,7 +140,7 @@ extension $UserMessage on _r{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{_S[33]: 'UserMessage',_S[32]:content.toMap(),}.$nn;}
   static _1u get from=>_1u(fromMap);
-  static _r fromMap(_5 r){_;_5 m=r.$nn;return _r(content: m.$c(_S[32])?$Content.fromMap((m[_S[32]]) as _1h):throw __x(_S[37],_S[32]),);}
+  static _r fromMap(_5 r){_;_5 m=r.$nn;return _r(content: m.$c(_S[32])? _1.a<_i>(m[_S[32]],(m)=>$Content.fromMap(m))!:throw __x(_S[37],_S[32]),);}
   _r copyWith({_i? content,})=>_r(content: content??_H.content,);
   static _r get newInstance=>_r(content: $Content.newInstance,);
 }
@@ -167,7 +167,7 @@ extension $Chunk on _u{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{_S[47]:_0.ea(index),_S[32]:_0.ea(content),_S[48]:_0.ea(record),_S[49]:vector?.toMap(),_S[16]:metadata.$m((k,v)=>_1d(k,v)),_S[50]:_0.ea(postContent),_S[51]:_0.ea(charStart),_S[52]:_0.ea(charEnd),'lod':_0.ea(lod),_S[53]:down?.$m((e)=> _0.ea(e)).$l,'up':_0.ea(up),}.$nn;}
   static _1x get from=>_1x(fromMap);
-  static _u fromMap(_5 r){_;_5 m=r.$nn;return _u(index: m.$c(_S[47])? _0.da(m[_S[47]], _9) as _9:throw __x(_S[54],_S[47]),content: m.$c(_S[32])? _0.da(m[_S[32]], _7) as _7:throw __x(_S[54],_S[32]),record: m.$c(_S[48]) ?  _0.da(m[_S[48]], _7) as _7? : null,vector: m.$c(_S[49]) ? $VectorValue.fromMap((m[_S[49]]) as _1h) : null,metadata: m.$c(_S[16]) ?  _1.fe((m[_S[16]] as Map).$e.$m((e)=>_1e(e.key,e.value))) : _V[3],postContent: m.$c(_S[50]) ?  _0.da(m[_S[50]], _7) as _7 : "",charStart: m.$c(_S[51]) ?  _0.da(m[_S[51]], _9) as _9 : 0,charEnd: m.$c(_S[52]) ?  _0.da(m[_S[52]], _9) as _9 : 0,lod: m.$c('lod') ?  _0.da(m['lod'], _9) as _9 : 0,down: m.$c(_S[53]) ?  (m[_S[53]] as _16).$m((e)=> _0.da(e, _9) as _9).$l : null,up: m.$c('up') ?  _0.da(m['up'], _9) as _9? : null,);}
+  static _u fromMap(_5 r){_;_5 m=r.$nn;return _u(index: m.$c(_S[47])? _0.da(m[_S[47]], _9) as _9:throw __x(_S[54],_S[47]),content: m.$c(_S[32])? _0.da(m[_S[32]], _7) as _7:throw __x(_S[54],_S[32]),record: m.$c(_S[48]) ?  _0.da(m[_S[48]], _7) as _7? : null,vector: m.$c(_S[49]) ?  _1.a<VectorValue>(m[_S[49]],(m)=>$VectorValue.fromMap(m)) : null,metadata: m.$c(_S[16]) ?  _1.fe((m[_S[16]] as Map).$e.$m((e)=>_1e(e.key,e.value))) : _V[3],postContent: m.$c(_S[50]) ?  _0.da(m[_S[50]], _7) as _7 : "",charStart: m.$c(_S[51]) ?  _0.da(m[_S[51]], _9) as _9 : 0,charEnd: m.$c(_S[52]) ?  _0.da(m[_S[52]], _9) as _9 : 0,lod: m.$c('lod') ?  _0.da(m['lod'], _9) as _9 : 0,down: m.$c(_S[53]) ?  (m[_S[53]] as _16).$m((e)=> _0.da(e, _9) as _9).$l : null,up: m.$c('up') ?  _0.da(m['up'], _9) as _9? : null,);}
   _u copyWith({_9? index,_9? deltaIndex,_7? content,_7? record,_19 deleteRecord=_F,_1y? vector,_19 deleteVector=_F,_1h? metadata,_19 resetMetadata=_F,_7? postContent,_19 resetPostContent=_F,_9? charStart,_19 resetCharStart=_F,_9? deltaCharStart,_9? charEnd,_19 resetCharEnd=_F,_9? deltaCharEnd,_9? lod,_19 resetLod=_F,_9? deltaLod,_1z? down,_19 deleteDown=_F,_1z? appendDown,_1z? removeDown,_9? up,_19 deleteUp=_F,_9? deltaUp,})=>_u(index: deltaIndex!=null?(index??_H.index)+deltaIndex:index??_H.index,content: content??_H.content,record: deleteRecord?null:(record??_H.record),vector: deleteVector?null:(vector??_H.vector),metadata: resetMetadata?_V[3]:(metadata??_H.metadata),postContent: resetPostContent?"":(postContent??_H.postContent),charStart: deltaCharStart!=null?(charStart??_H.charStart)+deltaCharStart:resetCharStart?0:(charStart??_H.charStart),charEnd: deltaCharEnd!=null?(charEnd??_H.charEnd)+deltaCharEnd:resetCharEnd?0:(charEnd??_H.charEnd),lod: deltaLod!=null?(lod??_H.lod)+deltaLod:resetLod?0:(lod??_H.lod),down: (deleteDown?null:(down??_H.down))?.$u(appendDown,removeDown),up: deltaUp!=null?(up??_H.up??0)+deltaUp:deleteUp?null:(up??_H.up),);
   static _u get newInstance=>_u(index: 0,content: '',);
 }
@@ -194,7 +194,7 @@ extension $NagaModelsListResponse on _x{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{_S[69]:data.$m((e)=> e.toMap()).$l,}.$nn;}
   static _25 get from=>_25(fromMap);
-  static _x fromMap(_5 r){_;_5 m=r.$nn;return _x(data: m.$c(_S[69]) ?  (m[_S[69]] as _16).$m((e)=>$NagaModel.fromMap((e) as _1h)).$l : _V[7],);}
+  static _x fromMap(_5 r){_;_5 m=r.$nn;return _x(data: m.$c(_S[69]) ?  (m[_S[69]] as _16).$m((e)=> _1.a<_y>(e,(m)=>$NagaModel.fromMap(m))!).$l : _V[7],);}
   _x copyWith({_26? data,_19 resetData=_F,_26? appendData,_26? removeData,})=>_x(data: ((resetData?_V[7]:(data??_H.data)) as _26).$u(appendData,removeData),);
   static _x get newInstance=>_x();
 }
@@ -203,7 +203,7 @@ extension $NagaModel on _y{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{'id':_0.ea(id),_S[70]:_0.ea(context_length),_S[71]:architecture.toMap(),_S[72]:supported_parameters.$m((e)=> _0.ea(e)).$l,_S[73]:pricing.toMap(),}.$nn;}
   static _27 get from=>_27(fromMap);
-  static _y fromMap(_5 r){_;_5 m=r.$nn;return _y(id: m.$c('id')? _0.da(m['id'], _7) as _7:throw __x(_S[74],'id'),context_length: m.$c(_S[70]) ?  _0.da(m[_S[70]], _9) as _9 : _V[8],architecture: m.$c(_S[71])?$NagaArchitecture.fromMap((m[_S[71]]) as _1h):throw __x(_S[74],_S[71]),supported_parameters: m.$c(_S[72]) ?  (m[_S[72]] as _16).$m((e)=> _0.da(e, _7) as _7).$l : _V[9],pricing: m.$c(_S[73]) ? $NagaPricing.fromMap((m[_S[73]]) as _1h) : _V[10],);}
+  static _y fromMap(_5 r){_;_5 m=r.$nn;return _y(id: m.$c('id')? _0.da(m['id'], _7) as _7:throw __x(_S[74],'id'),context_length: m.$c(_S[70]) ?  _0.da(m[_S[70]], _9) as _9 : _V[8],architecture: m.$c(_S[71])? _1.a<_z>(m[_S[71]],(m)=>$NagaArchitecture.fromMap(m))!:throw __x(_S[74],_S[71]),supported_parameters: m.$c(_S[72]) ?  (m[_S[72]] as _16).$m((e)=> _0.da(e, _7) as _7).$l : _V[9],pricing: m.$c(_S[73]) ?  _1.a<_10>(m[_S[73]],(m)=>$NagaPricing.fromMap(m))! : _V[10],);}
   _y copyWith({_7? id,_9? context_length,_19 resetContext_length=_F,_9? deltaContext_length,_z? architecture,_6? supported_parameters,_19 resetSupported_parameters=_F,_6? appendSupported_parameters,_6? removeSupported_parameters,_10? pricing,_19 resetPricing=_F,})=>_y(id: id??_H.id,context_length: deltaContext_length!=null?(context_length??_H.context_length)+deltaContext_length:resetContext_length?_V[8]:(context_length??_H.context_length),architecture: architecture??_H.architecture,supported_parameters: ((resetSupported_parameters?_V[9]:(supported_parameters??_H.supported_parameters)) as _6).$u(appendSupported_parameters,removeSupported_parameters),pricing: resetPricing?_V[10]:(pricing??_H.pricing),);
   static _y get newInstance=>_y(id: '',architecture: $NagaArchitecture.newInstance,);
 }
@@ -230,7 +230,7 @@ extension $OpenRouterModelsListResponse on _11{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{_S[69]:data.$m((e)=> e.toMap()).$l,}.$nn;}
   static _2a get from=>_2a(fromMap);
-  static _11 fromMap(_5 r){_;_5 m=r.$nn;return _11(data: m.$c(_S[69]) ?  (m[_S[69]] as _16).$m((e)=>$OpenRouterModel.fromMap((e) as _1h)).$l : _V[11],);}
+  static _11 fromMap(_5 r){_;_5 m=r.$nn;return _11(data: m.$c(_S[69]) ?  (m[_S[69]] as _16).$m((e)=> _1.a<_12>(e,(m)=>$OpenRouterModel.fromMap(m))!).$l : _V[11],);}
   _11 copyWith({_2b? data,_19 resetData=_F,_2b? appendData,_2b? removeData,})=>_11(data: ((resetData?_V[11]:(data??_H.data)) as _2b).$u(appendData,removeData),);
   static _11 get newInstance=>_11();
 }
@@ -239,7 +239,7 @@ extension $OpenRouterModel on _12{
   _a get to=>_a(toMap);
   _5 toMap(){_;return<_7,_8>{'id':_0.ea(id),_S[85]:_0.ea(canonical_slug),_S[41]:_0.ea(name),_S[86]:_0.ea(created),_S[70]:_0.ea(context_length),_S[71]:architecture.toMap(),_S[72]:supported_parameters.$m((e)=> _0.ea(e)).$l,_S[73]:pricing.toMap(),}.$nn;}
   static _2c get from=>_2c(fromMap);
-  static _12 fromMap(_5 r){_;_5 m=r.$nn;return _12(id: m.$c('id')? _0.da(m['id'], _7) as _7:throw __x(_S[87],'id'),canonical_slug: m.$c(_S[85])? _0.da(m[_S[85]], _7) as _7:throw __x(_S[87],_S[85]),name: m.$c(_S[41])? _0.da(m[_S[41]], _7) as _7:throw __x(_S[87],_S[41]),created: m.$c(_S[86])? _0.da(m[_S[86]], _9) as _9:throw __x(_S[87],_S[86]),context_length: m.$c(_S[70])? _0.da(m[_S[70]], _9) as _9:throw __x(_S[87],_S[70]),architecture: m.$c(_S[71])?$OpenRouterArchitecture.fromMap((m[_S[71]]) as _1h):throw __x(_S[87],_S[71]),supported_parameters: m.$c(_S[72]) ?  (m[_S[72]] as _16).$m((e)=> _0.da(e, _7) as _7).$l : _V[9],pricing: m.$c(_S[73]) ? $OpenRouterPricing.fromMap((m[_S[73]]) as _1h) : _V[12],);}
+  static _12 fromMap(_5 r){_;_5 m=r.$nn;return _12(id: m.$c('id')? _0.da(m['id'], _7) as _7:throw __x(_S[87],'id'),canonical_slug: m.$c(_S[85])? _0.da(m[_S[85]], _7) as _7:throw __x(_S[87],_S[85]),name: m.$c(_S[41])? _0.da(m[_S[41]], _7) as _7:throw __x(_S[87],_S[41]),created: m.$c(_S[86])? _0.da(m[_S[86]], _9) as _9:throw __x(_S[87],_S[86]),context_length: m.$c(_S[70])? _0.da(m[_S[70]], _9) as _9:throw __x(_S[87],_S[70]),architecture: m.$c(_S[71])? _1.a<_13>(m[_S[71]],(m)=>$OpenRouterArchitecture.fromMap(m))!:throw __x(_S[87],_S[71]),supported_parameters: m.$c(_S[72]) ?  (m[_S[72]] as _16).$m((e)=> _0.da(e, _7) as _7).$l : _V[9],pricing: m.$c(_S[73]) ?  _1.a<_14>(m[_S[73]],(m)=>$OpenRouterPricing.fromMap(m))! : _V[12],);}
   _12 copyWith({_7? id,_7? canonical_slug,_7? name,_9? created,_9? deltaCreated,_9? context_length,_9? deltaContext_length,_13? architecture,_6? supported_parameters,_19 resetSupported_parameters=_F,_6? appendSupported_parameters,_6? removeSupported_parameters,_14? pricing,_19 resetPricing=_F,})=>_12(id: id??_H.id,canonical_slug: canonical_slug??_H.canonical_slug,name: name??_H.name,created: deltaCreated!=null?(created??_H.created)+deltaCreated:created??_H.created,context_length: deltaContext_length!=null?(context_length??_H.context_length)+deltaContext_length:context_length??_H.context_length,architecture: architecture??_H.architecture,supported_parameters: ((resetSupported_parameters?_V[9]:(supported_parameters??_H.supported_parameters)) as _6).$u(appendSupported_parameters,removeSupported_parameters),pricing: resetPricing?_V[12]:(pricing??_H.pricing),);
   static _12 get newInstance=>_12(id: '',canonical_slug: '',name: '',created: 0,context_length: 0,architecture: $OpenRouterArchitecture.newInstance,);
 }

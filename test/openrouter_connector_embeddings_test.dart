@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:agentic/chat/content/content.dart';
 import 'package:agentic/chat/connector/connector_openrouter.dart';
 import 'package:test/test.dart';
 
@@ -9,7 +10,10 @@ void main() {
     test(
       'embed forwards to the OpenAI-compatible embeddings endpoint',
       () async {
-        final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+        HttpServer server = await HttpServer.bind(
+          InternetAddress.loopbackIPv4,
+          0,
+        );
         addTearDown(() => server.close(force: true));
 
         server.listen((request) async {
@@ -20,7 +24,7 @@ void main() {
             'Bearer sk-or-test',
           );
 
-          final body =
+          Map<String, dynamic> body =
               jsonDecode(await utf8.decoder.bind(request).join())
                   as Map<String, dynamic>;
 
@@ -49,14 +53,14 @@ void main() {
           await request.response.close();
         });
 
-        final connector = OpenRouterConnector(
+        OpenRouterConnector connector = OpenRouterConnector(
           apiKey: 'sk-or-test',
           baseUrl: 'http://${server.address.host}:${server.port}/api/v1',
         );
 
-        final vector = await connector.embed(
+        List<double> vector = await connector.embed(
           model: 'perplexity/pplx-embed-v1-4b',
-          text: 'hello world',
+          content: Content.text('hello world'),
           dimensions: 128,
         );
 
@@ -65,14 +69,17 @@ void main() {
     );
 
     test('embedMultiple returns multiple vectors', () async {
-      final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+      HttpServer server = await HttpServer.bind(
+        InternetAddress.loopbackIPv4,
+        0,
+      );
       addTearDown(() => server.close(force: true));
 
       server.listen((request) async {
         expect(request.method, 'POST');
         expect(request.uri.path, '/api/v1/embeddings');
 
-        final body =
+        Map<String, dynamic> body =
             jsonDecode(await utf8.decoder.bind(request).join())
                 as Map<String, dynamic>;
 
@@ -104,20 +111,32 @@ void main() {
         await request.response.close();
       });
 
-      final connector = OpenRouterConnector(
+      OpenRouterConnector connector = OpenRouterConnector(
         apiKey: 'sk-or-test',
         baseUrl: 'http://${server.address.host}:${server.port}/api/v1',
       );
 
-      final vectors = await connector.embedMultiple(
+      List<List<double>> vectors = await connector.embedMultiple(
         model: 'perplexity/pplx-embed-v1-4b',
-        texts: const ['alpha', 'beta'],
+        contents: [Content.text('alpha'), Content.text('beta')],
       );
 
       expect(vectors, [
         [1.0, 2.0],
         [3.0, 4.0],
       ]);
+    });
+
+    test('embed rejects non-text content for OpenAI-compatible embeddings', () {
+      OpenRouterConnector connector = OpenRouterConnector(apiKey: 'sk-or-test');
+
+      expect(
+        () => connector.embed(
+          model: 'perplexity/pplx-embed-v1-4b',
+          content: Content.imageUrl('https://example.com/document.png'),
+        ),
+        throwsA(isA<UnsupportedError>()),
+      );
     });
   });
 }

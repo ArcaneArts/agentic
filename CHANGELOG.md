@@ -1,3 +1,9 @@
+# 1.5.0
+* Add `NvidiaConnector` for NVIDIA NVCloud chat completions through the OpenAI-compatible endpoint
+* Add NVIDIA embeddings support, including `embedInputs(...)` for NVCloud-specific embedding options
+* Change embedding APIs to accept `Content` instead of raw strings so multimodal connectors can support image embeddings
+* Refresh the README for the current connector, export, and embedding API surface
+
 # 1.4.0
 * New chunk class support for parameters and direct vector modeling
 

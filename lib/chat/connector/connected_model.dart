@@ -18,9 +18,9 @@ class ConnectedEmbeddingModel {
     this.dimensions,
   });
 
-  Future<List<double>> embed(String text) =>
-      provider.embed(model: model, text: text, dimensions: dimensions);
+  Future<List<double>> embed(Content content) =>
+      provider.embed(model: model, content: content, dimensions: dimensions);
 
-  Future<List<List<double>>> embedMultiple(List<String> texts) => provider
-      .embedMultiple(model: model, texts: texts, dimensions: dimensions);
+  Future<List<List<double>>> embedMultiple(List<Content> contents) => provider
+      .embedMultiple(model: model, contents: contents, dimensions: dimensions);
 }

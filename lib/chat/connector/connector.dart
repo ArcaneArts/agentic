@@ -2,6 +2,7 @@ import 'package:agentic/chat/connector/chat_request.dart';
 import 'package:agentic/chat/connector/connected_model.dart';
 import 'package:agentic/chat/connector/model.dart';
 import 'package:agentic/chat/connector/result.dart';
+import 'package:agentic/chat/content/content.dart';
 
 abstract class ChatConnector {
   final String apiKey;
@@ -27,13 +28,13 @@ mixin EmbedProvider {
 
   Future<List<double>> embed({
     required String model,
-    required String text,
+    required Content content,
     int? dimensions,
   });
 
   Future<List<List<double>>> embedMultiple({
     required String model,
-    required List<String> texts,
+    required List<Content> contents,
     int? dimensions,
   });
 }

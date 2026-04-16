@@ -1,6 +1,7 @@
 import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/connector/chat_request.dart';
 import 'package:agentic/chat/connector/result.dart';
+import 'package:agentic/chat/content/text_content.dart';
 import 'package:agentic/util/codec.dart';
 import 'package:langchain/langchain.dart' as lc;
 import 'package:langchain_openai/langchain_openai.dart' as lc;
@@ -75,24 +76,44 @@ class OpenAIConnector extends ChatConnector with EmbedProvider {
   @override
   Future<List<double>> embed({
     required String model,
-    required String text,
+    required Content content,
     int? dimensions,
-  }) => lc.OpenAIEmbeddings(
+  }) => embedMultiple(
     model: model,
-    apiKey: apiKey,
-    baseUrl: baseUrl,
+    contents: [content],
     dimensions: dimensions,
-  ).embedDocuments([lc.Document(pageContent: text)]).then((i) => i.first);
+  ).then((List<List<double>> values) => values.first);
 
   @override
   Future<List<List<double>>> embedMultiple({
     required String model,
-    required List<String> texts,
+    required List<Content> contents,
     int? dimensions,
   }) => lc.OpenAIEmbeddings(
     model: model,
     apiKey: apiKey,
     baseUrl: baseUrl,
     dimensions: dimensions,
-  ).embedDocuments(texts.map((i) => lc.Document(pageContent: i)).toList());
+  ).embedDocuments(
+    contents
+        .map(
+          (Content i) => lc.Document(pageContent: _requireTextEmbeddingInput(i)),
+        )
+        .toList(),
+  );
+
+  String _requireTextEmbeddingInput(Content content) {
+    List<Content> parts = content.explode().toList();
+    bool hasNonText = parts.any((Content i) => i is! TextContent);
+
+    if (hasNonText) {
+      throw UnsupportedError(
+        'This embedding connector only supports text content. Use Content.text(...) or a text-only Content.group(...).',
+      );
+    }
+
+    return parts.whereType<TextContent>().map((TextContent i) => i.text).join(
+      ' ',
+    );
+  }
 }

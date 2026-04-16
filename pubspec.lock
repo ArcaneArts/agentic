@@ -45,18 +45,18 @@ packages:
     dependency: "direct main"
     description:
       name: artifact
-      sha256: "3c016ea0681efed4746ade5f515ddfb9f07cac3be5bafd96c2f59e9ee805b26f"
+      sha256: "18979fa3795922df8413d6925fdc6e1262654f63cccc46f2ae403dc08ee94e7c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.33"
+    version: "1.0.34"
   artifact_gen:
     dependency: "direct dev"
     description:
       name: artifact_gen
-      sha256: e37898fd3150bbed57986a83d5de9da772800356d5036a431d89b8e636e59ff9
+      sha256: "8cba6e0465d4233817c0f900253b532089ccaacfecabe87b13601c0742ff3939"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.9"
+    version: "1.3.10"
   asn1lib:
     dependency: transitive
     description:

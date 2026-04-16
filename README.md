@@ -8,7 +8,7 @@ It gives you:
 - built-in model metadata for pricing and capabilities
 - a stateful `Agent` abstraction for multi-step tool use
 - structured output via JSON schema
-- embeddings on supported OpenAI-compatible backends, including OpenRouter
+- embeddings on supported connectors, including OpenRouter and NVIDIA
 - an OpenRouter management-key client for API key lifecycle management
 - built-in chunking plus recursive distillation utilities for long-form ingestion
 
@@ -32,6 +32,7 @@ Out of the box, the package includes connectors for:
 - OpenAI
 - Anthropic
 - xAI
+- NVIDIA
 - Inception Labs
 - Ollama
 
@@ -40,7 +41,7 @@ There are also additional OpenAI-compatible connectors in the repo for:
 - OpenRouter
 - Naga
 
-Those advanced connectors currently require direct imports instead of the main barrel export.
+Those additional connectors currently require direct imports instead of the main barrel export.
 
 The package also includes a typed `OpenRouterManagementClient` for managing OpenRouter API keys with a management key.
 
@@ -53,7 +54,9 @@ The package also includes a typed `OpenRouterManagementClient` for managing Open
 - Stateful agents with recursive tool execution
 - Tool schemas with strict JSON-schema-based arguments
 - Structured outputs with `ToolSchema`
-- Embeddings on supported OpenAI-compatible connectors, including OpenRouter
+- Embeddings on supported connectors through a shared `Content`-based API
+- NVIDIA chat completions through NVCloud's OpenAI-compatible endpoint
+- NVIDIA embeddings through NVCloud, including NVIDIA-specific embedding options
 - OpenRouter management-key client for creating, listing, updating, and deleting API keys
 - Local model support through Ollama
 - Built-in document chunking, text-file ingestion, rechunking, distillation, and recursive summarization
@@ -88,6 +91,7 @@ dart run build_runner build --delete-conflicting-outputs
 - `Agent`: a stateful wrapper that reads history, calls the model, runs tools, and appends results
 - `Tool`: a callable unit the model can invoke
 - `ToolSchema`: a JSON schema for structured model output
+- `ConnectedEmbeddingModel`: a reusable model-bound embedder returned by `asEmbedder(...)`
 - `IChunker` and `IDistiller`: built-in helpers for chunking and LLM-backed distillation
 
 ## Basic Usage
@@ -130,6 +134,7 @@ import 'package:agentic/agentic.dart';
 OpenAIConnector openai = OpenAIConnector(apiKey: 'sk-proj-...');
 AnthropicConnector anthropic = AnthropicConnector(apiKey: 'sk-ant-...');
 XaiConnector xai = XaiConnector(apiKey: 'xai-...');
+NvidiaConnector nvidia = NvidiaConnector(apiKey: 'nvapi-...');
 InceptionLabsConnector inception = InceptionLabsConnector(apiKey: '...');
 OLlamaConnector ollama = OLlamaConnector();
 ```
@@ -424,7 +429,7 @@ Use:
 
 ## Embeddings Example
 
-OpenAI-compatible connectors that implement embeddings expose `embed` and `embedMultiple`.
+Connectors that implement embeddings expose `embed` and `embedMultiple`, and those APIs now take `Content`.
 
 ```dart
 import 'package:agentic/agentic.dart';
@@ -434,7 +439,9 @@ Future<void> main() async {
 
   List<double> vector = await openai.embed(
     model: 'text-embedding-3-small',
-    text: 'Agentic wraps multiple providers behind one Dart API.',
+    content: Content.text(
+      'Agentic wraps multiple providers behind one Dart API.',
+    ),
     dimensions: 256,
   );
 
@@ -445,6 +452,7 @@ Future<void> main() async {
 OpenRouter embeddings are also supported through `OpenRouterConnector`, which currently needs a direct import:
 
 ```dart
+import 'package:agentic/agentic.dart';
 import 'package:agentic/chat/connector/connector_openrouter.dart';
 
 Future<void> main() async {
@@ -454,11 +462,64 @@ Future<void> main() async {
 
   List<double> vector = await openrouter.embed(
     model: 'perplexity/pplx-embed-v1-4b',
-    text: 'Agentic wraps multiple providers behind one Dart API.',
+    content: Content.text(
+      'Agentic wraps multiple providers behind one Dart API.',
+    ),
     dimensions: 256,
   );
 
   print('OpenRouter embedding dimensions: ${vector.length}');
+}
+```
+
+NVIDIA embeddings are available through `NvidiaConnector`, which is exported from the main barrel:
+
+```dart
+import 'package:agentic/agentic.dart';
+
+Future<void> main() async {
+  NvidiaConnector nvidia = NvidiaConnector(apiKey: 'nvapi-...');
+
+  List<double> queryVector = await nvidia.embed(
+    model: 'nvidia/llama-nemotron-embed-vl-1b-v2',
+    content: Content.text(
+      'What is the civil caseload in South Dakota courts?',
+    ),
+  );
+
+  List<List<double>> passageVectors = await nvidia.embedInputs(
+    model: 'nvidia/llama-nemotron-embed-vl-1b-v2',
+    contents: [
+      Content.text('South Dakota Unified Judicial System annual caseload summary.'),
+      Content.text('South Dakota civil docket totals by county and year.'),
+    ],
+    inputType: 'passage',
+    modality: const ['text'],
+    encodingFormat: NvidiaEmbeddingEncodingFormat.float,
+    truncate: NvidiaEmbeddingTruncate.none,
+  );
+
+  print('NVIDIA query embedding dimensions: ${queryVector.length}');
+  print('NVIDIA passage embedding count: ${passageVectors.length}');
+}
+```
+
+Embedding APIs now take `Content` instead of raw strings. For text-only providers, use `Content.text(...)`. Multimodal embedding support depends on the connector and model. `NvidiaConnector` can send `ImageContent` payloads, while OpenAI-compatible embedding connectors currently reject non-text content before making the request.
+
+For example, NVIDIA image embeddings can be requested like this:
+
+```dart
+import 'package:agentic/agentic.dart';
+
+Future<void> main() async {
+  NvidiaConnector nvidia = NvidiaConnector(apiKey: 'nvapi-...');
+
+  List<double> imageVector = await nvidia.embed(
+    model: 'nvidia/llama-nemotron-embed-vl-1b-v2',
+    content: Content.imageUrl('https://example.com/document-page.png'),
+  );
+
+  print('NVIDIA image embedding dimensions: ${imageVector.length}');
 }
 ```
 
@@ -533,7 +594,9 @@ That gives you access to:
 ## Notes And Limitations
 
 - `AnthropicConnector` in this package does not currently support `responseFormat`; it throws if structured output is requested.
+- `NvidiaConnector` uses NVIDIA's OpenAI-compatible chat completions endpoint for LLMs and a custom NVCloud embeddings client for `embed`, `embedMultiple`, and `embedInputs`.
 - `OpenRouterConnector` supports embeddings through the same `embed` and `embedMultiple` interface as other OpenAI-compatible connectors.
+- OpenAI-compatible embedding connectors currently accept only text content; passing images or audio throws before the request is sent.
 - `OpenRouterManagementClient` is for management-key administration, not chat completions.
 - `chunkTextFile(...)` is intended for UTF-8 text files; richer document parsing lives outside Agentic.
 - Audio content types exist in the shared content model, but the current LangChain bridge only wires text and images for chat requests.
